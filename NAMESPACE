@@ -7,11 +7,13 @@ exportClasses(GeneIdentifierType,
               PFAMIdentifier,
               CollectionType,
               AdHocCollection, BroadCollection,
-              GeneSet)
+              GeneSet, GeneColorSet)
 
 exportMethods(show,
-              GeneSet,
-              ## GeneSet accessors
-              geneSetType, genes, uniqueIdentifier, geneSetName,
-              shortDescription, longDescription, organism, pubMedIds,
-              urls, contributor, geneSetVersion, creationDate, collectionType)
+              ## GeneSet
+              GeneSet, geneSetType, genes, uniqueIdentifier,
+              geneSetName, shortDescription, longDescription,
+              organism, pubMedIds, urls, contributor, geneSetVersion,
+              creationDate, collectionType,
+              ## GeneColorSet
+              GeneColorSet, geneColor, phenotypeColor)

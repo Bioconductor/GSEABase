@@ -69,3 +69,9 @@ setClass("GeneSet",
            type = new("Untyped"),
            version = new("Versions", "0.0.1"),
            collectionType = new("AdHocCollection")))
+
+setClass("GeneColorSet",
+         contains = "GeneSet",
+         representation = representation(
+           geneColor = "factor",
+           phenotypeColor = "factor"))

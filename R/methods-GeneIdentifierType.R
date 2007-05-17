@@ -2,9 +2,9 @@
 
 setMethod("validIdentifiers",
           signature=signature(
-            identifier="EntrezIdentifier"),
+            identifier="GeneIdentifierType"),
           function(identifier, genes) {
-              
+              TRUE
           })
 
 setMethod("show",

@@ -25,10 +25,11 @@
 
 .getters <- function(klass, slots) {
     ## getter name = slot; missing name uses slot for getter name
-    autoName <-
-        if (length(names(slots))) nchar(names(slots))==0
-        else rep(TRUE, length(slots))
-    names(slots)[autoName] <- slots[autoName]
+    if (length(names(slots)))
+      names(slots) <- ifelse(nchar(names(slots)) == 0,
+                             slots, names(slots))
+    else
+      names(slots) <- slots
     ## standard getters. 'where' default is topenv(parent.frame())
     ## which on package load is the package name space
     for (i in seq(along=slots)) {

@@ -3,7 +3,7 @@ import(methods)
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(GeneIdentifierType,
-              Untyped, EntrezIdentifier, SymbolIdentifier,
+              NullIdentifier, EntrezIdentifier, SymbolIdentifier,
               PfamIdentifier,
               CollectionType,
               AdHocCollection, BroadCollection,

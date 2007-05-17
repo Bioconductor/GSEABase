@@ -4,10 +4,10 @@ setClass("GeneIdentifierType", contains="VIRTUAL",
          representation=representation(
            type = "ScalarCharacter"))
 
-setClass("Untyped",
+setClass("NullIdentifier",
          contains = "GeneIdentifierType",
          prototype = prototype(
-           type = new("ScalarCharacter", "Untyped")))
+           type = new("ScalarCharacter", "NullIdentifier")))
 
 setClass("EntrezIdentifier",
          contains = "GeneIdentifierType",
@@ -66,7 +66,7 @@ setClass("GeneSet",
            creationDate = "character",
            collectionType = "CollectionType"),
          prototype = prototype(
-           type = new("Untyped"),
+           type = new("NullIdentifier"),
            version = new("Versions", "0.0.1"),
            collectionType = new("AdHocCollection")),
          validity = function(object) {

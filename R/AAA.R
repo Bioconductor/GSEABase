@@ -6,7 +6,7 @@
         setMethod(CLASS,
                   signature = signature(type = "missing"),
                   function(type, ..., creationDate) {
-                      new(CLASS, type = new("Untyped"), ...,
+                      new(CLASS, type = new("NullIdentifier"), ...,
                           creationDate = creationDate)
                   })
         setMethod(CLASS,

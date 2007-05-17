@@ -19,10 +19,10 @@ setClass("SymbolIdentifier",
          prototype = prototype(
            type=new("ScalarCharacter", "Symbol")))
 
-setClass("PFAMIdentifier",
+setClass("PfamIdentifier",
          contains = "GeneIdentifierType",
          prototype = prototype(
-           type = new("ScalarCharacter", "PFAM")))
+           type = new("ScalarCharacter", "Pfam")))
 
 ## CollectionType
 
@@ -68,11 +68,22 @@ setClass("GeneSet",
          prototype = prototype(
            type = new("Untyped"),
            version = new("Versions", "0.0.1"),
-           collectionType = new("AdHocCollection")))
+           collectionType = new("AdHocCollection")),
+         validity = function(object) {
+             validIdentifiers(geneSetType(object), genes(object))
+         })
 
 setClass("GeneColorSet",
          contains = "GeneSet",
          representation = representation(
            phenotype = "ScalarCharacter",
            geneColor = "factor",
-           phenotypeColor = "factor"))
+           phenotypeColor = "factor"),
+         validity = function(object) {
+             clen <- c(length(geneColor(object)),
+                       length(phenotypeColor(object)))
+             if (any(clen > 0) &
+                 any(clen != length(genes(object))))
+                 "gene and color lengths differ"
+             else TRUE
+         })

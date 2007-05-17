@@ -1,6 +1,11 @@
-setMethod("geneSetType",
-          signature=signature(object="GeneIdentifierType"),
-          function(object) object@type)
+.getters("GeneIdentifierType", c(geneSetType="type"))
+
+setMethod("validIdentifiers",
+          signature=signature(
+            identifier="EntrezIdentifier"),
+          function(identifier, genes) {
+              
+          })
 
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),

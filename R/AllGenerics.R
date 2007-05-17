@@ -3,3 +3,8 @@ setGeneric("geneSetType",
 
 setGeneric("collectionType",
            function(object) standardGeneric("collectionType"))
+
+setGeneric("validIdentifiers",
+           function(identifier, genes) {
+               standardGeneric("validIdentifiers")
+           })

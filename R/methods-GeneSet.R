@@ -1,7 +1,7 @@
 .constructors("GeneSet")
 
 .getters("GeneSet",
-         c(geneSetType = "type", "genes", "uniqueIdentifier",
+         c(geneSetType = "type", "genes", "setIdentifier",
          geneSetName = "setName", "shortDescription",
          "longDescription", "organism", "pubMedIds", "urls",
          "contributor", geneSetVersion = "version", "creationDate",
@@ -20,7 +20,7 @@ setMethod("show",
               show(collectionType(object))
               cat(
                   "geneSetName: ", geneSetName(object), "\n",
-                  "uniqueIdentifier: ", uniqueIdentifier(object), "\n",
+                  "setIdentifier: ", setIdentifier(object), "\n",
                   "shortDescription: ", shortDescription(object), "\n",
                   "longDescription: ",
                   if(nchar(longDescription(object))==0) "not ",

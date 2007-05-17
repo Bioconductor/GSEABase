@@ -22,7 +22,7 @@ setMethod("show",
               show(geneSetType(object))
               show(collectionType(object))
               cat("geneSetName: ", geneSetName(object), "\n",
-                  "uniqueIdentifier: ", uniqueIdentifier(object), "\n",
+                  "setIdentifier: ", setIdentifier(object), "\n",
                   "shortDescription: ", shortDescription(object), "\n",
                   "longDescription: ",
                   if(nchar(longDescription(object))==0) "not ",

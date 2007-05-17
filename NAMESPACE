@@ -12,7 +12,7 @@ exportClasses(GeneIdentifierType,
 exportMethods(show,
               validIdentifiers,
               ## GeneSet
-              GeneSet, geneSetType, genes, uniqueIdentifier,
+              GeneSet, geneSetType, genes, setIdentifier,
               geneSetName, shortDescription, longDescription,
               organism, pubMedIds, urls, contributor, geneSetVersion,
               creationDate, collectionType,

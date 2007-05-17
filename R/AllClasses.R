@@ -54,7 +54,7 @@ setClass("GeneSet",
            type = "GeneIdentifierType",
            genes = "character",
            ## Descriptive metadata
-           uniqueIdentifier = "ScalarCharacter",
+           setIdentifier = "ScalarCharacter",
            setName = "ScalarCharacter",
            shortDescription = "ScalarCharacter",
            longDescription = "ScalarCharacter",

@@ -4,12 +4,13 @@ importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(GeneIdentifierType,
               Untyped, EntrezIdentifier, SymbolIdentifier,
-              PFAMIdentifier,
+              PfamIdentifier,
               CollectionType,
               AdHocCollection, BroadCollection,
               GeneSet, GeneColorSet)
 
 exportMethods(show,
+              validIdentifiers,
               ## GeneSet
               GeneSet, geneSetType, genes, uniqueIdentifier,
               geneSetName, shortDescription, longDescription,

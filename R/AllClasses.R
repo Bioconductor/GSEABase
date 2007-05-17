@@ -73,5 +73,6 @@ setClass("GeneSet",
 setClass("GeneColorSet",
          contains = "GeneSet",
          representation = representation(
+           phenotype = "ScalarCharacter",
            geneColor = "factor",
            phenotypeColor = "factor"))

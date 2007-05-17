@@ -1,7 +1,7 @@
 .constructors("GeneColorSet")
 
 .getters("GeneColorSet",
-         c("geneColor", "phenotypeColor"))
+         c("phenotype", "geneColor", "phenotypeColor"))
 
 ## other methods
 
@@ -12,6 +12,7 @@ setMethod("show",
                   paste(" (length: ", length(genes(object)), ")\n",
                         sep=""),
                   sep="")
+              cat("phenotype:", phenotype(object), "\n")
               cat("geneColor:",
                   head(geneColor(object)),
                   "\n  levels:", levels(geneColor(object)), "\n")

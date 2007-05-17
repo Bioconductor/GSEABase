@@ -1,0 +1,17 @@
+import(methods)
+
+importClassesFrom(Biobase, ScalarCharacter, Versions)
+
+exportClasses(GeneIdentifierType,
+              Untyped, EntrezIdentifier, SymbolIdentifier,
+              PFAMIdentifier,
+              CollectionType,
+              AdHocCollection, BroadCollection,
+              GeneSet)
+
+exportMethods(show,
+              GeneSet,
+              ## GeneSet accessors
+              geneSetType, genes, uniqueIdentifier, geneSetName,
+              shortDescription, longDescription, organism, pubMedIds,
+              urls, contributor, geneSetVersion, creationDate, collectionType)

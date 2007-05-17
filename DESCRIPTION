@@ -1,0 +1,12 @@
+Package: GSEABase
+Type: Package
+Title: Gene set enrichment data structures and methods
+Version: 0.0.1
+Date: 2007-05-17
+Author: Martin Morgan, Seth Falcon, Robert Gentleman
+Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
+Description: More about what it does (maybe more than one line)
+License: The Artistic License, Version 2.0
+Depends: R (>= 2.6.0), methods, Biobase (>= 1.15.10)
+LazyLoad: yes
+biocViews: Infrastructure, Statistics

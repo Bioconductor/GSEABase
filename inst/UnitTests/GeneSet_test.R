@@ -68,3 +68,17 @@ test_MakeType <- function() {
 
     do_GeneSet_getter_check(gs)
 }
+
+test_RequiredArgsToNew <- function() {
+    checkException(
+                   GeneSet(new("EntrezIdentifier"),
+                           genes=letters[1:5],
+                           ## no setIdentifier
+                           setName="TestSet",
+                           shortDescription="Test Gene Set No. 1",
+                           organism="AlienX5.11",
+                           pubMedIds=c("1", "2"),
+                           urls=c("http://bioconductor.org"),
+                           contributor="A.U. Thor"),
+                   silent=TRUE)
+}

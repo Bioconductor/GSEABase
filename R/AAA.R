@@ -2,50 +2,21 @@
     eval(substitute({
         setGeneric(CLASS,
                    signature=c("type"),
-                   function(type, ...,
-                            setIdentifier, setName,
-                            shortDescription, longDescription=shortDescription,
-                            organism,
-                            creationDate = date())
-                   standardGeneric(CLASS))
+                   function(type, ...) standardGeneric(CLASS))
         setMethod(CLASS,
                   signature = signature(type = "missing"),
-                  function(type, ...,
-                           setIdentifier, setName,
-                           shortDescription, longDescription,
-                           organism,
-                           creationDate) {
-                      theCall <- match.call()
-                      theCall[["type"]] <- new("NullIdentifier")
-                      theCall[[1]] <- as.name(CLASS)
-                      eval(theCall)
+                  function(type, ...) {
+                      new(CLASS, type=new("NullIdentifier"), ...)
                   })
         setMethod(CLASS,
                   signature = signature(type = "character"),
-                  function(type, ...,
-                           setIdentifier, setName,
-                           shortDescription, longDescription,
-                           organism,
-                           creationDate) {
-                      theCall <- match.call()
-                      theCall[["type"]] <- new(type)
-                      theCall[[1]] <- as.name(CLASS)
-                      eval(theCall)
+                  function(type, ...) {
+                      new(CLASS, type=new(type), ...)
                   })
         setMethod(CLASS,
                   signature = signature(type="GeneIdentifierType"),
-                  function(type, ...,
-                           setIdentifier, setName,
-                           shortDescription, longDescription,
-                           organism,
-                           creationDate) {
-                      new(CLASS, type = type, ...,
-                          setIdentifier=mkScalar(setIdentifier),
-                          setName=mkScalar(setName),
-                          shortDescription=mkScalar(shortDescription),
-                          longDescription=mkScalar(longDescription),
-                          organism=mkScalar(organism),
-                          creationDate = creationDate)
+                  function(type, ...) {
+                      new(CLASS, type = type, ...)
                   })
     }, list(CLASS = klass)))
 

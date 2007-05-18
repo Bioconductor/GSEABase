@@ -9,7 +9,7 @@ exportClasses(GeneIdentifierType,
               AdHocCollection, BroadCollection,
               GeneSet, GeneColorSet)
 
-exportMethods(show,
+exportMethods(show, initialize,
               validIdentifiers,
               ## GeneSet
               GeneSet, geneSetType, genes, setIdentifier,

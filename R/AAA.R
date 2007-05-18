@@ -3,20 +3,16 @@
         setGeneric(CLASS,
                    signature=c("type"),
                    function(type, ...,
-                            setIdentifier,
-                            setName,
-                            shortDescription,
-                            longDescription=shortDescription,
+                            setIdentifier, setName,
+                            shortDescription, longDescription=shortDescription,
                             organism,
                             creationDate = date())
                    standardGeneric(CLASS))
         setMethod(CLASS,
                   signature = signature(type = "missing"),
                   function(type, ...,
-                           setIdentifier,
-                           setName,
-                           shortDescription,
-                           longDescription,
+                           setIdentifier, setName,
+                           shortDescription, longDescription,
                            organism,
                            creationDate) {
                       theCall <- match.call()
@@ -27,10 +23,8 @@
         setMethod(CLASS,
                   signature = signature(type = "character"),
                   function(type, ...,
-                           setIdentifier,
-                           setName,
-                           shortDescription,
-                           longDescription,
+                           setIdentifier, setName,
+                           shortDescription, longDescription,
                            organism,
                            creationDate) {
                       theCall <- match.call()
@@ -41,10 +35,8 @@
         setMethod(CLASS,
                   signature = signature(type="GeneIdentifierType"),
                   function(type, ...,
-                           setIdentifier,
-                           setName,
-                           shortDescription,
-                           longDescription,
+                           setIdentifier, setName,
+                           shortDescription, longDescription,
                            organism,
                            creationDate) {
                       new(CLASS, type = type, ...,

@@ -10,6 +10,6 @@ test_DefaultConstructor <- function() {
                   contributor="A.U. Thor")
 
     ## Basic accessor testing
-    checkEquals("unique!", setIdentifier(gs))
-    checkEquals("TestSet", setName(gs))
+    checkEquals(new("ScalarCharacter", "unique!"), setIdentifier(gs))
+    checkEquals(new("ScalarCharacter", "TestSet"), geneSetName(gs))
 }

@@ -1,24 +1,66 @@
+mkScalar <- function(x) new("ScalarCharacter", x)
+
 .constructors <- function(klass)
     eval(substitute({
         setGeneric(CLASS,
-                   function(type, ..., creationDate = date())
+                   signature=c("type"),
+                   function(type, ...,
+                            setIdentifier,
+                            setName,
+                            shortDescription,
+                            longDescription=shortDescription,
+                            organism,
+                            creationDate = date())
                    standardGeneric(CLASS))
         setMethod(CLASS,
                   signature = signature(type = "missing"),
-                  function(type, ..., creationDate) {
+                  function(type, ...,
+                           setIdentifier,
+                           setName,
+                           shortDescription,
+                           longDescription,
+                           organism,
+                           creationDate) {
                       new(CLASS, type = new("NullIdentifier"), ...,
+                          setIdentifier=mkScalar(setIdentifier),
+                          setName=mkScalar(setName),
+                          shortDescription=mkScalar(shortDescription),
+                          longDescription=mkScalar(longDescription),
+                          organism=mkScalar(organism),
                           creationDate = creationDate)
                   })
         setMethod(CLASS,
                   signature = signature(type = "character"),
-                  function(type, ..., creationDate) {
+                  function(type, ...,
+                           setIdentifier,
+                           setName,
+                           shortDescription,
+                           longDescription,
+                           organism,
+                           creationDate) {
                       new(CLASS, type = new(type), ...,
+                          setIdentifier=mkScalar(setIdentifier),
+                          setName=mkScalar(setName),
+                          shortDescription=mkScalar(shortDescription),
+                          longDescription=mkScalar(longDescription),
+                          organism=mkScalar(organism),
                           creationDate = creationDate)
                   })
         setMethod(CLASS,
                   signature = signature(type="GeneIdentifierType"),
-                  function(type, ..., creationDate) {
+                  function(type, ...,
+                           setIdentifier,
+                           setName,
+                           shortDescription,
+                           longDescription,
+                           organism,
+                           creationDate) {
                       new(CLASS, type = type, ...,
+                          setIdentifier=mkScalar(setIdentifier),
+                          setName=mkScalar(setName),
+                          shortDescription=mkScalar(shortDescription),
+                          longDescription=mkScalar(longDescription),
+                          organism=mkScalar(organism),
                           creationDate = creationDate)
                   })
     }, list(CLASS = klass)))

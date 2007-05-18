@@ -19,13 +19,10 @@
                            longDescription,
                            organism,
                            creationDate) {
-                      new(CLASS, type = new("NullIdentifier"), ...,
-                          setIdentifier=mkScalar(setIdentifier),
-                          setName=mkScalar(setName),
-                          shortDescription=mkScalar(shortDescription),
-                          longDescription=mkScalar(longDescription),
-                          organism=mkScalar(organism),
-                          creationDate = creationDate)
+                      theCall <- match.call()
+                      theCall[["type"]] <- new("NullIdentifier")
+                      theCall[[1]] <- as.name(CLASS)
+                      eval(theCall)
                   })
         setMethod(CLASS,
                   signature = signature(type = "character"),
@@ -36,13 +33,10 @@
                            longDescription,
                            organism,
                            creationDate) {
-                      new(CLASS, type = new(type), ...,
-                          setIdentifier=mkScalar(setIdentifier),
-                          setName=mkScalar(setName),
-                          shortDescription=mkScalar(shortDescription),
-                          longDescription=mkScalar(longDescription),
-                          organism=mkScalar(organism),
-                          creationDate = creationDate)
+                      theCall <- match.call()
+                      theCall[["type"]] <- new(type)
+                      theCall[[1]] <- as.name(CLASS)
+                      eval(theCall)
                   })
         setMethod(CLASS,
                   signature = signature(type="GeneIdentifierType"),

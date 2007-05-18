@@ -1,11 +1,12 @@
 .constructors("GeneSet")
 
-.getters("GeneSet",
-         c(geneSetType = "type", "genes", "setIdentifier",
-         geneSetName = "setName", "shortDescription",
-         "longDescription", "organism", "pubMedIds", "urls",
-         "contributor", geneSetVersion = "version", "creationDate",
-         "collectionType"))
+.GETTERS_GeneSet <- c(geneSetType="type", "genes", "setIdentifier",
+                      geneSetName="setName", "shortDescription",
+                      "longDescription", "organism", "pubMedIds", "urls",
+                      "contributor", geneSetVersion="version",
+                      "creationDate", "collectionType")
+
+.getters("GeneSet", .GETTERS_GeneSet)
 
 ## other methods
 

@@ -70,7 +70,7 @@ setClass("GeneSet",
            version = new("Versions", "0.0.1"),
            collectionType = new("AdHocCollection")),
          validity = function(object) {
-             validIdentifiers(geneSetType(object), genes(object))
+             TRUE
          })
 
 setClass("GeneColorSet",

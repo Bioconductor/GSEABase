@@ -1,5 +1,17 @@
 .constructors("GeneColorSet")
 
+setMethod("initialize", "GeneColorSet",
+          function(.Object, ...,
+                   genes=character(0), phenotype,
+                   geneColor=factor(character(length(genes))),
+                   phenotypeColor=factor(character(length(genes)))) {
+              callNextMethod(.Object, ...,
+                             genes=genes,
+                             phenotype=mkScalar(phenotype),
+                             geneColor=geneColor,
+                             phenotypeColor=phenotypeColor)
+          })
+
 .getters("GeneColorSet",
          c("phenotype", "geneColor", "phenotypeColor"))
 

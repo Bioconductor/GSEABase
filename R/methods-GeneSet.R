@@ -1,3 +1,5 @@
+.constructors("GeneSet")
+
 setMethod("initialize", "GeneSet",
           function(.Object, ...,
                    setIdentifier, setName,
@@ -12,8 +14,6 @@ setMethod("initialize", "GeneSet",
                              organism=mkScalar(organism),
                              creationDate = creationDate)
           })
-
-.constructors("GeneSet")
 
 .GETTERS_GeneSet <- c(geneSetType="type", "genes", "setIdentifier",
                       geneSetName="setName", "shortDescription",

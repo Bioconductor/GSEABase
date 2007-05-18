@@ -1,5 +1,3 @@
-mkScalar <- function(x) new("ScalarCharacter", x)
-
 .constructors <- function(klass)
     eval(substitute({
         setGeneric(CLASS,

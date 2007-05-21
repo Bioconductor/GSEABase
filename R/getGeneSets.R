@@ -1,9 +1,11 @@
 ## file: source
-## node: XPATH node identifier
+## node: XPATH node identifier (syntax: http://www.w3.org/TR/xpath#path-abbrev)
 ## handler: function of 1 argument converting each node to GeneSet
 .fromXML <- function(file, node, handler, ...) {
     res <- xmlTreeParse(file, useInternalNodes=TRUE, ...)
-    getNodeSet(res, node, fun=handler)
+    geneSets <- getNodeSet(res, node, fun=handler)
+    free(res)
+    geneSets
 }
 
 .toXML <- function(geneSet, handler, ...) {
@@ -37,9 +39,11 @@
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
                      genes=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
                      organism=attrs[["ORGANISM"]],
-                     urls=c(getBroadSet=url, attrs[["EXTERNAL_DETAILS_URL"]]),
+                     urls= c(getBroadSet=url,
+                       attrs[["EXTERNAL_DETAILS_URL"]]),
                      collectionType={
-                         categories <- .mkSplit(attrs[["CATEGORY_CODE"]])
+                         categories <-
+                             .mkSplit(attrs[["CATEGORY_CODE"]])
                          category <- subcategory <- as.character(NA)
                          if (length(categories)>=1)
                              category <- categories[[1]]
@@ -84,7 +88,7 @@
               CONTRIBUTOR=contributor(geneSet),
               PMID=pubMedIds(geneSet),
               DESCRIPTION_FULL=longDescription(geneSet),
-              DESCRIPTION_SHORT=description(geneSet),
+              DESCRIPTION_BRIEF=description(geneSet),
               MEMBERS_SYMBOLIZED=paste(genes(geneSet), collapse=",")
 ##               TAGS="",
 ##               MESH="",

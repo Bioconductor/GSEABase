@@ -9,7 +9,7 @@ exportClasses(GeneIdentifierType,
               AdHocCollection, BroadCollection,
               GeneSet, GeneColorSet)
 
-exportMethods(show, initialize,
+exportMethods(show, initialize, coerce,
               validIdentifiers,
               ## GeneSet
               GeneSet, setType, genes, setIdentifier,
@@ -17,6 +17,6 @@ exportMethods(show, initialize,
               organism, pubMedIds, urls, contributor, setVersion,
               creationDate, collectionType,
               ## GeneColorSet
-              GeneColorSet, geneColor, phenotypeColor)
+              GeneColorSet, phenotype, geneColor, phenotypeColor)
 
 export(getBroadSets, toBroadXML)

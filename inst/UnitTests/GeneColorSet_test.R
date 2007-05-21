@@ -38,3 +38,14 @@ test_ConstructorAllColorArgs <- function() {
     checkIdentical(geneColor(gs), gfactor)
     checkIdentical(phenotypeColor(gs), pfactor)
 }
+
+test_show <- function() {
+    gs <- GeneColorSet(setIdentifier="123",
+                       setName="Set name",
+                       phenotype="A phenotype",
+                       genes=LETTERS[1:24])
+    con <- textConnection("tmp", open="w", local=TRUE)
+    sink(con)
+    on.exit(sink())
+    show(gs)
+}

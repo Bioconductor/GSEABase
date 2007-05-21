@@ -18,3 +18,5 @@ exportMethods(show, initialize,
               creationDate, collectionType,
               ## GeneColorSet
               GeneColorSet, geneColor, phenotypeColor)
+
+export(getBroadSets)

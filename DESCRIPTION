@@ -9,7 +9,7 @@ Description: This package provides classes and methods to support
              the GeneSet class provides a common data structure for
              representing gene sets.
 License: The Artistic License, Version 2.0
-Depends: R (>= 2.6.0), methods, Biobase (>= 1.15.11)
+Depends: R (>= 2.6.0), methods, Biobase (>= 1.15.11), XML (>= 1.7-3)
 Imports: Biobase (>= 1.15.11)
 LazyLoad: yes
 biocViews: Infrastructure, Statistics

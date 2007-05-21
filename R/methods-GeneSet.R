@@ -1,12 +1,16 @@
 .constructors("GeneSet")
 
-setMethod("initialize", "GeneSet",
-          function(.Object, ...,
+setMethod("initialize",
+          signature=signature(.Object="GeneSet"),
+          function(.Object, .Template=.Object, ...,
+                   ## required, even when 'cloning'
                    setIdentifier, setName,
-                   shortDescription="", longDescription=shortDescription,
-                   organism="",
+                   ## additional args, manipulated by method
+                   shortDescription=.Template@shortDescription,
+                   longDescription=.Template@longDescription,
+                   organism=.Template@organism,
                    creationDate=date()) {
-              callNextMethod(.Object, ...,
+              callNextMethod(.Object, .Template, ...,
                              setIdentifier=mkScalar(setIdentifier),
                              setName=mkScalar(setName),
                              shortDescription=mkScalar(shortDescription),
@@ -52,3 +56,4 @@ setMethod("show",
               show(setVersion(object))
               cat("creationDate: ", creationDate(object), "\n", sep="")
           })
+

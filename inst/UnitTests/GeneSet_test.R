@@ -29,7 +29,7 @@ test_MakeNoType <- function() {
 
     ## Basic accessor testing
     checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), geneSetName(gs))
+    checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
 }
@@ -46,7 +46,7 @@ test_MakeString <- function() {
                   urls=c("http://bioconductor.org"),
                   contributor="A.U. Thor")
     checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), geneSetName(gs))
+    checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
 }
@@ -64,7 +64,7 @@ test_MakeType <- function() {
                   contributor="A.U. Thor")
 
     checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), geneSetName(gs))
+    checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
 }

@@ -15,10 +15,10 @@ setMethod("initialize", "GeneSet",
                              creationDate = creationDate)
           })
 
-.GETTERS_GeneSet <- c(geneSetType="type", "genes", "setIdentifier",
-                      geneSetName="setName", "shortDescription",
+.GETTERS_GeneSet <- c(setType="type", "genes", "setIdentifier",
+                      setName="setName", description="shortDescription",
                       "longDescription", "organism", "pubMedIds", "urls",
-                      "contributor", geneSetVersion="version",
+                      "contributor", setVersion="version",
                       "creationDate", "collectionType")
 
 .getters("GeneSet", .GETTERS_GeneSet)
@@ -28,25 +28,27 @@ setMethod("initialize", "GeneSet",
 setMethod("show",
           signature=signature(object="GeneSet"),
           function(object) {
-              cat("genes:", head(genes(object)),
-                  paste("(length: ", length(genes(object)), ")\n",
+              cat("setName: ", setName(object), "\n",
+                  "setIdentifier: ", setIdentifier(object), "\n", sep="")
+              cat("genes:",
+                  paste(selectSome(genes(object)), collapse=", "),
+                  paste("(total: ", length(genes(object)), ")\n",
                         sep=""),
                   sep=" ")
-              show(geneSetType(object))
+              show(setType(object))
               show(collectionType(object))
-              cat(
-                  "geneSetName: ", geneSetName(object), "\n",
-                  "setIdentifier: ", setIdentifier(object), "\n",
-                  "shortDescription: ", shortDescription(object), "\n",
-                  "longDescription: ",
-                  if(nchar(longDescription(object))==0) "not ",
-                  "available", "\n",
+              cat("description: ", description(object), "\n",
+                  if(nchar(longDescription(object))!=0 &&
+                     longDescription(object) !=  description(object)) {
+                      "  (longDescription available)\n"
+                  },
                   "organism: ", organism(object), "\n",
                   "pubMedIds: ", pubMedIds(object), "\n",
-                  "urls: ", paste(urls(object), collapse=", "), "\n",
+                  "urls: ", paste(selectSome(urls(object), maxToShow=3),
+                                  collapse="\n      "), "\n",
                   "contributor: ", contributor(object), "\n",
-                  "geneSetVersion: ",
+                  "setVersion: ",
                   sep="")
-              show(geneSetVersion(object))
+              show(setVersion(object))
               cat("creationDate: ", creationDate(object), "\n", sep="")
           })

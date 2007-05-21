@@ -1,4 +1,4 @@
-.getters("GeneIdentifierType", c(geneSetType="type"))
+.getters("GeneIdentifierType", c(setType="type"))
 
 setMethod("validIdentifiers",
           signature=signature(
@@ -9,4 +9,4 @@ setMethod("validIdentifiers",
 
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),
-          function(object) cat("geneSetType:", geneSetType(object), "\n"))
+          function(object) cat("setType:", setType(object), "\n"))

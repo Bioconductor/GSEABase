@@ -12,9 +12,9 @@ exportClasses(GeneIdentifierType,
 exportMethods(show, initialize,
               validIdentifiers,
               ## GeneSet
-              GeneSet, geneSetType, genes, setIdentifier,
-              geneSetName, shortDescription, longDescription,
-              organism, pubMedIds, urls, contributor, geneSetVersion,
+              GeneSet, setType, genes, setIdentifier,
+              setName, description, longDescription,
+              organism, pubMedIds, urls, contributor, setVersion,
               creationDate, collectionType,
               ## GeneColorSet
               GeneColorSet, geneColor, phenotypeColor)

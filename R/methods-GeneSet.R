@@ -31,7 +31,7 @@ setMethod("show",
               cat("genes:", head(genes(object)),
                   paste("(length: ", length(genes(object)), ")\n",
                         sep=""),
-                  sep="")
+                  sep=" ")
               show(geneSetType(object))
               show(collectionType(object))
               cat(
@@ -43,7 +43,7 @@ setMethod("show",
                   "available", "\n",
                   "organism: ", organism(object), "\n",
                   "pubMedIds: ", pubMedIds(object), "\n",
-                  "urls: ", urls(object), "\n",
+                  "urls: ", paste(urls(object), collapse=", "), "\n",
                   "contributor: ", contributor(object), "\n",
                   "geneSetVersion: ",
                   sep="")

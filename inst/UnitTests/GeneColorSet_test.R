@@ -15,6 +15,7 @@ test_ConstructorDefaultArgs <- function() {
 }
 
 test_ConstructorAllColorArgs <- function() {
+    ## appropriate default colors
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype",
@@ -24,6 +25,7 @@ test_ConstructorAllColorArgs <- function() {
     checkTrue(length(geneColor(gs))==24)
     checkTrue(length(phenotypeColor(gs))==24)
 
+    ## correct color contents
     gfactor <-     factor(rep(c("high", "low"), 12))
     pfactor <- factor(rep(c("big", "medium", "small"), 8))
     gs <- GeneColorSet(setIdentifier="123",

@@ -1,8 +1,5 @@
 .constructors <- function(klass)
     eval(substitute({
-        setGeneric(CLASS,
-                   signature=c("type"),
-                   function(type, ...) standardGeneric(CLASS))
         setMethod(CLASS,
                   signature = signature(type = "missing"),
                   function(type, ...) {

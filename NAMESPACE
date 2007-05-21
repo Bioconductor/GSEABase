@@ -19,4 +19,4 @@ exportMethods(show, initialize,
               ## GeneColorSet
               GeneColorSet, geneColor, phenotypeColor)
 
-export(getBroadSets)
+export(getBroadSets, toBroadXML)

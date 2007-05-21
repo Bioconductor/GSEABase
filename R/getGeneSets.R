@@ -1,16 +1,23 @@
-## 'handlers' is a list of named functons. Function names correspond
-## to XML elements. An additional function named getSets retrieves
-## sets created after parsing the document
-.getGeneSets <- function(file, handlers, ...) {
-    res <- xmlTreeParse(file, handlers=handlers, ...)
-    handlers$getSets()
+## file: source
+## node: XPATH node identifier
+## handler: function of 1 argument converting each node to GeneSet
+.fromXML <- function(file, node, handler, ...) {
+    res <- xmlTreeParse(file, useInternalNodes=TRUE, ...)
+    getNodeSet(res, node, fun=handler)
+}
+
+.toXML <- function(geneSet, handler, ...) {
+    con = textConnection("xml", open="w", local=TRUE)
+    saveXML(handler(geneSet), con, ...)
+    paste(xml, collapse="\n")
 }
 
 ## Broad gene set, see http://www.broad.mit.edu/gsea/
-.broadXMLToGeneSet <- function(file) {
-    ## separator not specified in DTD
-    .mkSplit <- function(x) unlist(strsplit(x, ","))
-    .mkNull <- function(x) NULL
+.BROAD_SEPARATOR = ","                  # not specficied in DTD
+
+.BroadXMLNodeToGeneSet_factory <- function(file) {
+    ## state
+    .mkSplit <- function(x) unlist(strsplit(x, .BROAD_SEPARATOR))
     url <- NULL
     if (length(file)==1) {
         isUri <- grep("^(http|ftp|file)://", file)
@@ -22,62 +29,85 @@
                 url <- paste("file:/", full, sep="")
         }
     }
-    ## Format of list entries: XML_ATTRIBUTE = c("slot", converter)
-    map <- 
-        list(STANDARD_NAME=c("setName", quote(mkScalar)),
-             SYSTEMATIC_NAME=c("setIdentifier", quote(mkScalar)),
-             ORGANISM=c("organism", quote(mkScalar)),
-             EXTERNAL_DETAILS_URL=c("urls",
-               function(x) c(getBroadSets=url, .mkSplit(x))),
-             CATEGORY_CODE=c("collectionType",
-               function(x) {
-                   categories <- .mkSplit(x)
-                   category <- subcategory <- as.character(NA)
-                   if (length(categories)>=1)
-                       category <- categories[[1]]
-                   if (length(categories)>=2)
-                       subcategory <- categories[[2]]
-                   if (length(categories)>2)
-                       warning("Broad 'CATEGORY_CODE' too long; using first two elements")
-                   new("BroadCollection",
-                       category=mkScalar(category),
-                       subCategory=mkScalar(subcategory))
-               }),
-             CONTRIBUTOR=c("contributor", quote(mkScalar)),
-             PMID=c("pubMedIds", quote(.mkSplit)),
-             GEOID=c(NA, quote(.mkNull)),
-             ## 'DESCRIPTION' in DTD
-             DESCRIPTION_FULL=c("longDescription", quote(mkScalar)),
-             DESCRIPTION_BRIEF=c("shortDescription", quote(mkScalar)),
-             TAGS=c(NA, quote(.mkNull)),
-             MESH=c(NA, quote(.mkNull)),
-             MEMBERS_SYMBOLIZED=c("genes", quote(.mkSplit)),
-             ## FIXME: 'original' source ?
-             CHIP=c(NA, quote(.mkNull)),
-             MEMBERS=c(NA, quote(.mkNull)))
-    sets <- list()
-    list(getSets=function() sets,
-         GENESET=function(x) {
-             ## Parse GENESET to object of class GeneSet
-             attrs <- xmlAttrs(x)
-             vattrs <-
-                 lapply(names(attrs),
-                        function(x) eval(map[[x]][[2]])(attrs[[x]]))
-             names(vattrs) <- sapply(names(attrs),
-                                     function(x) map[[x]][[1]])
-             vattrs <- vattrs[!is.na(names(vattrs))]
-             sets <<- append(sets,
-                             do.call("GeneSet",
-                                     c(new("EntrezIdentifier"), vattrs)))
-             NULL
-         })
+    ## handler: XMLNode -> GeneSet
+    function(node) {
+        attrs <- as.list(xmlAttrs(node))
+        args <- list(new("EntrezIdentifier"),
+                     setName=attrs[["STANDARD_NAME"]],
+                     setIdentifier=attrs[["SYSTEMATIC_NAME"]],
+                     genes=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
+                     organism=attrs[["ORGANISM"]],
+                     urls=c(getBroadSet=url, attrs[["EXTERNAL_DETAILS_URL"]]),
+                     collectionType={
+                         categories <- .mkSplit(attrs[["CATEGORY_CODE"]])
+                         category <- subcategory <- as.character(NA)
+                         if (length(categories)>=1)
+                             category <- categories[[1]]
+                         if (length(categories)>=2)
+                             subcategory <- categories[[2]]
+                         if (length(categories)>2)
+                             warning("Broad 'CATEGORY_CODE' too long; using first two elements")
+                         new("BroadCollection",
+                             category=mkScalar(category),
+                             subCategory=mkScalar(subcategory))
+                     },
+                     contributor=attrs[["CONTRIBUTOR"]],
+                     pubMedIds=attrs[["PMID"]],
+                     shortDescription=attrs[["DESCRIPTION_BRIEF"]],
+                     longDescription=attrs[["DESCRIPTION_FULL"]],
+                     TAGS=NULL,
+                     MESH=NULL,
+                     CHIP=NULL,
+                     MEMBERS=NULL)
+        args <- args[!sapply(args, is.null)]
+        do.call("GeneSet", args)
+    }
+}
+
+.GeneSetToBroadXMLNode <- function(geneSet) {
+    ## return text representation
+    xmlNode("GENESET",
+            attrs=c(
+              STANDARD_NAME=setName(geneSet),
+              SYSTEMATIC_NAME=setIdentifier(geneSet),
+              ORGANISM=organism(geneSet),
+              EXTERNAL_DETAILS_URL=paste(urls(geneSet),
+                collapse=.BROAD_SEPARATOR),
+              CATEGORY_CODE={
+                  ct <- collectionType(geneSet)
+                  category <- ct@category
+                  subcategory <- ct@subCategory
+                  paste(if (is.na(category)) NULL else category,
+                        if (is.na(subcategory)) NULL else subcategory,
+                        collapse=.BROAD_SEPARATOR, sep="")
+              },
+              CONTRIBUTOR=contributor(geneSet),
+              PMID=pubMedIds(geneSet),
+              DESCRIPTION_FULL=longDescription(geneSet),
+              DESCRIPTION_SHORT=description(geneSet),
+              MEMBERS_SYMBOLIZED=paste(genes(geneSet), collapse=",")
+##               TAGS="",
+##               MESH="",
+##               CHIP="",
+##               MEMBERS=""
+              ))
 }
 
 getBroadSets <- function(file, ...) {
     tryCatch({
-        .getGeneSets(file, .broadXMLToGeneSet(file), ...)
+        .fromXML(file, "//GENESET", .BroadXMLNodeToGeneSet_factory(file), ...)
     }, error=function(err) {
-        stop("'broadGeneSet' failed to create gene set:",
+        stop("'getBroadSets' failed to create gene set:",
+             "\n  ", conditionMessage(err),
+             call.=FALSE)
+    })
+}
+
+toBroadXML <- function(geneSet, ...) {
+    tryCatch({
+        .toXML(geneSet, .GeneSetToBroadXMLNode, ...)
+    }, error=function(err) {
+        stop("'toBroadXML' failed to create XML:",
              "\n  ", conditionMessage(err),
              call.=FALSE)
     })

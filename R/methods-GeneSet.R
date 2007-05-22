@@ -35,7 +35,7 @@ setMethod("show",
               cat("setName: ", setName(object), "\n",
                   "setIdentifier: ", setIdentifier(object), "\n", sep="")
               cat("genes:",
-                  paste(selectSome(genes(object)), collapse=", "),
+                  paste(selectSome(genes(object), maxToShow=4), collapse=", "),
                   paste("(total: ", length(genes(object)), ")\n",
                         sep=""),
                   sep=" ")

@@ -82,3 +82,20 @@ test_RequiredArgsToNew <- function() {
                            contributor="A.U. Thor"),
                    silent=TRUE)
 }
+
+test_MakeFromExpressionSet <- function() {
+    data(sample.ExpressionSet)
+    res <- GeneSet(sample.ExpressionSet, setName="123",
+                   setIdentifier="456")
+    checkTrue(all(genes(res)==featureNames(sample.ExpressionSet)))
+    checkTrue(is(setType(res), "AnnotationIdentifier"))
+    checkTrue(is(collectionType(res), "AdHocCollection"))
+    checkTrue(description(res)==
+              experimentData(sample.ExpressionSet)@title)
+    checkTrue(longDescription(res) ==
+              abstract(experimentData(sample.ExpressionSet)))
+    checkTrue(urls(res) ==
+              experimentData(sample.ExpressionSet)@url)
+    checkTrue(contributor(res) ==
+              experimentData(sample.ExpressionSet)@name)
+}

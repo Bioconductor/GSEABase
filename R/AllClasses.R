@@ -9,6 +9,13 @@ setClass("NullIdentifier",
          prototype = prototype(
            type = new("ScalarCharacter", "NullIdentifier")))
 
+setClass("AnnotationIdentifier",
+         contains = "GeneIdentifierType",
+         representation = representation(
+           annotation = "ScalarCharacter"), # Bioconductor annotation package
+         prototype = prototype(
+           type = new("ScalarCharacter", "Annotation")))
+
 setClass("EntrezIdentifier",
          contains = "GeneIdentifierType",
          prototype = prototype(

@@ -3,14 +3,14 @@ import(methods)
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(GeneIdentifierType,
-              NullIdentifier, EntrezIdentifier, SymbolIdentifier,
-              PfamIdentifier,
+              NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
+              SymbolIdentifier, PfamIdentifier,
               CollectionType,
               AdHocCollection, BroadCollection,
               GeneSet, GeneColorSet)
 
 exportMethods(show, initialize, coerce,
-              validIdentifiers,
+              validIdentifiers, annotation,
               ## GeneSet
               GeneSet, setType, genes, setIdentifier,
               setName, description, longDescription,

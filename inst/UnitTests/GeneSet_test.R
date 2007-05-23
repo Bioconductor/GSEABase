@@ -8,11 +8,19 @@ getterCheck <- function(getter, slotName, obj) {
 }
 
 do_GeneSet_getter_check <- function(obj) {
-    getters <- GSEABase:::.GETTERS_GeneSet
-    names(getters) <- ifelse(nchar(names(getters)) == 0,
-                             getters, names(getters))
+    getters <- GSEABase:::.nameAll(GSEABase:::.GETTERS_GeneSet)
     for (g in names(getters)) {
         getterCheck(get(g), getters[[g]], obj)
+    }
+}
+
+do_GeneSet_setter_check <- function(obj) {
+    setters <- GSEABase:::.nameAll(GSEABase:::.SETTERS_GeneSet)
+    for (s in names(setters)) {
+        ss <- paste(s, "<-", sep="")
+        obj <- do.call(ss,
+                       list(obj, new(class(slot(obj, setters[[s]])))))
+        checkTrue(validObject(obj,complete=TRUE))
     }
 }
 
@@ -32,6 +40,7 @@ test_MakeNoType <- function() {
     checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
+    do_GeneSet_setter_check(gs)
 }
 
 test_MakeString <- function() {
@@ -49,6 +58,7 @@ test_MakeString <- function() {
     checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
+    do_GeneSet_setter_check(gs)
 }
 
 test_MakeType <- function() {
@@ -67,11 +77,11 @@ test_MakeType <- function() {
     checkEquals(mkScalar("TestSet"), setName(gs))
 
     do_GeneSet_getter_check(gs)
+    do_GeneSet_setter_check(gs)
 }
 
 test_RequiredArgsToNew <- function() {
-    checkException(
-                   GeneSet(new("EntrezIdentifier"),
+    checkException(GeneSet(new("EntrezIdentifier"),
                            genes=letters[1:5],
                            ## no setIdentifier
                            setName="TestSet",
@@ -85,17 +95,55 @@ test_RequiredArgsToNew <- function() {
 
 test_MakeFromExpressionSet <- function() {
     data(sample.ExpressionSet)
-    res <- GeneSet(sample.ExpressionSet, setName="123",
+    gs <- GeneSet(sample.ExpressionSet, setName="123",
                    setIdentifier="456")
-    checkTrue(all(genes(res)==featureNames(sample.ExpressionSet)))
-    checkTrue(is(setType(res), "AnnotationIdentifier"))
-    checkTrue(is(collectionType(res), "AdHocCollection"))
-    checkTrue(description(res)==
+    checkTrue(all(genes(gs)==featureNames(sample.ExpressionSet)))
+    checkTrue(is(setType(gs), "AnnotationIdentifier"))
+    checkTrue(is(collectionType(gs), "AdHocCollection"))
+    checkTrue(description(gs)==
               experimentData(sample.ExpressionSet)@title)
-    checkTrue(longDescription(res) ==
+    checkTrue(longDescription(gs) ==
               abstract(experimentData(sample.ExpressionSet)))
-    checkTrue(urls(res) ==
+    checkTrue(urls(gs) ==
               experimentData(sample.ExpressionSet)@url)
-    checkTrue(contributor(res) ==
+    checkTrue(contributor(gs) ==
               experimentData(sample.ExpressionSet)@name)
+    do_GeneSet_getter_check(gs)
+    do_GeneSet_setter_check(gs)
+}
+
+test_setdiffExport <- function() {
+    checkIdentical(environment(setdiff),
+                   environment(GSEABase::setdiff))
+}
+
+test_LogicalNonOverlapping <- function() {
+    ## non-overlapping
+    gss <- getBroadSets(system.file("extdata", "Broad.xml",
+                                   package="GSEABase"))
+    gs1 <- gss[[1]]
+    gs2 <- gss[[2]]
+    gs12 <- gs1 & gs2
+    checkTrue(length(genes(gs12))==0)
+    gs12 <- gs1 | gs2
+    checkTrue(length(genes(gs12))==length(c(genes(gs1), genes(gs2))))
+    checkTrue(all(genes(gs1) %in% genes(gs12)))
+    checkTrue(all(genes(gs2) %in% genes(gs12)))
+    checkIdentical(genes(GSEABase::setdiff(gs12, gs1)), genes(gs2))
+    checkIdentical(genes(GSEABase::setdiff(gs12, gs2)), genes(gs1))
+}
+
+test_LogicalOverlapping <- function() {
+    gss <- getBroadSets(system.file("extdata", "Broad.xml",
+                                   package="GSEABase"))
+    gs1 <- gss[[1]]
+    gs2 <- GeneSet(type=setType(gs1),
+                   setName="123", setIdentifier="456",
+                   genes=c(
+                     sample(genes(gs1), 20),
+                     sample(genes(gss[[2]]), 20)))
+    checkTrue(all(genes(gs1 | gs2) %in%
+                  genes(GSEABase::setdiff(gs1, gs2) |
+                        (gs1 & gs2) |
+                        GSEABase::setdiff(gs2, gs1))))
 }

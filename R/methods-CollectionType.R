@@ -8,12 +8,14 @@ setMethod("show",
               cat("collectionType:", collectionType(object), "\n")
           })
 
+## BroadCollection
+
 setMethod("show",
           signature=signature(object="BroadCollection"),
           function(object) {
-              callNextMethod()
-              cat("category and sub-category: ",
-                  object@category, ", ",
-                  object@subCategory, "\n",
-                  sep="")
+              cat("collectionType:",
+                  collectionType(object),
+                  paste("(category: ", object@category, " / ",
+                        object@subCategory, ")", sep=""),
+                  "\n")
           })

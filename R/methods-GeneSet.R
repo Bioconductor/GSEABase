@@ -27,7 +27,93 @@ setMethod("initialize",
 
 .getters("GeneSet", .GETTERS_GeneSet)
 
-## other methods
+.SETTERS_GeneSet <- .GETTERS_GeneSet
+
+.setters("GeneSet", .SETTERS_GeneSet)
+
+## set operations
+
+.checkSetTypes <- function(x, y, functionName) {
+    if (!extends(class(setType(x)), class(setType(y))))
+        stop("'", functionName, "' requires identical GeneSet setTypes;",
+             "\n\tgot: ", class(setType(x)), ", ", class(setType(y)))
+}
+
+.geneSetIntersect <- function(x, y) {
+   .checkSetTypes(x, y, "intersect")
+    new(class(x), x,
+        setIdentifier=setIdentifier(x),
+        setName=paste("(", setName(x), " & ", setName(y), ")",
+          sep=""),
+        urls=c(urls(x), urls(y)),
+        genes=intersect(genes(x), genes(y)))
+}
+
+.geneSetUnion <- function(x, y) {
+    .checkSetTypes(x, y, "union")
+    new(class(x), x,
+        setIdentifier=setIdentifier(x),
+        setName=paste("(", setName(x), " | ", setName(y), ")",
+          sep=""),
+        urls = c(urls(x), urls(y)),
+        genes=union(genes(x), genes(y)))
+}
+
+setMethod("intersect",
+          signature=signature(x="GeneSet", y="GeneSet"),
+          .geneSetIntersect)
+
+setMethod("union",
+          signature=signature(x="GeneSet", y="GeneSet"),
+          .geneSetUnion)
+
+setMethod("&",
+          signature=signature(e1="GeneSet", e2="GeneSet"),
+          function(e1, e2) .geneSetIntersect(e1, e2))
+
+setMethod("&",
+          signature=signature(e1="GeneSet", e2="character"),
+          function(e1, e2) {
+              genes <- intersect(genes(e1), e2)
+              new(class(e1), e1,
+                  setIdentifier=setIdentifier(e1),
+                  setName=paste("(", setName(e1), " & <character>)",
+                    sep=""),
+                  genes=genes)
+          })
+
+setMethod("|",
+          signature=signature(e1="GeneSet", e2="GeneSet"),
+          function(e1, e2) .geneSetUnion(e1, e2))
+
+setMethod("|",
+          signature=signature(e1="GeneSet", e2="character"),
+          function(e1, e2) {
+              genes <- union(genes(e1), e2)
+              new(class(e1), e1,
+                  setIdentifier=setIdentifier(e1),
+                  setName=paste("(", setName(e1), " | <character>)",
+                    sep=""),
+                  genes=genes)
+          })
+
+setMethod("Logic",
+          signature=signature(e1="character", e2="GeneSet"),
+          function(e1, e2) callGeneric(e2, e1))
+
+setMethod("setdiff",
+          signature=signature(x="GeneSet", y="GeneSet"),
+          function(x, y) {
+              .checkSetTypes(x, y, "setdiff")
+              genes=setdiff(genes(x), genes(y))
+              new(class(x), x,
+                  setIdentifier=setIdentifier(x),
+                  setName=paste(setName(x), "-", setName(y)),
+                  genes=setdiff(genes(x), genes(y)),
+                  creationDate=date())
+          })
+
+## show
 
 setMethod("show",
           signature=signature(object="GeneSet"),
@@ -56,4 +142,3 @@ setMethod("show",
               show(setVersion(object))
               cat("creationDate: ", creationDate(object), "\n", sep="")
           })
-

@@ -38,13 +38,17 @@
                   })
     }, list(CLASS = klass)))
 
-.getters <- function(klass, slots) {
-    ## getter name = slot; missing name uses slot for getter name
-    if (length(names(slots)))
-      names(slots) <- ifelse(nchar(names(slots)) == 0,
-                             slots, names(slots))
+.nameAll <- function(x) {
+    ## name = slot; missing name uses slot for getter name
+    if (length(names(x)))
+      names(x) <- ifelse(nchar(names(x)) == 0, x, names(x))
     else
-      names(slots) <- slots
+      names(x) <- x
+    x
+}
+
+.getters <- function(klass, slots) {
+    slots <- .nameAll(slots)
     ## standard getters. 'where' default is topenv(parent.frame())
     ## which on package load is the package name space
     for (i in seq(along=slots)) {
@@ -58,5 +62,28 @@
         }, list(CLASS = klass,
                 GENERIC = names(slots)[[i]],
                 SLOT = slots[[i]])))
+    }
+}
+
+.setters <- function(klass, slots) {
+    slots <- .nameAll(slots)
+    for (i in seq(along=slots)) {
+        eval(substitute({
+
+            if (!isGeneric(SETTER))
+                setGeneric(SETTER, function(object, value)
+                           standardGeneric(SETTER))
+            setReplaceMethod(GENERIC,
+                             signature=signature(
+                               object=CLASS,
+                               value=getSlots(CLASS)[[SLOT]]),
+                             function(object, value) {
+                                 slot(object, SLOT) <- value
+                                 object
+                             })
+        }, list(CLASS=klass,
+                GENERIC=names(slots)[[i]],
+                SETTER=paste(names(slots)[[i]], "<-", sep=""),
+                SLOT=slots[[i]])))
     }
 }

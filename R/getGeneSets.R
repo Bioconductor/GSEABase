@@ -40,7 +40,7 @@
                      genes=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
                      organism=attrs[["ORGANISM"]],
                      urls= c(getBroadSet=url,
-                       attrs[["EXTERNAL_DETAILS_URL"]]),
+                       .mkSplit(attrs[["EXTERNAL_DETAILS_URL"]])),
                      collectionType={
                          categories <-
                              .mkSplit(attrs[["CATEGORY_CODE"]])

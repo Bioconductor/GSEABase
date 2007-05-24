@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 0.0.3
+Version: 0.0.4
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 Description: This package provides classes and methods to support
@@ -13,3 +13,13 @@ Depends: R (>= 2.6.0), methods, Biobase (>= 1.15.11), XML (>= 1.7-3)
 Imports: Biobase (>= 1.15.11)
 LazyLoad: yes
 biocViews: Infrastructure, Statistics
+Collate: utilities.R
+         AAA.R
+         AllClasses.R
+         AllGenerics.R
+         getGeneSets.R
+         methods-CollectionType.R
+         methods-GeneColorSet.R
+         methods-GeneIdentifierType.R
+         methods-GeneSet.R
+         zzz.R

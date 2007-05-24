@@ -2,7 +2,7 @@
     idx <- which(!(required %in% names(match.call())[-1]))
     if (length(idx) > 0)
         stop("missing required argument(s) '",
-             paste(required[idx], sep="', '"), "'")
+             paste(required[idx], collapse="', '"), "'")
 }
 
 .constructors <- function(klass, required)
@@ -78,14 +78,24 @@
             if (!isGeneric(SETTER))
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER))
-            setReplaceMethod(GENERIC,
-                             signature=signature(
-                               object=CLASS,
-                               value=getSlots(CLASS)[[SLOT]]),
-                             function(object, value) {
-                                 slot(object, SLOT) <- value
-                                 object
-                             })
+            if (getSlots(CLASS)[[SLOT]] == "ScalarCharacter")
+                setReplaceMethod(GENERIC,
+                                 signature=signature(
+                                   object=CLASS,
+                                   value="character"),
+                                 function(object, value) {
+                                     slot(object, SLOT) <- mkScalar(value)
+                                     object
+                                 })
+            else
+                setReplaceMethod(GENERIC,
+                                 signature=signature(
+                                   object=CLASS,
+                                   value=getSlots(CLASS)[[SLOT]]),
+                                 function(object, value) {
+                                     slot(object, SLOT) <- value
+                                     object
+                                 })
         }, list(CLASS=klass,
                 GENERIC=names(slots)[[i]],
                 SETTER=paste(names(slots)[[i]], "<-", sep=""),

@@ -111,6 +111,24 @@ test_intersect <- function() {
                    levels(phenotypeColor(res)))
 }
 
+test_intersectDifferentColors <- function() {
+    gcs1 <- .colorBroadSets()[[1]]
+    gcs2 <- gcs1
+    phenotype(gcs2) <- paste(phenotype(gcs2), "A")
+    geneColor(gcs2) <- factor(rep(c("Q", "R"), length=length(genes(gcs2))))
+    ## warning about synthetic phenotype
+    oldOpts <- options(warn=2)
+    on.exit(options(oldOpts))
+    checkException(res <- GSEABase::intersect(gcs1, gcs2), silent=TRUE)
+    options(oldOpts)
+    ## 
+    suppressWarnings(res <- GSEABase::intersect(gcs1, gcs2))
+    checkTrue(phenotype(res) != phenotype(gcs1))
+    checkIdentical(2L, length(levels(geneColor(res))))
+    checkIdentical(3L, length(levels(phenotypeColor(res))))
+    checkTrue(!any(levels(geneColor(res)) == levels(geneColor(gcs2))))
+}
+
 test_union <- function() {
     gcss <- .colorBroadSets()
 

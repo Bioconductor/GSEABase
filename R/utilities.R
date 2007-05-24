@@ -2,7 +2,7 @@
 .unique <- function(x, y) c(x, y[!(y %in% x)])
 
 .glue <- function(x, y, op)
-    paste("(", x, " ", op, " ", y, ")", sep="")
+    paste("(", x, op, y, ")", sep="")
 
 .requireQ <- function(pkg)
   suppressWarnings(require(pkg, quietly=TRUE, character.only=TRUE))

@@ -46,7 +46,7 @@ setMethod("initialize",
    .checkGeneSetLogicTypes(x, y, "'&' or 'intersect'")
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName=.glue(setName(x), setName(y), "&"),
+        setName=.glue(setName(x), setName(y), " & "),
         urls=.unique(urls(x), urls(y)),
         genes=intersect(genes(x), genes(y)))
 }
@@ -55,7 +55,7 @@ setMethod("initialize",
     .checkGeneSetLogicTypes(x, y, "'|' or 'union'")
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName=.glue(setName(x), setName(y), "|"),
+        setName=.glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
         genes=union(genes(x), genes(y)))
 }
@@ -78,7 +78,7 @@ setMethod("&",
               genes <- intersect(genes(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
-                  setName=.glue(setName(e1), "<character>", "&"),
+                  setName=.glue(setName(e1), "<character>", " & "),
                   genes=genes)
           })
 
@@ -92,7 +92,7 @@ setMethod("|",
               genes <- union(genes(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
-                  setName=.glue(setName(e1), "<character>", "|"),
+                  setName=.glue(setName(e1), "<character>", " | "),
                   genes=genes)
           })
 
@@ -107,7 +107,7 @@ setMethod("setdiff",
               genes=setdiff(genes(x), genes(y))
               new(class(x), x,
                   setIdentifier=setIdentifier(x),
-                  setName=.glue(setName(x), setName(y), "-"),
+                  setName=.glue(setName(x), setName(y), " - "),
                   genes=setdiff(genes(x), genes(y)),
                   creationDate=date())
           })

@@ -1,5 +1,5 @@
-.constructors("GeneColorSet", required=c("setName", "setIdentifier",
-                                "phenotype"))
+.constructors("GeneColorSet",
+              required=c("setName", "setIdentifier", "phenotype"))
 
 setMethod("initialize",
           signature=signature(.Object="GeneColorSet"),
@@ -24,16 +24,13 @@ setMethod("initialize",
 
 .setters("GeneColorSet", .SETTERS_GeneColorSet)
 
-setAs("GeneSet", "GeneColorSet",
-      function(from) {
-          new("GeneColorSet",
-              ## clone template
-              from,
-              ## required args
-              setName=setName(from),
-              setIdentifier=setIdentifier(from),
-              phenotype="undefined")
-      })
+setReplaceMethod("phenotype",
+                 signature(object="GeneColorSet",
+                           value="character"),
+                 function(object, value) {
+                     slot(object, "phenotype") <- mkScalar(value)
+                     object
+                 })
 
 setMethod("coloring",
           signature=signature(object="GeneColorSet"),
@@ -76,23 +73,19 @@ setReplaceMethod("coloring",
         warning(functionName, ": ",
                 "'phenotype' differs; creating synthetic phenotype")
     else {
-        if (any(is.na(match(levels(geneColor(x)),
-                        levels(geneColor(y))))) ||
-            any(is.na(match(levels(phenotypeColor(x)),
-                        levels(phenotypeColor(y))))))
+        if (any(levels(geneColor(x)) != levels(geneColor(y))) ||
+            any(levels(phenotypeColor(x)) !=
+                levels(phenotypeColor(y))))
             warning(functionName, ": ",
-                    "'levels' of gene- or phenotypeColors differ between identical phenotpyes")
+                    "'levels' of gene- or phenotypeColor differ between identical phenotpyes")
     }
 }
 
 .geneColorSetIntersect <- function(x, y) {
     color <- function(x, y, lbl) {
-        if (!phenotypesIdentical)
-            .glue(x, y, "&")
-        else if (any(is.na(match(levels(x), levels(y)))))
-            .glue(x, y, "&")
-        else if (any(x != y))
-            stop("'", lbl, "' values differ for identical phenotypes")
+        if (!phenotypesIdentical ||
+            any(as.character(x) != as.character(y)))
+            factor(.glue(as.character(x), as.character(y), ", "))
         else x
     }
     .checkGeneColorSetLogicTypes(x, y, "'&' or 'intersect'")
@@ -104,22 +97,15 @@ setReplaceMethod("coloring",
     phenotype <- phenotype(x)
     phenotypesIdentical <- phenotype == phenotype(y)
     if (!phenotypesIdentical)
-        phenotype <- .glue(phenotype, phenotype(y), "&")
-    gc <- factor(color(as.character(geneColor(x)[idx]),
-                       as.character(geneColor(y)[idy]), "geneColor"),
-                 levels = unique(c(
-                   levels(geneColor(x)),
-                   levels(geneColor(y)))))
-    pc <- factor(color(as.character(phenotypeColor(x)[idx]),
-                       as.character(phenotypeColor(y)[idy]),
-                       "phenotypeColor"),
-                 levels = unique(c(
-                   levels(phenotypeColor(x)),
-                   levels(phenotypeColor(y)))))
+        phenotype <- .glue(phenotype, phenotype(y), ", ")
+    gc <- color(geneColor(x)[idx], geneColor(y)[idy], "geneColor")
+    pc <- color(phenotypeColor(x)[idx], phenotypeColor(y)[idy],
+                "phenotypeColor")
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName = .glue(setName(x), setName(y), "&"),
+        setName = .glue(setName(x), setName(y), " & "),
         urls = .unique(urls(x), urls(y)),
+        phenotype = phenotype,
         genes = genes, geneColor = gc, phenotypeColor = pc)      
 }
 
@@ -130,7 +116,7 @@ setReplaceMethod("coloring",
     phenotype <- phenotype(x)
     phenotypesIdentical <- phenotype == phenotype(y)
     if (!phenotypesIdentical)
-        phenotype <- .glue(phenotype, phenotype(y), "|")
+        phenotype <- .glue(phenotype, phenotype(y), ", ")
     gc <- factor(c(as.character(geneColor(x)),
                    as.character(geneColor(y)[idy])),
                  levels = unique(c(
@@ -143,7 +129,7 @@ setReplaceMethod("coloring",
                    levels(phenotypeColor(y)))))
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName = .glue(setName(x), setName(y), "|"),
+        setName = .glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
         genes = genes, geneColor = gc, phenotypeColor = pc)      
 }
@@ -163,7 +149,7 @@ setReplaceMethod("coloring",
                  levels=levels(phenotypeColor(x)))
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName = .glue(setName(x), setName(y), "-"),
+        setName = .glue(setName(x), setName(y), " - "),
         urls = .unique(urls(x), urls(y)),
         genes=gx[idx], geneColor = gc, phenotypeColor = pc)
 }
@@ -188,7 +174,7 @@ setMethod("&",
               idx <- which(genes(e1)==e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
-                  setName=.glue(setName(e1), "<character>", "&"),
+                  setName=.glue(setName(e1), "<character>", " & "),
                   genes=genes(e1)[idx],
                   geneColor=geneColor(e1)[idx],
                   phenotypeColor=phenotypeColor(e1)[idx])

@@ -35,9 +35,11 @@ setMethod("initialize",
 ## Logic operations
 
 .checkGeneSetLogicTypes <- function(x, y, functionName) {
-    if (!extends(class(setType(x)), class(setType(y))))
-        stop(functionName, " requires identical GeneSet setTypes;",
-             "\n\tgot: ", class(setType(x)), ", ", class(setType(y)))
+    tx <- setType(x)
+    ty <- setType(y)
+    if (!(is(tx, class(ty)) || is(ty, class(tx))))
+        stop(functionName, " incompatible GeneSet setTypes;",
+             "\n\tgot: ", class(tx), ", ", class(ty))
 }
 
 .geneSetIntersect <- function(x, y) {

@@ -32,10 +32,11 @@
                       organism <- 
                           tryCatch({
                               pkg <- annotation(type)
-                              if (length(pkg) == 1 &&
-                                  nchar(pkg) > 0 &&
-                                  require(pkg, quietly=TRUE, character.only=TRUE))
-                                  get(paste(pkg, "ORGANISM", sep=""))
+                              if (length(pkg) == 1 && nchar(pkg) > 0 &&
+                                  .requireQ(pkg))
+                                get(paste(pkg, "ORGANISM", sep=""))
+                              else
+                                ""
                           }, error=function(err) "")
                       new(CLASS,
                           type = new("AnnotationIdentifier",

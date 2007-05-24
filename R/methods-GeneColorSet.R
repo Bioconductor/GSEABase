@@ -1,4 +1,5 @@
-.constructors("GeneColorSet", required=c("phenotype"))
+.constructors("GeneColorSet", required=c("setName", "setIdentifier",
+                                "phenotype"))
 
 setMethod("initialize",
           signature=signature(.Object="GeneColorSet"),

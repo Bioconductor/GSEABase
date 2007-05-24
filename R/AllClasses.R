@@ -92,10 +92,16 @@ setClass("GeneColorSet",
            geneColor = "factor",
            phenotypeColor = "factor"),
          validity = function(object) {
+             msg <- NULL
              clen <- c(length(geneColor(object)),
                        length(phenotypeColor(object)))
              if (any(clen > 0) &
                  any(clen != length(genes(object))))
-                 "gene and color lengths differ"
+                 msg <- c(msg,"gene and color lengths differ")
+             if (!("factor" %in% class(geneColor(object))) ||
+                 !("factor" %in% class(phenotypeColor(object))))
+                 msg <- c(msg, "gene- and phenotypeColor must be 'factor'")
+             if (!is.null(msg))
+                 msg
              else TRUE
          })

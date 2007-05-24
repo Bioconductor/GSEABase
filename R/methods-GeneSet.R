@@ -32,31 +32,29 @@ setMethod("initialize",
 
 .setters("GeneSet", .SETTERS_GeneSet)
 
-## set operations
+## Logic operations
 
-.checkSetTypes <- function(x, y, functionName) {
+.checkGeneSetLogicTypes <- function(x, y, functionName) {
     if (!extends(class(setType(x)), class(setType(y))))
-        stop("'", functionName, "' requires identical GeneSet setTypes;",
+        stop(functionName, " requires identical GeneSet setTypes;",
              "\n\tgot: ", class(setType(x)), ", ", class(setType(y)))
 }
 
 .geneSetIntersect <- function(x, y) {
-   .checkSetTypes(x, y, "intersect")
+   .checkGeneSetLogicTypes(x, y, "'&' or 'intersect'")
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName=paste("(", setName(x), " & ", setName(y), ")",
-          sep=""),
-        urls=c(urls(x), urls(y)),
+        setName=.glue(setName(x), setName(y), "&"),
+        urls=.unique(urls(x), urls(y)),
         genes=intersect(genes(x), genes(y)))
 }
 
 .geneSetUnion <- function(x, y) {
-    .checkSetTypes(x, y, "union")
+    .checkGeneSetLogicTypes(x, y, "'|' or 'union'")
     new(class(x), x,
         setIdentifier=setIdentifier(x),
-        setName=paste("(", setName(x), " | ", setName(y), ")",
-          sep=""),
-        urls = c(urls(x), urls(y)),
+        setName=.glue(setName(x), setName(y), "|"),
+        urls = .unique(urls(x), urls(y)),
         genes=union(genes(x), genes(y)))
 }
 
@@ -78,8 +76,7 @@ setMethod("&",
               genes <- intersect(genes(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
-                  setName=paste("(", setName(e1), " & <character>)",
-                    sep=""),
+                  setName=.glue(setName(e1), "<character>", "&"),
                   genes=genes)
           })
 
@@ -93,8 +90,7 @@ setMethod("|",
               genes <- union(genes(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
-                  setName=paste("(", setName(e1), " | <character>)",
-                    sep=""),
+                  setName=.glue(setName(e1), "<character>", "|"),
                   genes=genes)
           })
 
@@ -105,11 +101,11 @@ setMethod("Logic",
 setMethod("setdiff",
           signature=signature(x="GeneSet", y="GeneSet"),
           function(x, y) {
-              .checkSetTypes(x, y, "setdiff")
+              .checkSetTypes(x, y, "'setdiff'")
               genes=setdiff(genes(x), genes(y))
               new(class(x), x,
                   setIdentifier=setIdentifier(x),
-                  setName=paste(setName(x), "-", setName(y)),
+                  setName=.glue(setName(x), setName(y), "-"),
                   genes=setdiff(genes(x), genes(y)),
                   creationDate=date())
           })

@@ -51,15 +51,6 @@
                   })
     }, list(CLASS = klass, REQUIRED=required)))
 
-.nameAll <- function(x) {
-    ## name = slot; missing name uses slot for getter name
-    if (length(names(x)))
-      names(x) <- ifelse(nchar(names(x)) == 0, x, names(x))
-    else
-      names(x) <- x
-    x
-}
-
 .getters <- function(klass, slots) {
     slots <- .nameAll(slots)
     ## standard getters. 'where' default is topenv(parent.frame())

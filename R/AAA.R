@@ -1,27 +1,40 @@
-.constructors <- function(klass)
+.checkRequired <- function(required, ...) {
+    idx <- which(!(required %in% names(match.call())[-1]))
+    if (length(idx) > 0)
+        stop("missing required argument(s) '",
+             paste(required[idx], sep="', '"), "'")
+}
+
+.constructors <- function(klass, required)
     eval(substitute({
         setMethod(CLASS,
                   signature = signature(type = "missing"),
                   function(type, ...) {
+                      .checkRequired(REQUIRED, ...)
                       new(CLASS, type=new("NullIdentifier"), ...)
                   })
         setMethod(CLASS,
                   signature = signature(type = "character"),
                   function(type, ...) {
-                      new(CLASS, type=new(type), ...)
+                      .checkRequired(REQUIRED, ...)
+                      new(CLASS, type=new("NullIdentifier"), ...)
                   })
         setMethod(CLASS,
                   signature = signature(type="GeneIdentifierType"),
                   function(type, ...) {
+                      .checkRequired(REQUIRED, ...)
                       new(CLASS, type = type, ...)
                   })
         setMethod(CLASS,
                   signature = signature(type="ExpressionSet"),
                   function(type, ...) {
+                      .checkRequired(REQUIRED, ...)
                       organism <- 
                           tryCatch({
                               pkg <- annotation(type)
-                              if (require(pkg, quietly=TRUE, character.only=TRUE))
+                              if (length(pkg) == 1 &&
+                                  nchar(pkg) > 0 &&
+                                  require(pkg, quietly=TRUE, character.only=TRUE))
                                   get(paste(pkg, "ORGANISM", sep=""))
                           }, error=function(err) "")
                       new(CLASS,
@@ -36,7 +49,7 @@
                           contributor = experimentData(type)@name,
                           ...)
                   })
-    }, list(CLASS = klass)))
+    }, list(CLASS = klass, REQUIRED=required)))
 
 .nameAll <- function(x) {
     ## name = slot; missing name uses slot for getter name

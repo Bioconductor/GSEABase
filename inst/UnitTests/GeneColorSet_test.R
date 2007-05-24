@@ -26,7 +26,7 @@ test_ConstructorAllColorArgs <- function() {
     checkTrue(length(phenotypeColor(gs))==24)
 
     ## correct color contents
-    gfactor <-     factor(rep(c("high", "low"), 12))
+    gfactor <- factor(rep(c("high", "low"), 12))
     pfactor <- factor(rep(c("big", "medium", "small"), 8))
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
@@ -48,4 +48,21 @@ test_show <- function() {
     sink(con)
     on.exit(sink())
     show(gs)
+}
+
+test_colorizeReplace <- function() {
+    gs <- getBroadSets(system.file("extdata", "Broad.xml",
+                                   package="GSEABase"))[[1]]
+    gcs <- as(gs, "GeneColorSet")
+    df <- coloring(gcs)
+    gc <- as.factor(rep(c("Up", "Down"), length=nrow(df)))
+    pc <- as.factor(rep(c("Bigger", "Smaller", "Same"),
+                        length=nrow(df)))
+    df$geneColor <- gc
+    df$phenotypeColor <- pc
+    coloring(gcs) <- df
+
+    checkIdentical(geneColor(gcs), gc)
+    checkIdentical(phenotypeColor(gcs), pc)
+    checkIdentical(genes(gs), genes(gcs))
 }

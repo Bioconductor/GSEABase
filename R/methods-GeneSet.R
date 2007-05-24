@@ -1,11 +1,12 @@
-.constructors("GeneSet")
+.constructors("GeneSet",
+              required=c("setName", "setIdentifier"))
 
 setMethod("initialize",
           signature=signature(.Object="GeneSet"),
           function(.Object, .Template=.Object, ...,
-                   ## required, even when 'cloning'
-                   setIdentifier, setName,
                    ## additional args, manipulated by method
+                   setIdentifier=.Template@setIdentifier,
+                   setName=.Template@setIdentifier,
                    shortDescription=.Template@shortDescription,
                    longDescription=.Template@longDescription,
                    organism=.Template@organism,

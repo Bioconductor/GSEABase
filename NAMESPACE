@@ -9,8 +9,12 @@ exportClasses(GeneIdentifierType,
               AdHocCollection, BroadCollection,
               GeneSet, GeneColorSet)
 
-exportMethods(show, initialize, coerce,
+exportMethods(show, initialize, coerce, intersect, union, setdiff,
+              "&", "|",
+
+              ## IdentifierType
               validIdentifiers, annotation,
+
               ## GeneSet
               GeneSet,
               
@@ -23,9 +27,12 @@ exportMethods(show, initialize, coerce,
               "pubMedIds<-", "urls<-", "contributor<-",
               "setVersion<-", "creationDate<-", "collectionType<-",
 
-              intersect, union, setdiff, "&", "|",
-
               ## GeneColorSet
-              GeneColorSet, phenotype, geneColor, phenotypeColor)
+              GeneColorSet,
+              
+              phenotype, geneColor, phenotypeColor, coloring,
+              
+              "phenotype<-", "geneColor<-", "phenotypeColor<-",
+              "coloring<-")
 
 export(getBroadSets, toBroadXML)

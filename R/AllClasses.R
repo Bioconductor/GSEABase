@@ -73,11 +73,16 @@ setClass("GeneSet",
            creationDate = "character",
            collectionType = "CollectionType"),
          prototype = prototype(
+           setName = new("ScalarCharacter", "<undefined>"),
+           setIdentifier = new("ScalarCharacter", "<undefined>"),
            type = new("NullIdentifier"),
            version = new("Versions", "0.0.1"),
            collectionType = new("AdHocCollection")),
          validity = function(object) {
-             TRUE
+             if (any(duplicated(genes(object))))
+                 "gene symbols must be unique"
+             else
+                 TRUE
          })
 
 setClass("GeneColorSet",

@@ -12,6 +12,12 @@ setGeneric("GeneColorSet",
            signature=c("type"),
            function(type, ...) standardGeneric("GeneColorSet"))
 
+setGeneric("coloring",
+           function(object, ...) standardGeneric("coloring"))
+
+setGeneric("coloring<-",
+           function(object, ..., value) standardGeneric("coloring<-"))
+
 setGeneric("validIdentifiers",
            function(identifier, genes) {
                standardGeneric("validIdentifiers")

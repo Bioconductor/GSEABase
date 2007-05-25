@@ -2,7 +2,7 @@
     gss <- getBroadSets(system.file("extdata", "Broad.xml",
                                     package="GSEABase"))
     lapply(gss, function(gs) {
-        gcs <- as(gs, "GeneColorSet")
+        gcs <- GeneColorSet(gs, phenotype="<undefined>")
         df <- coloring(gcs)
         df[,"geneColor"] <- as.factor(rep(c("P", "M"), length=nrow(df)))
         df[,"phenotypeColor"] <- as.factor(rep(LETTERS[1:3], length=nrow(df)))
@@ -64,9 +64,7 @@ test_show <- function() {
 }
 
 test_colorizeReplace <- function() {
-    gs <- getBroadSets(system.file("extdata", "Broad.xml",
-                                   package="GSEABase"))[[1]]
-    gcs <- as(gs, "GeneColorSet")
+    gcs <- .colorBroadSets()[[1]]
     df <- coloring(gcs)
     gc <- as.factor(rep(c("Up", "Down"), length=nrow(df)))
     pc <- as.factor(rep(c("Bigger", "Smaller", "Same"),
@@ -81,9 +79,7 @@ test_colorizeReplace <- function() {
 }
 
 test_colorizeReplaceRetainGeneOrder <- function() {
-    gs <- getBroadSets(system.file("extdata", "Broad.xml",
-                                   package="GSEABase"))[[1]]
-    gcs <- as(gs, "GeneColorSet")
+    gcs <- .colorBroadSets()[[1]]
     ogenes <- genes(gcs)
     coloring(gcs) <- coloring(gcs)[sample(ogenes, length(ogenes)),]
     checkIdentical(genes(gcs), ogenes)

@@ -16,6 +16,16 @@ setMethod("initialize",
                              phenotypeColor=phenotypeColor)
           })
 
+setMethod("GeneColorSet",
+          signature=signature(type="GeneSet"),
+          function(type, ...) {
+              new("GeneColorSet", type, ...)
+          })
+
+setAs("GeneSet", "GeneColorSet",
+      function(from)
+      stop("use 'GeneColorSet(<GeneSet>, phenotype=\"phenotype\", ...)'"))
+
 .GETTERS_GeneColorSet <- c("phenotype", "geneColor", "phenotypeColor")
 
 .getters("GeneColorSet", .GETTERS_GeneColorSet)

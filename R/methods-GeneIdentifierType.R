@@ -32,30 +32,64 @@ setMethod("initialize",
 
 .getters("AnnotationIdentifier", .GETTERS_AnnotationIdentifier)
 
+.annotationMapper <- function(from, tag, what) {
+    genes <- genes(what)
+    pkg <- annotation(from)
+    map <- paste(pkg, tag, sep="")
+    if (!suppressWarnings(.requireQ(pkg)))
+        stop(sprintf("cannot load annotation package '%s'",
+                     pkg))
+    if (!exists(map))
+        stop(sprintf("map '%s' not found in annotation package '%s'",
+                     map, pkg))
+    ngenes <- mget(genes, get(map))
+    if (!all(sapply(ngenes, length)==1))
+        stop(sprintf("map '%s' is not 1:1 in annotation package '%s'",
+                     map, pkg))
+    as.character(unlist(ngenes))
+}
+
+## construct these programatically
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            from="AnnotationIdentifier", to="ANY",
+            what="GeneSet"),
+          function(from, to, what) {
+              new(class(what), what,
+                  genes=.annotationMapper(from, what,
+                    toupper(setType(to))),
+                  type=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            from="AnnotationIdentifier", to="character",
+            what="GeneSet"),
+          function(from, to, what) {
+              type <- tryCatch({
+                  res <- do.call(to, list())
+                  if (!is(res, "AnnotationIdentifier"))
+                      NullIdentifier()
+                  else
+                      res
+              }, error = function(err) NullIdentifier())
+              new(class(what), what,
+                  genes=.annotationMapper(from, to, what),
+                  type=type)
+          })
+
 setMethod("mapIdentifiers",
           signature=signature(
             from="AnnotationIdentifier",
             to="EntrezIdentifier",
             what="GeneSet"),
           function(from, to, what) {
-              genes <- genes(what)
-              pkg <- annotation(from)
-              genemap <- paste(pkg, "ENTREZID", sep="")
-              if (!suppressWarnings(.requireQ(pkg)))
-                  stop(sprintf("cannot load annotation package '%s'",
-                               pkg))
-              if (!exists(paste(pkg, "ENTREZID", sep="")))
-                  stop(sprintf("cannot find map '%s' in annotation package '%s'",
-                               genemap, pkg))
-              ngenes <- mget(genes, get(genemap))
-              if (!all(sapply(ngenes, length)==1))
-                  stop(sprintf("mapping between '%s' and '%s' is not 1:1 in '%s'",
-                               "AnnotationIdentifier",
-                               "EntrezIdentifier", genemap))
               new(class(what), what,
-                  genes=as.character(unlist(ngenes)), type=to)
+                  genes=.annotationMapper(from, "ENTREZID", what),
+                  type=to)
           })
-
+              
 setMethod("show",
           signature=signature(object="AnnotationIdentifier"),
           function(object) {

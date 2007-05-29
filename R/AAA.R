@@ -67,6 +67,8 @@
                         ""
                 }, error=function(err) "")
             new(CLASS,
+                setName = setName,
+                setIdentifier = setIdentifier,
                 type = new("AnnotationIdentifier",
                   annotation = annotation(type)),
                 genes = featureNames(type),

@@ -97,6 +97,8 @@ test_GS_MakeFromExpressionSet <- function() {
     data(sample.ExpressionSet)
     gs <- GeneSet(sample.ExpressionSet, setName="123",
                    setIdentifier="456")
+    checkTrue("123" == setName(gs))
+    checkTrue("456" == setIdentifier(gs))
     checkTrue(all(genes(gs)==featureNames(sample.ExpressionSet)))
     checkTrue(is(setType(gs), "AnnotationIdentifier"))
     checkTrue(is(collectionType(gs), "ExpressionSetCollection"))

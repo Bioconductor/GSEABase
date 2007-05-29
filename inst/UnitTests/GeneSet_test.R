@@ -99,7 +99,7 @@ test_GS_MakeFromExpressionSet <- function() {
                    setIdentifier="456")
     checkTrue(all(genes(gs)==featureNames(sample.ExpressionSet)))
     checkTrue(is(setType(gs), "AnnotationIdentifier"))
-    checkTrue(is(collectionType(gs), "AdHocCollection"))
+    checkTrue(is(collectionType(gs), "ExpressionSetCollection"))
     checkTrue(description(gs)==
               experimentData(sample.ExpressionSet)@title)
     checkTrue(longDescription(gs) ==

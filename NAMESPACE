@@ -35,4 +35,14 @@ exportMethods(show, initialize, coerce, intersect, union, setdiff,
               "phenotype<-", "geneColor<-", "phenotypeColor<-",
               "coloring<-")
 
-export(getBroadSets, toBroadXML)
+export(## IdentifierType
+       NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
+       SymbolIdentifier, PfamIdentifier,
+
+       ## CollectionType
+
+       AdHocCollection, ExpressionSetCollection, KEGGCollection,
+       GOCollection, BroadCollection,
+
+       ## XML
+       getBroadSets, toBroadXML)

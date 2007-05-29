@@ -1,5 +1,10 @@
 ## GeneIdentifierType
 
+.CONSTRUCTORS_GeneIdentifierType <- 
+    names(getSubclasses(getClass("GeneIdentifierType")))
+
+.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType)
+
 .getters("GeneIdentifierType", c(setType="type"))
 
 setMethod("validIdentifiers",

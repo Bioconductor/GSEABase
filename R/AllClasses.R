@@ -43,6 +43,21 @@ setClass("AdHocCollection",
          prototype = prototype(
            type = new("ScalarCharacter", "Ad hoc")))
 
+setClass("ExpressionSetCollection",
+         contains = "CollectionType",
+         prototype = prototype(
+           type = new("ScalarCharacter", "ExpressionSet")))
+
+setClass("KEGGCollection",
+         contains = "CollectionType",
+         prototype = prototype(
+           type = new("ScalarCharacter", "KEGG")))
+
+setClass("GOCollection",
+         contains = "CollectionType",
+         prototype = prototype(
+           type = new("ScalarCharacter", "GO")))
+
 setClass("BroadCollection",
          contains = "CollectionType",
          representation = representation(

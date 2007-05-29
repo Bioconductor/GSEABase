@@ -1,3 +1,8 @@
+.CONSTRUCTORS_CollectionType <- 
+    names(getSubclasses(getClass("CollectionType")))
+
+.constructors_Simple(.CONSTRUCTORS_CollectionType)
+
 setMethod("collectionType",
           signature=signature(object="CollectionType"),
           function(object) object@type)

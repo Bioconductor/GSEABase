@@ -15,7 +15,7 @@
         eval(substitute({
             assign(CONSTRUCTOR,
                    function(...) new(CLASS, ...),
-                   envir=topenv(parent.frame()))
+                   envir=topenv())
         }, list(CONSTRUCTOR = klassnames[[cl]],
                 CLASS = klasses[[cl]])))
 }
@@ -76,6 +76,7 @@
                 pubMedIds = pubMedIds(experimentData(type)),
                 urls = experimentData(type)@url,
                 contributor = experimentData(type)@name,
+                collectionType = ExpressionSetCollection(),
                 ...)
         }
         formals(f) <- IARGS

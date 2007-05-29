@@ -3,9 +3,9 @@
 
 .constructors_Simple(.CONSTRUCTORS_CollectionType)
 
-setMethod("collectionType",
-          signature=signature(object="CollectionType"),
-          function(object) object@type)
+.GETTERS_CollectionType <- c(collectionType="type")
+
+.getters("CollectionType", .GETTERS_CollectionType)
 
 setMethod("show",
           signature=signature(object="CollectionType"),

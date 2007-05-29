@@ -1,19 +1,28 @@
-setGeneric("geneSetType",
-           function(object) standardGeneric("geneSetType"))
+## many generics are constructed in code; see AAA.R and methods-* 
 
-setGeneric("collectionType",
-           function(object) standardGeneric("collectionType"))
+## GeneIdentifierType
+
+setGeneric("mapIdentifiers",
+           function(from, to, what)
+           standardGeneric("mapIdentifiers"))
+
+setGeneric("validIdentifiers",
+           function(identifier, genes) {
+               standardGeneric("validIdentifiers")
+           })
+
+## GeneSet
+
+setGeneric("setType<-",
+           function(object, value) standardGeneric("setType<-"))
+
+## GeneColorSet
 
 setGeneric("coloring",
            function(object, ...) standardGeneric("coloring"))
 
 setGeneric("coloring<-",
            function(object, ..., value) standardGeneric("coloring<-"))
-
-setGeneric("validIdentifiers",
-           function(identifier, genes) {
-               standardGeneric("validIdentifiers")
-           })
 
 ##
 

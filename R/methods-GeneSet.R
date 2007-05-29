@@ -66,9 +66,34 @@ setMethod("initialize",
 
 .getters("GeneSet", .GETTERS_GeneSet)
 
-.SETTERS_GeneSet <- .GETTERS_GeneSet
+.SETTERS_GeneSet <-
+    .GETTERS_GeneSet["setType" != names(.GETTERS_GeneSet)]
 
 .setters("GeneSet", .SETTERS_GeneSet)
+
+## convert between GeneIdentifier types
+
+setReplaceMethod("setType",
+                 signature=signature(
+                   object="GeneSet",
+                   value="character"),
+                 function(object, value) {
+                     tag <- tryCatch({
+                         do.call(value, list())
+                     }, error=function(err) {
+                         stop(sprintf("could not create setType tag of '%s'",
+                                      value))
+                     })
+                     mapIdentifiers(setType(object), tag, object)
+                 })
+
+setReplaceMethod("setType",
+                 signature=signature(
+                   object="GeneSet",
+                   value="GeneIdentifierType"),
+                 function(object, value) {
+                     mapIdentifiers(setType(object), value, object)
+                 })
 
 ## Logic operations
 

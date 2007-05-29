@@ -1,6 +1,44 @@
 .constructors("GeneSet",
               required=c("setName", "setIdentifier"))
 
+## Rationale: 'initialize' is always called with .Object, constructed
+## from the object prototype. The documentation for 'new' indicates
+## that an un-named argument will be 'from [a] class[es] that this
+## class extends', with the intention that unnamed arguments serve as
+## templates to over-ride prototypes, but be over-written by specific
+## named (slot) arguments.
+## 
+## Partial matching means that a named argument before ... without a
+## corresponding named argument in a call to 'new' will pick up the
+## template. To circumvent this partial matching, all named (slot)
+## arguments in initialize should come _after_ ...
+## 
+## Template slots are meant to over-ride default slots provided in the
+## prototype.  Named arguments requiring defaults need to capture
+## these values from the template, rather than from the
+## prototype. Providing a second argument before ..., called
+## .Template, captures the (first) template argument, and named
+## arguments after ... use this for defaults, rather than
+## .Object. Since the template may not always be provided, .Template
+## is in turn supplied with a default, i.e., .Object.
+## 
+## There are two additional outcomes of this scheme.
+## 
+## It is possible to use 'new' to update multiple slots, new('Obj',
+## <obj>, slot1=<>, slot2=<>). This can be an efficient way to update
+## many slots simultaneously, since 'new' is now relatively efficient
+## in slot assignments (avoiding most unnecessary copying).
+## 
+## This also provides a way to perform 'atomic' updates, so that it is
+## not necessary to construct invalid objects in the process of
+## complex transformations.
+## 
+## An alternative approach would use named arguments to capture any
+## incoming arguments before a .Object <- callNextMethod(.Object,
+## ...), followed by slot assignment to .Object. This implies copying
+## for each assignment, and precludes certain types of validity
+## checking (e.g., when a named argument is meant to be 'required')
+
 setMethod("initialize",
           signature=signature(.Object="GeneSet"),
           function(.Object, .Template=.Object, ...,
@@ -103,7 +141,7 @@ setMethod("Logic",
 setMethod("setdiff",
           signature=signature(x="GeneSet", y="GeneSet"),
           function(x, y) {
-              .checkSetTypes(x, y, "'setdiff'")
+              .checkGeneSetLogicTypes(x, y, "'setdiff'")
               genes=setdiff(genes(x), genes(y))
               new(class(x), x,
                   setIdentifier=setIdentifier(x),

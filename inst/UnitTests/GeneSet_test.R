@@ -24,7 +24,7 @@ do_GeneSet_setter_check <- function(obj) {
     }
 }
 
-test_MakeNoType <- function() {
+test_GS_MakeNoType <- function() {
     gs <- GeneSet(genes=letters[1:5],
                   setIdentifier="unique!",
                   setName="TestSet",
@@ -43,7 +43,7 @@ test_MakeNoType <- function() {
     do_GeneSet_setter_check(gs)
 }
 
-test_MakeString <- function() {
+test_GS_MakeString <- function() {
     gs <- GeneSet("EntrezIdentifier",
                   genes=letters[1:5],
                   setIdentifier="unique!",
@@ -61,7 +61,7 @@ test_MakeString <- function() {
     do_GeneSet_setter_check(gs)
 }
 
-test_MakeType <- function() {
+test_GS_MakeType <- function() {
     gs <- GeneSet(new("EntrezIdentifier"),
                   genes=letters[1:5],
                   setIdentifier="unique!",
@@ -80,7 +80,7 @@ test_MakeType <- function() {
     do_GeneSet_setter_check(gs)
 }
 
-test_RequiredArgsToNew <- function() {
+test_GS_RequiredArgsToNew <- function() {
     checkException(GeneSet(new("EntrezIdentifier"),
                            genes=letters[1:5],
                            ## no setIdentifier
@@ -93,7 +93,7 @@ test_RequiredArgsToNew <- function() {
                    silent=TRUE)
 }
 
-test_MakeFromExpressionSet <- function() {
+test_GS_MakeFromExpressionSet <- function() {
     data(sample.ExpressionSet)
     gs <- GeneSet(sample.ExpressionSet, setName="123",
                    setIdentifier="456")
@@ -112,12 +112,12 @@ test_MakeFromExpressionSet <- function() {
     do_GeneSet_setter_check(gs)
 }
 
-test_setdiffExport <- function() {
+test_GS_setdiffExport <- function() {
     checkIdentical(environment(setdiff),
                    environment(GSEABase::setdiff))
 }
 
-test_LogicalNonOverlapping <- function() {
+test_GS_LogicalNonOverlapping <- function() {
     ## non-overlapping
     gss <- getBroadSets(system.file("extdata", "Broad.xml",
                                    package="GSEABase"))
@@ -133,7 +133,7 @@ test_LogicalNonOverlapping <- function() {
     checkIdentical(genes(GSEABase::setdiff(gs12, gs2)), genes(gs1))
 }
 
-test_LogicalOverlapping <- function() {
+test_GS_LogicalOverlapping <- function() {
     gss <- getBroadSets(system.file("extdata", "Broad.xml",
                                    package="GSEABase"))
     gs1 <- gss[[1]]

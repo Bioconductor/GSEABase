@@ -1,6 +1,7 @@
 .constructors("GeneColorSet",
               required=c("setName", "setIdentifier", "phenotype"))
 
+## See methods-GeneSet for rationale about 'initialize'
 setMethod("initialize",
           signature=signature(.Object="GeneColorSet"),
           function(.Object, .Template=.Object, ...,
@@ -18,8 +19,13 @@ setMethod("initialize",
 
 setMethod("GeneColorSet",
           signature=signature(type="GeneSet"),
-          function(type, ...) {
-              new("GeneColorSet", type, ...)
+          function(type,
+                   phenotype,
+                   setName=GSEABase::setName(type),
+                   setIdentifier=GSEABase::setIdentifier(type), ...) {
+              new("GeneColorSet", type,
+                  setName = setName, setIdentifier=setIdentifier,
+                  phenotype=phenotype, ...)
           })
 
 setAs("GeneSet", "GeneColorSet",
@@ -94,6 +100,7 @@ setReplaceMethod("coloring",
 .geneColorSetIntersect <- function(x, y) {
     color <- function(x, y, lbl) {
         if (!phenotypesIdentical ||
+            any(levels(x) != levels(y)) ||
             any(as.character(x) != as.character(y)))
             factor(.glue(as.character(x), as.character(y), ", "))
         else x

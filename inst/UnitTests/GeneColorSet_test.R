@@ -11,13 +11,13 @@
     })
 }
 
-test_ConstructorNoColorSetArgs <- function() {
+test_GCS_ConstructorNoColorSetArgs <- function() {
     checkException(GeneColorSet(setIdentifier="123",
                                 setName="Set name"),
                    silent=TRUE)
 }
 
-test_ConstructorDefaultArgs <- function() {
+test_GCS_ConstructorDefaultArgs <- function() {
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype")
@@ -27,7 +27,7 @@ test_ConstructorDefaultArgs <- function() {
     checkTrue(length(phenotypeColor(gs))==0)
 }
 
-test_ConstructorAllColorArgs <- function() {
+test_GCS_ConstructorAllColorArgs <- function() {
     ## appropriate default colors
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
@@ -52,7 +52,7 @@ test_ConstructorAllColorArgs <- function() {
     checkIdentical(phenotypeColor(gs), pfactor)
 }
 
-test_show <- function() {
+test_GCS_show <- function() {
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype",
@@ -63,7 +63,7 @@ test_show <- function() {
     show(gs)
 }
 
-test_colorizeReplace <- function() {
+test_GCS_colorizeReplace <- function() {
     gcs <- .colorBroadSets()[[1]]
     df <- coloring(gcs)
     gc <- as.factor(rep(c("Up", "Down"), length=nrow(df)))
@@ -75,17 +75,16 @@ test_colorizeReplace <- function() {
 
     checkIdentical(geneColor(gcs), gc)
     checkIdentical(phenotypeColor(gcs), pc)
-    checkIdentical(genes(gs), genes(gcs))
 }
 
-test_colorizeReplaceRetainGeneOrder <- function() {
+test_GCS_colorizeReplaceRetainGeneOrder <- function() {
     gcs <- .colorBroadSets()[[1]]
     ogenes <- genes(gcs)
     coloring(gcs) <- coloring(gcs)[sample(ogenes, length(ogenes)),]
     checkIdentical(genes(gcs), ogenes)
 }
 
-test_intersect <- function() {
+test_GCS_intersect <- function() {
     gcss <- .colorBroadSets()
 
     res <- GSEABase::intersect(gcss[[1]], gcss[[2]])
@@ -107,7 +106,7 @@ test_intersect <- function() {
                    levels(phenotypeColor(res)))
 }
 
-test_intersectDifferentColors <- function() {
+test_GCS_intersectDifferentColors <- function() {
     gcs1 <- .colorBroadSets()[[1]]
     gcs2 <- gcs1
     phenotype(gcs2) <- paste(phenotype(gcs2), "A")
@@ -125,7 +124,7 @@ test_intersectDifferentColors <- function() {
     checkTrue(!any(levels(geneColor(res)) == levels(geneColor(gcs2))))
 }
 
-test_union <- function() {
+test_GCS_union <- function() {
     gcss <- .colorBroadSets()
 
     res <- GSEABase::union(gcss[[1]], gcss[[2]])
@@ -149,7 +148,7 @@ test_union <- function() {
     checkIdentical(urls(gcss[[1]]), urls(res))
 }
 
-test_setdiff <- function() {
+test_GCS_setdiff <- function() {
     gcss <- .colorBroadSets()
 
     res <- GSEABase::setdiff(gcss[[1]], gcss[[2]])
@@ -171,7 +170,7 @@ test_setdiff <- function() {
     checkIdentical(levels(phenotypeColor(gcss[[1]])), levels(phenotypeColor(res)))
 }
 
-test_LogicalNonOverlapping <- function() {
+test_GCS_LogicalNonOverlapping <- function() {
     gcss <- .colorBroadSets()
     gs1 <- gcss[[1]]
     gs2 <- gcss[[2]]
@@ -187,7 +186,7 @@ test_LogicalNonOverlapping <- function() {
     checkIdentical(genes(GSEABase::setdiff(gs12, gs2)), genes(gs1))
 }
 
-test_LogicalOverlapping <- function() {
+test_GCS_LogicalOverlapping <- function() {
     gcss <- .colorBroadSets()
     gs1 <- gcss[[1]]
 

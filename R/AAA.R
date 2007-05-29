@@ -1,56 +1,71 @@
-.checkRequired <- function(required, ...) {
-    idx <- which(!(required %in% names(match.call())[-1]))
+.checkRequired <- function(required, provided) {
+    idx <- which(!(required %in% provided))
     if (length(idx) > 0)
-        stop("missing required argument(s) '",
+        stop("missing required argument(s): '",
              paste(required[idx], collapse="', '"), "'")
 }
 
-.constructors <- function(klass, required)
+.constructors <- function(klass, required) {
+    ## construct the arg list of symbols with no defaults
+    ## constructor input arguments: type, name, ...
+    iargs <- sapply(.nameAll(c("type", required, "...")),
+                    function(y) alist(y=)$y)
+    ## arguments as seen by 'new': name=name, ...
+    oargs <- sapply(c(.nameAll(required), "..."), as.symbol)
     eval(substitute({
+        if (!isGeneric(CLASS))
+            setGeneric(CLASS,
+                       function(type, ...) standardGeneric(CLASS))
+        
+        f <- function() {
+            .checkRequired(REQUIRED, names(match.call()))
+            do.call("new", c(CLASS, type=new("NullIdentifier"), OARGS))
+        }
+        formals(f) <- IARGS
+        setMethod(CLASS, signature = signature(type = "missing"), f)
+
+        f <- function() {
+            .checkRequired(REQUIRED, names(match.call()))
+            do.call("new", c(CLASS, type=new(type), OARGS))
+        }
+        formals(f) <- IARGS
+        setMethod(CLASS, signature = signature(type = "character"), f)
+
+        f <- function(){
+            .checkRequired(REQUIRED, names(match.call()))
+            do.call("new", c(CLASS, type=type, OARGS))
+        }
+        formals(f) <- IARGS
         setMethod(CLASS,
-                  signature = signature(type = "missing"),
-                  function(type, ...) {
-                      .checkRequired(REQUIRED, ...)
-                      new(CLASS, type=new("NullIdentifier"), ...)
-                  })
-        setMethod(CLASS,
-                  signature = signature(type = "character"),
-                  function(type, ...) {
-                      .checkRequired(REQUIRED, ...)
-                      new(CLASS, type=new("NullIdentifier"), ...)
-                  })
-        setMethod(CLASS,
-                  signature = signature(type="GeneIdentifierType"),
-                  function(type, ...) {
-                      .checkRequired(REQUIRED, ...)
-                      new(CLASS, type = type, ...)
-                  })
-        setMethod(CLASS,
-                  signature = signature(type="ExpressionSet"),
-                  function(type, ...) {
-                      .checkRequired(REQUIRED, ...)
-                      organism <- 
-                          tryCatch({
-                              pkg <- annotation(type)
-                              if (length(pkg) == 1 && nchar(pkg) > 0 &&
-                                  .requireQ(pkg))
-                                get(paste(pkg, "ORGANISM", sep=""))
-                              else
-                                ""
-                          }, error=function(err) "")
-                      new(CLASS,
-                          type = new("AnnotationIdentifier",
-                            annotation = annotation(type)),
-                          genes = featureNames(type),
-                          shortDescription = experimentData(type)@title,
-                          longDescription = abstract(type),
-                          organism = organism,
-                          pubMedIds = pubMedIds(experimentData(type)),
-                          urls = experimentData(type)@url,
-                          contributor = experimentData(type)@name,
-                          ...)
-                  })
-    }, list(CLASS = klass, REQUIRED=required)))
+                  signature=signature(type="GeneIdentifierType"), f)
+
+        f <- function(type, ...) {
+            .checkRequired(REQUIRED, names(match.call()))
+            organism <- 
+                tryCatch({
+                    pkg <- annotation(type)
+                    if (length(pkg) == 1 && nchar(pkg) > 0 &&
+                        .requireQ(pkg))
+                        get(paste(pkg, "ORGANISM", sep=""))
+                    else
+                        ""
+                }, error=function(err) "")
+            new(CLASS,
+                type = new("AnnotationIdentifier",
+                  annotation = annotation(type)),
+                genes = featureNames(type),
+                shortDescription = experimentData(type)@title,
+                longDescription = abstract(type),
+                organism = organism,
+                pubMedIds = pubMedIds(experimentData(type)),
+                urls = experimentData(type)@url,
+                contributor = experimentData(type)@name,
+                ...)
+        }
+        formals(f) <- IARGS
+        setMethod(CLASS, signature = signature(type="ExpressionSet"), f)
+    }, list(CLASS = klass, REQUIRED=required, IARGS=iargs, OARGS=oargs)))
+}
 
 .getters <- function(klass, slots) {
     slots <- .nameAll(slots)

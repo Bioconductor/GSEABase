@@ -1,5 +1,5 @@
-.constructors("GeneColorSet",
-              required=c("setName", "setIdentifier", "phenotype"))
+.constructors_GeneSet("GeneColorSet",
+                      required=c("setName", "setIdentifier", "phenotype"))
 
 ## See methods-GeneSet for rationale about 'initialize'
 setMethod("initialize",

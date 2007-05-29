@@ -1,5 +1,5 @@
-.constructors("GeneSet",
-              required=c("setName", "setIdentifier"))
+.constructors_GeneSet("GeneSet",
+                      required=c("setName", "setIdentifier"))
 
 ## Rationale: 'initialize' is always called with .Object, constructed
 ## from the object prototype. The documentation for 'new' indicates

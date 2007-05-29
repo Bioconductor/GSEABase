@@ -1,3 +1,4 @@
+
 .checkRequired <- function(required, provided) {
     idx <- which(!(required %in% provided))
     if (length(idx) > 0)
@@ -5,7 +6,22 @@
              paste(required[idx], collapse="', '"), "'")
 }
 
-.constructors <- function(klass, required) {
+## for a vector c(CONSTRUCTOR=CLASS, ...) create a
+## functionCONSTRUCTOR(...) calling new(CLASS, ...). Missing
+## CONSTRUCTOR are filled with CLASS
+.constructors_Simple <- function(klasses) {
+    klassnames <- names(.nameAll(klasses))
+    for (cl in seq_along(klasses))
+        eval(substitute({
+            assign(CONSTRUCTOR,
+                   function(...) new(CLASS, ...),
+                   envir=topenv(parent.frame()))
+        }, list(CONSTRUCTOR = klassnames[[cl]],
+                CLASS = klasses[[cl]])))
+}
+
+## constructors for GeneSet and derived classes, with required fields.
+.constructors_GeneSet<- function(klass, required) {
     ## construct the arg list of symbols with no defaults
     ## constructor input arguments: type, name, ...
     iargs <- sapply(.nameAll(c("type", required, "...")),

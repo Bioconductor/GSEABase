@@ -2,14 +2,20 @@ import(methods)
 
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
-exportClasses(GeneIdentifierType,
-              NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
+exportClasses(## GeneIdentifierType
+              GeneIdentifierType, NullIdentifier,
+              AnnotationIdentifier, EntrezIdentifier,
               SymbolIdentifier, PfamIdentifier,
-              CollectionType,
-              AdHocCollection, BroadCollection,
+
+              ## CollectionType
+              CollectionType, AdHocCollection,
+              ExpressionSetCollection, KEGGCollection, GOCollection,
+              BroadCollection,
+
+              ## GeneSet
               GeneSet, GeneColorSet)
 
-exportMethods(show, initialize, coerce, intersect, union, setdiff,
+exportMethods(show, initialize, intersect, union, setdiff,
               "&", "|",
 
               ## IdentifierType

@@ -95,6 +95,26 @@ setReplaceMethod("setType",
                      mapIdentifiers(setType(object), value, object)
                  })
 
+## subset
+
+setMethod("[",
+          signature=signature(x="GeneSet"),
+          function(x, i, j, ..., drop=TRUE) {
+              stop("not yet implemented for '%s'", class(x))
+          })
+
+setMethod("[[",
+          signature=signature(x="GeneSet"),
+          function(x, i, j, ...) {
+              stop("not yet implemented for '%s'", class(x))
+          })
+
+setMethod("$",
+          signature=signature(x="GeneSet"),
+          function(x, name) {
+              stop("not yet implemented for '%s'", class(x))
+          })
+
 ## Logic operations
 
 .checkGeneSetLogicTypes <- function(x, y, functionName) {

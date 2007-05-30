@@ -1,0 +1,54 @@
+\name{getBroadSets}
+\alias{getBroadSets}
+\alias{toBroadXML}
+
+\title{Read and Write XML Gene Sets}
+\description{
+  \code{getBroadSets} parses one or more XML files for gene sets. The
+  file can reside locally or at a URL. The format followed is that defined
+  by the Broad (below).
+}
+\usage{
+getBroadSets(file, ...)
+toBroadXML(geneSet, con, ...)
+}
+\arguments{
+  \item{file}{A file name or URL containing gene sets encoded following
+    the Broad specification. Gene sets can be embedded in other
+    elements, such as those for Broad's MGIDB.}
+  \item{geneSet}{A \code{\linkS4class{GeneSet}} with
+    \code{collectionType} \code{BroadCollection} (to ensure that
+    required information is available).}
+  \item{con}{An optional file name or connection to receive output.}
+  \item{\dots}{Further arguments passed to the underlying XML parser,
+    particularly \code{file} used to specify an output \code{connection}
+    for \code{toBroadXML}.}
+}
+\value{
+  \code{getBroadSets} returns a \code{list} of \code{GeneSet} objects.
+
+  \code{toBroadXML} returns a character vector of a single
+  \code{GeneSet} or, if \code{file} is provided
+}
+\references{ ~put references to the literature/web site here ~ }
+\author{Martin Morgan <mtmrogan@fhcrc.org>}
+\note{
+  Actual Broad XML files differ from the DTD (e.g., an implied ','
+  separateor between genes in a set); we parse to and from files as they
+  exists the realziatioactual files.
+}
+\seealso{\url{http://www.broad.mit.edu/gsea/}}
+\examples{
+## could be a url
+fl <- system.file("extdata", "Broad.xml", package="GSEABase")
+gss <- getBroadSets(fl) # list of 2 sets
+gss[[1]]
+
+fl <- tempfile()
+toBroadXML(gss[[1]], con=fl)
+noquote(readLines(fl))
+unlink(fl)
+
+toBroadXML(gss[[1]]) # character vector
+}
+\keyword{manip}

@@ -8,10 +8,8 @@
     geneSets
 }
 
-.toXML <- function(geneSet, handler, ...) {
-    con = textConnection("xml", open="w", local=TRUE)
-    saveXML(handler(geneSet), con, ...)
-    paste(xml, collapse="\n")
+.toXML <- function(geneSet, handler, con, ...) {
+    saveXML(handler(geneSet), file=con, ...)
 }
 
 ## Broad gene set, see http://www.broad.mit.edu/gsea/
@@ -107,9 +105,14 @@ getBroadSets <- function(file, ...) {
     })
 }
 
-toBroadXML <- function(geneSet, ...) {
+toBroadXML <- function(geneSet, con, ...) {
     tryCatch({
-        .toXML(geneSet, .GeneSetToBroadXMLNode, ...)
+        xml <- NULL
+        if (missing(con))
+            con <- textConnection("xml", open="w", local=TRUE)
+        .toXML(geneSet, .GeneSetToBroadXMLNode, con=con, ...)
+        if (missing(con))
+            xml
     }, error=function(err) {
         stop("'toBroadXML' failed to create XML:",
              "\n  ", conditionMessage(err),

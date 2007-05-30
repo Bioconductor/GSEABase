@@ -28,10 +28,6 @@ setMethod("GeneColorSet",
                   phenotype=phenotype, ...)
           })
 
-setAs("GeneSet", "GeneColorSet",
-      function(from)
-      stop("use 'GeneColorSet(<GeneSet>, phenotype=\"phenotype\", ...)'"))
-
 .GETTERS_GeneColorSet <- c("phenotype", "geneColor", "phenotypeColor")
 
 .getters("GeneColorSet", .GETTERS_GeneColorSet)

@@ -49,11 +49,20 @@ setMethod("initialize",
     as.character(unlist(ngenes))
 }
 
-## construct these programatically
+## construct these programatically?
 
 setMethod("mapIdentifiers",
           signature=signature(
-            from="AnnotationIdentifier", to="ANY",
+            from="NullIdentifier", to="GeneIdentifierType",
+            what="GeneSet"),
+          function(from, to, what) {
+              new(class(what), what, type=to)
+          })
+          
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            from="AnnotationIdentifier", to="GeneIdentifierType",
             what="GeneSet"),
           function(from, to, what) {
               new(class(what), what,

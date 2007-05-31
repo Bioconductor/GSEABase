@@ -15,8 +15,8 @@
   \describe{
     \item{\code{category}:}{Object of class \code{"ScalarCharacter"}
       containing terms from the Broad list of categories, or \code{NA}}
-    \item{\code{subCategory}:}{Object of class \code{"ScalarCharacter"}
-      containing Broad subcategories, or \code{NA}}
+    \item{\code{subcategory}:}{Object of class \code{"ScalarCharacter"}
+      containing Broad sub-categories, or \code{NA}}
     \item{\code{type}:}{Object of class \code{"ScalarCharacter"}
       containing a string identifier of this class.}
   }

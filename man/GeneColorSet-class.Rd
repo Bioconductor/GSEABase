@@ -34,7 +34,7 @@
   "reduced").
 
   All operations on a \code{GeneSet} can be applied to a
-  \code{GeneColorSet}; coloring can also be accesssed.
+  \code{GeneColorSet}; coloring can also be accessed.
 }
 \section{Objects from the Class}{
   Construct a \code{GeneColorSet} with a \code{\link{GeneColorSet}}
@@ -72,14 +72,14 @@
     \item{coloring<-}{\code{signature(object = "GeneColorSet", value =
         "data.frame")}: use a \code{data frame} to assign coloring
       information. The \code{data.frame} must have the same number of
-      rows as the \code{GeneColorSet} has genes (though see the exmaples
+      rows as the \code{GeneColorSet} has genes (though see the examples
       below for flexible ways to alter coloring of a subset of
       genes). Row names of the \code{data.frame} correspond to gene
       names. The data frame has two columns, named \code{geneColor} and
       \code{phenotypeColor}. These must be of class \code{factor}.
 
       A typical use of \code{coloring<-} is to simultaneous extract,
-      subset, and reassign the currenct coloring, e.g.,
+      subset, and reassign the current coloring, e.g.,
       \code{coloring(<GeneColorSet>)[1:5,"geneColor"] <- "up"}; see the
       examples below.}
     \item{geneColor<-}{\code{signature(object = "GeneColorSet", value =
@@ -105,7 +105,7 @@
       \code{signature(x = "GeneSet", i="numeric")}: subset the gene set by
       index (\code{i="numeric"}) or gene value (\code{i="character"}). Genes
       are re-ordered as required. \code{geneColor} and \code{phenotypeColor} are
-      subsetted as appropriate.}
+      subset as appropriate.}
     \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set, returning a named character vector of \code{gene,
         geneColor, phenotypeColor}. Exact matches only.}

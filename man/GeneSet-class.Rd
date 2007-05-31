@@ -64,7 +64,7 @@
   (locally or on the internet; see \code{getBroadSets})
 
   A \code{GeneSet} requires a \code{setName} (best just to be a single
-  word) and a unique \code{setIdentifier}. Aditional informational
+  word) and a unique \code{setIdentifier}. Additional informational
   elements can be added (see Slots, below, for an indication of this
   information, and the Methods for how to set or retrieve it.).
 }
@@ -102,7 +102,7 @@
       number, manually curated (i.e., by the \code{contributor}) to
       provide a consistent way of tracking a gene set.}
     \item{\code{creationDate}:}{Object of class \code{"character"}
-      containg the character string representation of the date on which
+      containing the character string representation of the date on which
       the gene set was created.}
   }
 }
@@ -142,7 +142,7 @@
       \code{signature(object = "GeneSet", value = "GeneIdentifierType")}:
       These method attempt to coerce genes from
       the current type to the type named by \code{value}. Successful
-      coersion requires an appropariate method for \code{\link{mapIdentifiers}}.}
+      coercion requires an appropriate method for \code{\link{mapIdentifiers}}.}
     \item{setType}{\code{signature(object = "GeneSet")}}
     \item{setVersion<-}{\code{signature(object = "GeneSet", value = "Versions")}}
     \item{setVersion}{\code{signature(object = "GeneSet")}}
@@ -157,14 +157,14 @@
       the logical `or' (union) of two gene sets. The sets must contain elements of
       the same \code{setType}.}
     \item{|}{\code{signature(e1 = "GeneSet", e2 = "character")}:
-      calculate the logcial `or' (union) of a gene set and a character vector,
+      calculate the logical `or' (union) of a gene set and a character vector,
       i.e., determine the genes named in the character vector also
       present in the gene set.}
     \item{intersect}{\code{signature(x = "GeneSet", y = "GeneSet")}:{}}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
     the logical `and' (intersection) of two gene sets.}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "character")}:
-      calculate the logcial `and' (intersection) of a gene set and a
+      calculate the logical `and' (intersection) of a gene set and a
       character vector, creating a new gene set with the character
       vector coerced to be of type \code{setType}.}
 
@@ -221,7 +221,7 @@ setType(gs3) <- EntrezIdentifier()
 
 ## Convert between set types; this consults the 'annotation'
 ## information encoded in the 'AnnotationIdentifier' set type and the
-## correspondining annotation package.
+## corresponding annotation package.
 \dontrun{
 gs4 <- gs1
 setType(gs4) <- EntrezIdentifier()
@@ -240,7 +240,7 @@ gs5 | gs6
 gs7 <- gs5 | gs6
 gs8 <- setdiff(gs5, gs6) | (gs5 & gs6) | setdiff(gs6, gs5)
 identical(genes(gs7), genes(gs8))
-identical(gs7, gs8) == FALSE # gs7 and gs8 setNmes differ
+identical(gs7, gs8) == FALSE # gs7 and gs8 setNames differ
 
 ## output
 tmp <- tempfile()

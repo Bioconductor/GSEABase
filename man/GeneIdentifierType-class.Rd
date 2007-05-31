@@ -31,15 +31,15 @@
   symbols in a \code{GeneSet}. For instance, a \code{GeneSet} with gene
   names derived from a Bioconductor \code{annotation} package (e.g., via
   \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}) initially have a
-  \code{GeneIdentifierType} of \code{AnnotationType}.
+  \code{GeneIdentifierType} of \code{AnnotationIdentifier}.
 }
 
 \section{Objects from the Class}{
   The following classes are available:
   \describe{
-    \item{NullIdentifier}{No information about what genes represent.}
+    \item{NullIdentifier}{No formal information about what genes represent.}
     \item{AnnotationIdentifier}{'Genes' are represented by the
-      Affymetrix chip-specific probe identifier, as represented in Bicondcutor
+      Affymetrix chip-specific probe identifier, as represented in Bioconductor
       annotation packages.}
     \item{EntrezIdentifier}{Genes are represented by their Entrez
       identifier.}
@@ -59,6 +59,13 @@
     \item{type}{Object of class \code{"ScalarCharacter"}
       containing the character string representation of this
       \code{GeneIdentifierType}.}
+  }
+
+  The \code{NullIdentifier} class has an additional slot
+  \describe{
+    \item{geneType}{Object of class \code{"ScalarCharacter"}
+      containing an ad hoc name identifying the type of symbol
+      represented by genes in the gene set.}
   }
 
   The \code{AnnotationIdentifier} class has an additional slot
@@ -85,10 +92,11 @@
       the process.}
 
     \item{setType}{\code{signature(object = "GeneIdentifierType")}:
-      return the type of this \code{object}.}
+      return a character string representation of the type of this
+      \code{object}.}
 
-    \item{mapIdentifiers}{\code{\signature(from="NullIdentifier",
-        to="GeneIdentifierType", whate="GeneSet")}: Used primarily
+    \item{mapIdentifiers}{\code{signature(from="NullIdentifier",
+        to="GeneIdentifierType", what="GeneSet")}: Used primarily
       internally (by \code{setType<-}), applied to a \code{geneSet} to map
       the set from genes represented by a \code{NullIdentifier} to genes
       represent by a class derived from \code{GeneIdentifierType}. Other
@@ -99,7 +107,7 @@
       this object.}
 
     \item{validIdentifiers}{\code{signature(identifier =
-        "GeneIdentifierType")}: validate that the identiifier are
+        "GeneIdentifierType")}: validate that the identifier are
       legitimate; subclasses are responsible for implementing this
       method.}
   }
@@ -171,7 +179,7 @@ gs <- GeneSet(sample.ExpressionSet[100:109],
               setName="sample.GeneSet", setIdentifier="123")
 setType(gs) # AnnotationIdentifier
 
-## Read a Broad set from the sytem (or a url), and discover their
+## Read a Broad set from the system (or a url), and discover their
 ## GeneIdentifierType
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 bsets <- getBroadSets(fl)

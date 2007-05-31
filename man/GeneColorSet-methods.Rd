@@ -17,7 +17,7 @@
   Available methods are the same as those for
   \code{GeneSet}, but a \code{GeneColorSet} requires an additional
   \code{phenotype} argument to identify the phenotype that is being
-  colored. See documentaiton for \code{\linkS4class{GeneColorSet}} for
+  colored. See documentation for \code{\linkS4class{GeneColorSet}} for
   examples.
 
   An additional method is:

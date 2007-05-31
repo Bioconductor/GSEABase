@@ -12,7 +12,7 @@
   instance, a \code{GeneSet} derived from an \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
   might have \code{CollectionType} of \code{ExpressionSetCollection}, whereas
   a gene set derived from Broad XML has
-  \code{BroadCollection}. Collection types can be used in mannipulating
+  \code{BroadCollection}. Collection types can be used in manipulating
   (e.g., selecting) sets, and can contain information specific to
   particular sets (e.g., \code{category} and \code{subcategory}
   classifications of \code{BroadCollection}.)} 

@@ -1,5 +1,5 @@
 \name{Identifiers}
-\alias{GeneIdentifiers}
+\alias{Gene Identifiers}
 \alias{NullIdentifier}
 \alias{AnnotationIdentifier}
 \alias{EntrezIdentifier}

@@ -11,6 +11,11 @@
   Written by Martin Morgan, Seth Falcon, Robert Gentleman. 
   Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 }
-\seealso{}
-\examples{}
+\seealso{
+  \linkS4class{GeneSet},
+  \linkS4class{GeneColorSet}
+}
+\examples{
+example(GeneSet)
+}
 \keyword{package}

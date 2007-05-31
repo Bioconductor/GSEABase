@@ -1,4 +1,5 @@
-\name{getBroadSets}
+\name{xal}
+\alias{xml}
 \alias{getBroadSets}
 \alias{toBroadXML}
 
@@ -7,6 +8,9 @@
   \code{getBroadSets} parses one or more XML files for gene sets. The
   file can reside locally or at a URL. The format followed is that defined
   by the Broad (below).
+
+  \code{toBroadXML} creates Broad XML from \code{BroadCollection} gene
+  sets.
 }
 \usage{
 getBroadSets(file, ...)
@@ -34,8 +38,8 @@ toBroadXML(geneSet, con, ...)
 \author{Martin Morgan <mtmrogan@fhcrc.org>}
 \note{
   Actual Broad XML files differ from the DTD (e.g., an implied ','
-  separateor between genes in a set); we parse to and from files as they
-  exists the realziatioactual files.
+  separator between genes in a set); we parse to and from files as they
+  exists the actual files.
 }
 \seealso{\url{http://www.broad.mit.edu/gsea/}}
 \examples{

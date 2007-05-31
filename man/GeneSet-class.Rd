@@ -1,10 +1,12 @@
 \name{GeneSet-class}
 \docType{class}
 \alias{GeneSet-class}
+\alias{[,GeneSet,character-method}
+\alias{[,GeneSet,numeric-method}
+\alias{[[,GeneSet,character-method}
+\alias{[[,GeneSet,numeric-method}
 \alias{|,GeneSet,GeneSet-method}
 \alias{|,GeneSet,character-method}
-\alias{[,GeneSet-method}
-\alias{[[,GeneSet-method}
 \alias{$,GeneSet-method}
 \alias{&,GeneSet,GeneSet-method}
 \alias{&,GeneSet,character-method}

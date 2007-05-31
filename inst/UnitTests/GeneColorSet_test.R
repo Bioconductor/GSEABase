@@ -11,6 +11,17 @@
     })
 }
 
+.check_subset_Ok <- function(expected, gs) {
+    checkTrue(validObject(gs))
+    len <- length(genes(expected))
+    checkIdentical(len, length(genes(gs)))
+    checkIdentical(len, length(geneColor(gs)))
+    checkIdentical(len, length(phenotypeColor(gs)))
+    checkTrue(all(genes(expected)==genes(gs)))
+    checkTrue(all(geneColor(expected)==geneColor(gs)))
+    checkTrue(all(phenotypeColor(expected)==phenotypeColor(gs)))
+}
+
 test_GCS_ConstructorNoColorSetArgs <- function() {
     checkException(GeneColorSet(setIdentifier="123",
                                 setName="Set name"),
@@ -208,4 +219,39 @@ test_GCS_LogicalOverlapping <- function() {
                   genes(GSEABase::setdiff(gs1, gs2) |
                         (gs1 & gs2) |
                         GSEABase::setdiff(gs2, gs1))))
+}
+
+test_GCS_subset <- function() {
+    gcs <- .colorBroadSets()[[1]]
+
+    expected <- new(class(gcs), gcs,
+                    genes=genes(gcs)[4:1],
+                    geneColor=factor(as.character(
+                      geneColor(gcs)[4:1])),
+                    phenotypeColor=factor(as.character(
+                      phenotypeColor(gcs)[4:1])))
+
+    .check_subset_Ok(expected, gcs[4:1])
+    .check_subset_Ok(expected, gcs[ genes(gcs)[4:1] ])
+
+    max <- length(genes(gcs))
+    checkException(gcs[(max-1):(max+1)], silent=TRUE)
+    checkException(gcs["adfas"], silent=TRUE)
+}
+
+test_GCS_subset2 <- function() {
+    gcs <- .colorBroadSets()[[1]]
+
+    expected <- c(gene=genes(gcs)[[2]],
+                  geneColor=as.character(geneColor(gcs)[[2]]),
+                  phenotypeColor=as.character(phenotypeColor(gcs)[[2]]))
+
+    checkIdentical(expected, gcs[[2]])
+    checkIdentical(expected, gcs[[ genes(gcs)[[2]] ]])
+
+    max <- length(genes(gcs))
+    checkException(gcs[["sdfsf"]], silent=TRUE)
+    checkException(gcs[[ max+1 ]], silent=TRUE)
+
+    checkIdentical(expected, do.call("$",list(gcs, genes(gcs)[[2]])))
 }

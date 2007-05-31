@@ -98,21 +98,56 @@ setReplaceMethod("setType",
 ## subset
 
 setMethod("[",
-          signature=signature(x="GeneSet"),
+          signature=signature(
+            x="GeneSet", i="numeric"),
           function(x, i, j, ..., drop=TRUE) {
-              stop("not yet implemented for '%s'", class(x))
+              if (any(duplicated(i)))
+                  stop("duplicate index: ",
+                       paste(i[duplicated(i)], collapse=" "))
+              genes <- genes(x)[i]
+              if (any(is.na(genes)))
+                  stop("unmatched index: ",
+                       paste(i[is.na(genes)], collapse=" "))
+              genes(x) <- genes
+              x
+          })
+
+setMethod("[",
+          signature=signature(
+            x="GeneSet", i="character"),
+          function(x, i, j, ..., drop=TRUE) {
+              idx <- pmatch(i, genes(x))
+              if (any(is.na(idx)))
+                  stop(sprintf("unmatched / duplicate genes: '%s'",
+                               paste(i[is.na(idx)], collapse="', '")))
+              genes(x) <- genes(x)[idx]
+              x
           })
 
 setMethod("[[",
-          signature=signature(x="GeneSet"),
+          signature=signature(
+            x="GeneSet", i="numeric"),
           function(x, i, j, ...) {
-              stop("not yet implemented for '%s'", class(x))
+              genes(x)[[i]]
+          })
+
+setMethod("[[",
+          signature=signature(
+            x="GeneSet", i="character"),
+          function(x, i, j, ...) {
+              idx <- pmatch(i, genes(x))
+              if (is.na(idx))
+                  stop("unmatched gene: ", i)
+              genes(x)[[idx]]
           })
 
 setMethod("$",
           signature=signature(x="GeneSet"),
           function(x, name) {
-              stop("not yet implemented for '%s'", class(x))
+              i <- pmatch(name, genes(x), duplicates.ok=FALSE)
+              if (is.na(i))
+                  stop("unmatched gene: ", i)
+              genes(x)[i]
           })
 
 ## Logic operations

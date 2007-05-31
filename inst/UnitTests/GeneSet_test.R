@@ -1,3 +1,12 @@
+.broadSets <- function()
+    getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
+
+.check_subset_Ok <- function(genes, gs) {
+    checkTrue(validObject(gs))
+    checkIdentical(length(genes), length(genes(gs)))
+    checkTrue(all(genes==genes(gs)))
+}
+
 getClassOfSlot <- function(klass, slot) {
     as.character(getClass(klass)@slots[[slot]])
 }
@@ -121,8 +130,7 @@ test_GS_setdiffExport <- function() {
 
 test_GS_LogicalNonOverlapping <- function() {
     ## non-overlapping
-    gss <- getBroadSets(system.file("extdata", "Broad.xml",
-                                   package="GSEABase"))
+    gss <- .broadSets()
     gs1 <- gss[[1]]
     gs2 <- gss[[2]]
     gs12 <- gs1 & gs2
@@ -148,4 +156,30 @@ test_GS_LogicalOverlapping <- function() {
                   genes(GSEABase::setdiff(gs1, gs2) |
                         (gs1 & gs2) |
                         GSEABase::setdiff(gs2, gs1))))
+}
+
+test_GS_subset <- function() {
+    gs <- .broadSets()[[1]]
+
+    genes <- genes(gs)[4:1]
+    .check_subset_Ok(genes, gs[4:1])
+    .check_subset_Ok(genes, gs[ genes ])
+
+    max <- length(genes(gs))
+    checkException(gs[(max-1):(max+1)], silent=TRUE)
+    checkException(gs["adfas"], silent=TRUE)
+}
+
+test_GS_subset2 <- function() {
+    gs <- .broadSets()[[1]]
+
+    genes <- genes(gs)[[2]]
+    checkTrue(genes == gs[[2]])
+    checkTrue(genes == gs[[ genes ]])
+
+    max <- length(genes(gs))
+    checkException(gs[["sdfsf"]], silent=TRUE)
+    checkException(gs[[ max+1 ]], silent=TRUE)
+
+    checkTrue(genes == do.call("$",list(gs, genes)))
 }

@@ -166,9 +166,15 @@
       character vector, creating a new gene set with the character
       vector coerced to be of type \code{setType}.}
 
-    \item{[}{\code{signature(x = "GeneSet")}: ... }
-    \item{[[}{\code{signature(x = "GeneSet")}: ... }
-    \item{\$}{\code{signature(x = "GeneSet")}: ... }
+    \item{[}{
+      \code{signature(x = "GeneSet", i="character")}
+      \code{signature(x = "GeneSet", i="numeric")}: subset the gene set by
+      index (\code{i="numeric"}) or value (\code{i="character"}). Genes
+      are re-ordered as required}
+    \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
+      the gene set; not particularly useful.}
+    \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from
+      the gene set, allowing partial matching.}
   }
 
   Useful additional methods include:

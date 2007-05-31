@@ -77,6 +77,74 @@ setReplaceMethod("coloring",
                          phenotype=phenotype(object))
                  })
 
+## subset
+
+setMethod("[",
+          signature=signature(
+            x="GeneColorSet", i="numeric"),
+          function(x, i, j, ..., drop=TRUE) {
+              if (any(duplicated(i)))
+                  stop("duplicate index: ",
+                       paste(i[duplicated(i)], collapse=" "))
+              genes <- genes(x)[i]
+              if (any(is.na(genes)))
+                  stop("unmatched index: ",
+                       paste(i[is.na(genes)], collapse=" "))
+              new(class(x), x,
+                  genes=genes,
+                  geneColor=factor(
+                    as.character(geneColor(x)[i])),
+                  phenotypeColor=factor(
+                    as.character(phenotypeColor(x)[i])))
+          })
+
+setMethod("[",
+          signature=signature(
+            x="GeneColorSet", i="character"),
+          function(x, i, j, ..., drop=TRUE) {
+              idx <- pmatch(i, genes(x))
+              if (any(is.na(idx)))
+                  stop(sprintf("unmatched / duplicate genes: '%s'",
+                               paste(i[is.na(idx)], collapse="', '")))
+              new(class(x), x,
+                  genes=genes(x)[idx],
+                  geneColor=factor(
+                    as.character(geneColor(x))[idx]),
+                  phenotypeColor=factor(
+                    as.character(phenotypeColor(x)[idx])))
+          })
+
+setMethod("[[",
+          signature=signature(
+            x="GeneColorSet", i="numeric"),
+          function(x, i, j, ...) {
+              c(gene=genes(x)[[i]],
+                geneColor= as.character(geneColor(x)[[i]]),
+                phenotypeColor= as.character(phenotypeColor(x)[[i]]))
+          })
+
+setMethod("[[",
+          signature=signature(
+            x="GeneColorSet", i="character"),
+          function(x, i, j, ...) {
+              idx <- match(i, genes(x))
+              if (is.na(idx))
+                  stop("unmatched gene: ", i)
+              ## 'next' method is GeneSet, so want to re-start...
+              callGeneric(x, idx, ...)
+          })
+
+setMethod("$",
+          signature=signature(x="GeneColorSet"),
+          function(x, name) {
+              i <- pmatch(name, genes(x), duplicates.ok=FALSE)
+              if (is.na(i))
+                  stop("unmatched gene: ", i)
+              c(gene=genes(x)[i],
+                geneColor=as.character(geneColor(x)[[i]]),
+                phenotypeColor=as.character(phenotypeColor(x)[[i]]))
+          })
+
 ## Logic operations
 
 .checkGeneColorSetLogicTypes <- function(x, y, functionName) {

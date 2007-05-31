@@ -56,15 +56,8 @@
   Class \code{"\linkS4class{GeneSet}"}, directly.
 }
 \section{Methods}{
-  \code{GeneColorSet} inherits all methods from class
-  \code{GeneSet}.
 
-  Logical (set) operations \code{&, |, setdiff} warn if
-  the \code{phenotype} \code{geneColor}, or \code{phenotypeColor}
-  differs between sets; this implies coercion of factor levels, and the
-  consequences should be carefully considered.
-
-  Additional methods include:
+  Methods unique to \code{GeneColorSet} include:
   \describe{
     \item{coloring}{\code{signature(object = "GeneColorSet")}: retrieve
       coloring as a \code{data.frame}. The row names of the data frame
@@ -97,6 +90,29 @@
     \item{phenotype}{\code{signature(object = "GeneColorSet")}: retrieve
       the phenotype as a single-element \code{character}.}
   }
+
+  \code{GeneColorSet} inherits all methods from class
+  \code{GeneSet}. Methods with different behavior include
+  \describe{
+    \item{[}{
+      \code{signature(x = "GeneSet", i="character")}
+      \code{signature(x = "GeneSet", i="numeric")}: subset the gene set by
+      index (\code{i="numeric"}) or gene value (\code{i="character"}). Genes
+      are re-ordered as required. \code{geneColor} and \code{phenotypeColor} are
+      subsetted as appropriate.}
+    \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
+      the gene set, returning a named character vector of \code{gene,
+        geneColor, phenotypeColor}. Exact matches only.}
+    \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from
+      the gene set, returning a named character vector of \code{gene,
+        geneColor, phenotypeColor}. Provides partial matching into the
+      list of genes.}
+  }  
+
+  Logical (set) operations \code{&, |, setdiff} warn if
+  the \code{phenotype} \code{geneColor}, or \code{phenotypeColor}
+  differs between sets; this implies coercion of factor levels, and the
+  consequences should be carefully considered.
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>} 
 \seealso{
@@ -128,5 +144,9 @@ coloring(gcs2)
 coloring(gcs2)[c("31339_at", "31342_at"),"geneColor"] <- c("up", "up")
 ## usual 'factor' errors and warning apply:
 coloring(gcs2)[c("31339_at", "31342_at"),"geneColor"] <- c("UP", "up")
+
+gcs2[["31342_at"]]
+try(gcs2[["31342_"]]) # no partial matching
+gcs2$"31342" # 1 partial match ok
 }
 \keyword{classes}

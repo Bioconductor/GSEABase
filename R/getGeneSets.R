@@ -32,7 +32,7 @@
     ## handler: XMLNode -> GeneSet
     function(node) {
         attrs <- as.list(xmlAttrs(node))
-        args <- list(new("EntrezIdentifier"),
+        args <- list(new("SymbolIdentifier"),
                      setName=attrs[["STANDARD_NAME"]],
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
                      genes=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),

@@ -19,7 +19,7 @@ toBroadXML(geneSet, con, ...)
 \arguments{
   \item{file}{A file name or URL containing gene sets encoded following
     the Broad specification. Gene sets can be embedded in other
-    elements, such as those for Broad's MGIDB.}
+    elements, such as those for Broad's MSIGDB.}
   \item{geneSet}{A \code{\linkS4class{GeneSet}} with
     \code{collectionType} \code{BroadCollection} (to ensure that
     required information is available).}

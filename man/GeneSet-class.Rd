@@ -217,7 +217,7 @@ gs3 <- GeneSet(genes=genes, setName="another", setIdentifier="101")
 is(setType(gs3), "NullIdentifier") == TRUE
 ## update set type to match encoding of identifiers
 setType(gs2)
-setType(gs3) <- EntrezIdentifier()
+setType(gs3) <- SymbolIdentifier()
 
 ## Convert between set types; this consults the 'annotation'
 ## information encoded in the 'AnnotationIdentifier' set type and the

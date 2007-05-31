@@ -59,11 +59,11 @@ setMethod("initialize",
 
 .setters("AnnotationIdentifier", .SETTERS_AnnotationIdentifier)
 
-.annotationMapper <- function(from, tag, what) {
+.fromAnnotation <- function(from, tag, what) {
     genes <- genes(what)
-    pkg <- annotation(from)
+    pkg <- geneType(from)
     map <- paste(pkg, tag, sep="")
-    if (!suppressWarnings(.requireQ(pkg)))
+    if (!.requireQ(pkg))
         stop(sprintf("cannot load annotation package '%s'",
                      pkg))
     if (!exists(map))
@@ -76,7 +76,18 @@ setMethod("initialize",
     as.character(unlist(ngenes))
 }
 
+setMethod("show",
+          signature=signature(object="AnnotationIdentifier"),
+          function(object) {
+              cat("setType:", setType(object),
+                  if (nchar(annotation(object))>0) {
+                      paste("(", annotation(object), ")", sep="")
+                  }, "\n")
+          })
+
 ## construct these programatically?
+
+## Null --> X
 
 setMethod("mapIdentifiers",
           signature=signature(
@@ -87,13 +98,15 @@ setMethod("mapIdentifiers",
           })
           
 
+## AnnotationIdentifier --> X
+
 setMethod("mapIdentifiers",
           signature=signature(
             from="AnnotationIdentifier", to="GeneIdentifierType",
             what="GeneSet"),
           function(from, to, what) {
               new(class(what), what,
-                  genes=.annotationMapper(from, what,
+                  genes=.fromAnnotation(from, what,
                     toupper(setType(to))),
                   type=to)
           })
@@ -111,7 +124,7 @@ setMethod("mapIdentifiers",
                       res
               }, error = function(err) NullIdentifier())
               new(class(what), what,
-                  genes=.annotationMapper(from, to, what),
+                  genes=.fromAnnotation(from, to, what),
                   type=type)
           })
 
@@ -122,15 +135,6 @@ setMethod("mapIdentifiers",
             what="GeneSet"),
           function(from, to, what) {
               new(class(what), what,
-                  genes=.annotationMapper(from, "ENTREZID", what),
+                  genes=.fromAnnotation(from, "ENTREZID", what),
                   type=to)
-          })
-              
-setMethod("show",
-          signature=signature(object="AnnotationIdentifier"),
-          function(object) {
-              cat("setType:", setType(object),
-                  if (nchar(annotation(object))>0) {
-                      paste("(", annotation(object), ")", sep="")
-                  }, "\n")
           })

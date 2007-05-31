@@ -1,27 +1,28 @@
 \name{Identifiers}
-\alias{<name>Identifier}
+\alias{GeneIdentifiers}
 \alias{NullIdentifier}
 \alias{AnnotationIdentifier}
 \alias{EntrezIdentifier}
 \alias{SymbolIdentifier}
 \alias{PfamIdentifier}
-\title{Gene Identifier Class Constructors}
+\title{Construct Gene Identifier Classes}
 \description{
-  These functions construct gene identifiers. A gene identifier is used
-  by \code{\linkS4class{GeneSet}} classes to indicate what the list of
-  genes represents (e.g., Entrez gene identifiers, Bioconductor
-  annotations).
+  Gene identifier classes and functions are used to indicate what the
+  list of genes in a gene set represents (e.g., Entrez gene identifiers
+  are tagged with \code{EntrezIdentifier()}, Bioconductor annotations with
+  \code{AnnotationIdentifier()}).
 }
 \usage{
 NullIdentifier(...)
-AnnotationIdentifier(...)
+AnnotationIdentifier(annotation,...)
 EntrezIdentifier(...)
 SymbolIdentifier(...)
 PfamIdentifier(...)
 }
 \arguments{
-  \item{\dots}{Additional arguments, usually none but see specific
-    identifier pages for possibilities.}
+  \item{annotation}{(required) A single character string identifying  the
+    Bioconductor package from which the annotations are drawn.}
+  \item{\dots}{Additional arguments, usually none.}
 }
 \value{
   An object of the same class as the function name, initialized as
@@ -29,11 +30,8 @@ PfamIdentifier(...)
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
-  \code{\linkS4class{NullIdentifier}}, 
-  \code{\linkS4class{AnnotationIdentifier}}, 
-  \code{\linkS4class{EntrezIdentifier}}, 
-  \code{\linkS4class{SymbolIdentifier}}, 
-  \code{\linkS4class{PfamIdentifier}}
+  \code{\linkS4class{GeneIdentifierType}} for a description of the
+  classes and methods using these objects.
 }
 \examples{
 NullIdentifier()
@@ -49,10 +47,11 @@ gs2 <- GeneSet(genes=genes,
 setType(gs2) # NullIdentifier, since no info about genes provided
 
 ## Convert...
-setType(gs2) <- AnnotationIdentifier()
+ai <- AnnotationIdentifier(annotation(sample.ExpressionSet))
+setType(gs2) <- ai
 setType(gs2)
 ## ...or provide more explicit construction
-gs3 <- GeneSet(genes=genes, type=AnnotationIdentifier(),
+gs3 <- GeneSet(genes=genes, type=ai,
                setName="sample1", setIdentifier="102")
 }
 \keyword{manip}

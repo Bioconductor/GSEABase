@@ -3,7 +3,9 @@
 .CONSTRUCTORS_GeneIdentifierType <- 
     names(getSubclasses(getClass("GeneIdentifierType")))
 
-.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType)
+.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType[.CONSTRUCTORS_GeneIdentifierType!="AnnotationIdentifier"])
+
+.constructors_Simple("AnnotationIdentifier", required="annotation")
 
 .getters("GeneIdentifierType", c(setType="type"))
 

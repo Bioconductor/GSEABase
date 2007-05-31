@@ -9,25 +9,33 @@
 ## for a vector c(CONSTRUCTOR=CLASS, ...) create a
 ## functionCONSTRUCTOR(...) calling new(CLASS, ...). Missing
 ## CONSTRUCTOR are filled with CLASS
-.constructors_Simple <- function(klasses) {
+.constructors_Simple <- function(klasses, required=NULL) {
     klassnames <- names(.nameAll(klasses))
+    args <- .nameAll(c(required, "..."))
+    iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
+    oargs <- sapply(args, as.symbol)    # output args
     for (cl in seq_along(klasses))
         eval(substitute({
-            assign(CONSTRUCTOR,
-                   function(...) new(CLASS, ...),
-                   envir=topenv())
+            f <- function() {
+                .checkRequired(REQUIRED, names(match.call()))
+                do.call("new", c(CLASS, OARGS))
+            }
+            formals(f) <- IARGS
+            assign(CONSTRUCTOR, f, envir=topenv())
         }, list(CONSTRUCTOR = klassnames[[cl]],
-                CLASS = klasses[[cl]])))
+                CLASS = klasses[[cl]],
+                IARGS=iargs,
+                OARGS=oargs,
+                REQUIRED=required)))
 }
 
 ## constructors for GeneSet and derived classes, with required fields.
 .constructors_GeneSet<- function(klass, required) {
     ## construct the arg list of symbols with no defaults
     ## constructor input arguments: type, name, ...
-    iargs <- sapply(.nameAll(c("type", required, "...")),
-                    function(y) alist(y=)$y)
-    ## arguments as seen by 'new': name=name, ...
-    oargs <- sapply(c(.nameAll(required), "..."), as.symbol)
+    args <- .nameAll(c("type", required, "..."))
+    iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
+    oargs <- sapply(args[-1], as.symbol) # output args
     eval(substitute({
         if (!isGeneric(CLASS))
             setGeneric(CLASS,
@@ -35,7 +43,7 @@
         
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, type=new("NullIdentifier"), OARGS))
+            do.call("new", c(CLASS, type=NullIdentifier(), OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "missing"), f)

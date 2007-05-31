@@ -3,9 +3,17 @@
 .CONSTRUCTORS_GeneIdentifierType <- 
     names(getSubclasses(getClass("GeneIdentifierType")))
 
+.CONSTRUCTORS_GeneIdentifierType <-
+    .CONSTRUCTORS_GeneIdentifierType[!(.CONSTRUCTORS_GeneIdentifierType %in%
+                                       c("AnnotationIdentifier", "NullIdentifier"))]
+
 .constructors_Simple(.CONSTRUCTORS_GeneIdentifierType[.CONSTRUCTORS_GeneIdentifierType!="AnnotationIdentifier"])
 
 .constructors_Simple("AnnotationIdentifier", required="annotation")
+
+NullIdentifier <- function(geneType = "<Ad hoc>", ...) {
+    new("NullIdentifier", geneType=mkScalar(geneType), ...)
+}
 
 .getters("GeneIdentifierType", c(setType="type"))
 
@@ -20,6 +28,20 @@ setMethod("show",
           signature=signature(object="GeneIdentifierType"),
           function(object) cat("setType:", setType(object), "\n"))
 
+## NullIdentifier
+
+.SETTERS_NullIdentifier <- .GETTERS_NullIdentifier <- c("geneType")
+
+.getters("NullIdentifier", .GETTERS_NullIdentifier)
+
+.setters("NullIdentifier", .SETTERS_NullIdentifier)
+
+setMethod("show",
+          signature=signature(object="NullIdentifier"),
+          function(object)
+          cat("setType:", setType(object),
+              paste("(", geneType(object), ")", sep=""), "\n"))
+
 ## AnnotationIdentifier
 
 setMethod("initialize",
@@ -30,9 +52,12 @@ setMethod("initialize",
                              annotation = mkScalar(annotation))
           })
 
-.GETTERS_AnnotationIdentifier <- c("annotation")
+.SETTERS_AnnotationIdentifier <-
+    .GETTERS_AnnotationIdentifier <- c("annotation", geneType="annotation")
 
 .getters("AnnotationIdentifier", .GETTERS_AnnotationIdentifier)
+
+.setters("AnnotationIdentifier", .SETTERS_AnnotationIdentifier)
 
 .annotationMapper <- function(from, tag, what) {
     genes <- genes(what)

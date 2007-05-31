@@ -6,9 +6,13 @@
 \alias{mapIdentifiers,NullIdentifier,GeneIdentifierType,GeneSet-method}
 \alias{show,GeneIdentifierType-method}
 \alias{validIdentifiers,GeneIdentifierType-method}
+% NullIdentifier-class
+\alias{geneType,NullIdentifier-method}
+\alias{show,NullIdentifier-method}
 % AnnotationIdentifier-class
 \alias{AnnotationIdentifier-class}
 \alias{annotation,AnnotationIdentifier-method}
+\alias{geneType,AnnotationIdentifier-method}
 \alias{initialize,AnnotationIdentifier-method}
 \alias{mapIdentifiers,AnnotationIdentifier,GeneIdentifierType,GeneSet-method}
 \alias{mapIdentifiers,AnnotationIdentifier,character,GeneSet-method}
@@ -98,6 +102,16 @@
         "GeneIdentifierType")}: validate that the identiifier are
       legitimate; subclasses are responsible for implementing this
       method.}
+  }
+
+  \code{NullIdentifier} and \code{AnnotationIdentifier} classes have the
+  following method:
+  \describe{
+    \item{geneType}{
+      \code{signature(object = "NullIdentifier")}, 
+      \code{signature(object = "AnnotationIdentifier")}: Retrieve the
+      \code{geneType} (e.g., annotation string for
+      \code{AnnotationIdentifier}; ad hoc string for \code{NullIdentifier}).}
   }
 
   \code{AnnotationIdentifier} classes are also used in:

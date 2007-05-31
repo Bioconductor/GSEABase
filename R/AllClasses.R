@@ -6,8 +6,11 @@ setClass("GeneIdentifierType", contains="VIRTUAL",
 
 setClass("NullIdentifier",
          contains = "GeneIdentifierType",
+         representation=representation(
+           geneType = "ScalarCharacter"),
          prototype = prototype(
-           type = new("ScalarCharacter", "NullIdentifier")))
+           type = new("ScalarCharacter", "NullIdentifier"),
+           geneType = new("ScalarCharacter", "<Ad hoc>")))
 
 setClass("AnnotationIdentifier",
          contains = "GeneIdentifierType",

@@ -9,10 +9,16 @@ test_GeneIdentifierType_Constructors <- function() {
         checkTrue(is(res, constructors[[i]]))
     }
 
+    ## Required slot for AnnotationIdentifier
     res <- AnnotationIdentifier(annotation="123")
     checkTrue(validObject(res))
     checkTrue(is(res, "AnnotationIdentifier"))
     checkException(AnnotationIdentifier(), silent=TRUE) # required arg missing
+    checkTrue("hgu95av2"==geneType(AnnotationIdentifier("hgu95av2")))
+
+    ## Optional slot for NullIdentifier
+    checkTrue("<Ad hoc>"==geneType(NullIdentifier()))
+    checkTrue("myType"==geneType(NullIdentifier("myType")))
 }
 
 

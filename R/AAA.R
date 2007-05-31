@@ -11,7 +11,7 @@
 ## CONSTRUCTOR are filled with CLASS
 .constructors_Simple <- function(klasses, required=NULL) {
     klassnames <- names(.nameAll(klasses))
-    args <- .nameAll(c(required, "..."))
+    args <- .nameAll(c(required, "...")) # convenience of automatic matching
     iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
     oargs <- sapply(args, as.symbol)    # output args
     for (cl in seq_along(klasses))

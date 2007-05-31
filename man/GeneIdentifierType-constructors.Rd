@@ -13,13 +13,15 @@
   \code{AnnotationIdentifier()}).
 }
 \usage{
-NullIdentifier(...)
+NullIdentifier(geneType = "<Ad hoc>", ...)
 AnnotationIdentifier(annotation,...)
 EntrezIdentifier(...)
 SymbolIdentifier(...)
 PfamIdentifier(...)
 }
 \arguments{
+  \item{geneType}{Further specification on type of identifier, e.g., for
+    ad hoc or otherwise unsupported classifications.}
   \item{annotation}{(required) A single character string identifying  the
     Bioconductor package from which the annotations are drawn.}
   \item{\dots}{Additional arguments, usually none.}

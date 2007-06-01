@@ -17,10 +17,13 @@ AdHocCollection(...)
 ExpressionSetCollection(...)
 KEGGCollection(...)
 GOCollection(...)
-BroadCollection(...)
+BroadCollection(category, subCategory=NA, ...)
 }
 
 \arguments{
+  \item{category}{(Required) Broad category, one of "c1" (postitional), "c2"
+    (curated), "c3" (motif), "c4" (computational).}
+  \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
   \item{\dots}{Additional arguments, usually none but see specific
     \code{linkS4class{CollectionType}} classes  for possibilities.}
 }

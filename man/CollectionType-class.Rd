@@ -10,6 +10,8 @@
 \alias{ExpressionSetCollection-class}
 % BroadCollection-class
 \alias{BroadCollection-class}
+\alias{bcCategory,BroadCollection-method}
+\alias{bcSubCategory,BroadCollection-method}
 \alias{show,BroadCollection-method}
 % GOCollection-class
 \alias{GOCollection-class}
@@ -72,6 +74,14 @@
       Retrieve the collection type.}
     \item{show}{\code{signature(object = "CollectionType")}: display the
       collection type.}
+  }
+
+  \code{BroadCollection} has methods:
+  \describe{
+    \item{bcCategory}{Retrieve the \code{category} of the Broad
+      collection.}
+    \item{bcSubCategory}{Retrieve the sub-category of the Broad
+      collection.}
   }
 }
 

@@ -21,6 +21,9 @@ exportMethods(show, initialize, intersect, union, setdiff,
               ## IdentifierType
               mapIdentifiers, validIdentifiers, annotation,
 
+              ## CollectionType
+              bcCategory, bcSubCategory,
+
               ## GeneSet
               GeneSet,
               

@@ -65,8 +65,8 @@ setClass("BroadCollection",
            subCategory = "ScalarCharacter"),
          prototype = prototype(
            type = new("ScalarCharacter", "Broad"),
-           category = new("ScalarCharacter", "none"),
-           subCategory = new("ScalarCharacter", "none")))
+           category = new("ScalarCharacter", "c1"),
+           subCategory = new("ScalarCharacter", as.character(NA))))
 
 ## GeneSet
 

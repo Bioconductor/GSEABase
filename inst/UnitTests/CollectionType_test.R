@@ -7,4 +7,8 @@ test_CollectionType_Constructors <- function() {
         checkTrue(validObject(res))
         checkTrue(is(res, constructors[[i]]))
     }
+
+    ## BroadCollection
+    checkTrue("c2" == bcCategory(BroadCollection(category="c2")))
+    checkTrue("yyy" == bcSubCategory(BroadCollection(subCategory="yyy")))
 }

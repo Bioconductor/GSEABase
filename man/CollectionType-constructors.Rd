@@ -1,5 +1,5 @@
-\name{Collections}
-\alias{<name>Collection}
+\name{CollectionType}
+\alias{CollectionType}
 \alias{AdHocCollection}
 \alias{ExpressionSetCollection}
 \alias{KEGGCollection}
@@ -19,21 +19,19 @@ KEGGCollection(...)
 GOCollection(...)
 BroadCollection(...)
 }
+
 \arguments{
   \item{\dots}{Additional arguments, usually none but see specific
-    collection pages for possibilities.}
+    \code{linkS4class{CollectionType}} classes  for possibilities.}
 }
+
 \value{
   An object of the same class as the function name, initialized as
   appropriate for the collection.
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
-  \code{\linkS4class{AdHocCollection}}, 
-  \code{\linkS4class{ExpressionSetCollection}}, 
-  \code{\linkS4class{KEGGCollection}}, 
-  \code{\linkS4class{GOCollection}}, 
-  \code{\linkS4class{BroadCollection}}
+  \code{\linkS4class{CollectionType}}, 
 }
 \examples{
 AdHocCollection()

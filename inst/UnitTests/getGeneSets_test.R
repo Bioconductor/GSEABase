@@ -8,7 +8,7 @@ test_getBroadSets <- function() {
     checkTrue(setIdentifier(gs)=="c1:102")
     checkIdentical(length(genes(gs)), 129L)
     checkTrue(genes(gs)[length(genes(gs))]=="TRAPPC2L")
-    checkTrue(class(setType(gs))=="EntrezIdentifier")
+    checkTrue(class(setType(gs))=="SymbolIdentifier")
     checkIdentical(collectionType(gs),
                    new("BroadCollection",
                        category=mkScalar("c1"),

@@ -5,15 +5,11 @@
 
 .CONSTRUCTORS_GeneIdentifierType <-
     .CONSTRUCTORS_GeneIdentifierType[!(.CONSTRUCTORS_GeneIdentifierType %in%
-                                       c("AnnotationIdentifier", "NullIdentifier"))]
+                                       c("AnnotationIdentifier"))]
 
 .constructors_Simple(.CONSTRUCTORS_GeneIdentifierType[.CONSTRUCTORS_GeneIdentifierType!="AnnotationIdentifier"])
 
 .constructors_Simple("AnnotationIdentifier", required="annotation")
-
-NullIdentifier <- function(geneType = "<Ad hoc>", ...) {
-    new("NullIdentifier", geneType=mkScalar(geneType), ...)
-}
 
 .getters("GeneIdentifierType", c(setType="type"))
 
@@ -28,20 +24,6 @@ setMethod("show",
           signature=signature(object="GeneIdentifierType"),
           function(object) cat("setType:", setType(object), "\n"))
 
-## NullIdentifier
-
-.SETTERS_NullIdentifier <- .GETTERS_NullIdentifier <- c("geneType")
-
-.getters("NullIdentifier", .GETTERS_NullIdentifier)
-
-.setters("NullIdentifier", .SETTERS_NullIdentifier)
-
-setMethod("show",
-          signature=signature(object="NullIdentifier"),
-          function(object)
-          cat("setType:", setType(object),
-              paste("(", geneType(object), ")", sep=""), "\n"))
-
 ## AnnotationIdentifier
 
 setMethod("initialize",
@@ -53,7 +35,7 @@ setMethod("initialize",
           })
 
 .SETTERS_AnnotationIdentifier <-
-    .GETTERS_AnnotationIdentifier <- c("annotation", geneType="annotation")
+    .GETTERS_AnnotationIdentifier <- c("annotation")
 
 .getters("AnnotationIdentifier", .GETTERS_AnnotationIdentifier)
 
@@ -61,7 +43,7 @@ setMethod("initialize",
 
 .fromAnnotation <- function(from, tag, what) {
     genes <- genes(what)
-    pkg <- geneType(from)
+    pkg <- annotation(from)
     map <- paste(pkg, tag, sep="")
     if (!.requireQ(pkg))
         stop(sprintf("cannot load annotation package '%s'",

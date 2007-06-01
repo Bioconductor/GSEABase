@@ -19,7 +19,7 @@ exportMethods(show, initialize, intersect, union, setdiff,
               "&", "|",
 
               ## IdentifierType
-              mapIdentifiers, validIdentifiers, annotation, geneType,
+              mapIdentifiers, validIdentifiers, annotation,
 
               ## GeneSet
               GeneSet,

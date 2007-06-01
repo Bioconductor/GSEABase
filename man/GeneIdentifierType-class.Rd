@@ -6,9 +6,6 @@
 \alias{mapIdentifiers,NullIdentifier,GeneIdentifierType,GeneSet-method}
 \alias{show,GeneIdentifierType-method}
 \alias{validIdentifiers,GeneIdentifierType-method}
-% NullIdentifier-class
-\alias{geneType,NullIdentifier-method}
-\alias{show,NullIdentifier-method}
 % AnnotationIdentifier-class
 \alias{AnnotationIdentifier-class}
 \alias{annotation,AnnotationIdentifier-method}
@@ -61,13 +58,6 @@
       \code{GeneIdentifierType}.}
   }
 
-  The \code{NullIdentifier} class has an additional slot
-  \describe{
-    \item{geneType}{Object of class \code{"ScalarCharacter"}
-      containing an ad hoc name identifying the type of symbol
-      represented by genes in the gene set.}
-  }
-
   The \code{AnnotationIdentifier} class has an additional slot
   \describe{
     \item{annotation}{Object of class \code{"ScalarCharacter"}
@@ -112,13 +102,11 @@
       method.}
   }
 
-  \code{NullIdentifier} and \code{AnnotationIdentifier} classes have the
+  \code{AnnotationIdentifier} has the
   following method:
   \describe{
-    \item{geneType}{
-      \code{signature(object = "NullIdentifier")}, 
-      \code{signature(object = "AnnotationIdentifier")}: Retrieve the
-      \code{geneType} (e.g., annotation string for
+    \item{geneType}{\code{signature(object = "AnnotationIdentifier")}:
+      Retrieve the \code{geneType} (e.g., annotation string for
       \code{AnnotationIdentifier}; ad hoc string for \code{NullIdentifier}).}
   }
 

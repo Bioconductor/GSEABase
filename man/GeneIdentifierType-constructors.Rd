@@ -1,11 +1,11 @@
-\name{Identifiers}
-\alias{Gene Identifiers}
+\name{GeneIdentifierType}
+\alias{GeneIdentifierType}
 \alias{NullIdentifier}
 \alias{AnnotationIdentifier}
 \alias{EntrezIdentifier}
 \alias{SymbolIdentifier}
 \alias{PfamIdentifier}
-\title{Construct Gene Identifier Classes}
+\title{Gene Identifier Class Constructors}
 \description{
   Gene identifier classes and functions are used to indicate what the
   list of genes in a gene set represents (e.g., Entrez gene identifiers
@@ -13,15 +13,13 @@
   \code{AnnotationIdentifier()}).
 }
 \usage{
-NullIdentifier(geneType = "<Ad hoc>", ...)
+NullIdentifier(...)
 AnnotationIdentifier(annotation,...)
 EntrezIdentifier(...)
 SymbolIdentifier(...)
 PfamIdentifier(...)
 }
 \arguments{
-  \item{geneType}{Further specification on type of identifier, e.g., for
-    ad hoc or otherwise unsupported classifications.}
   \item{annotation}{(required) A single character string identifying  the
     Bioconductor package from which the annotations are drawn.}
   \item{\dots}{Additional arguments, usually none.}

@@ -19,7 +19,7 @@ setClass("AnnotationIdentifier",
 setClass("EntrezIdentifier",
          contains = "GeneIdentifierType",
          prototype = prototype(
-           type = new("ScalarCharacter", "Entrez")))
+           type = new("ScalarCharacter", "EntrezId")))
 
 setClass("SymbolIdentifier",
          contains = "GeneIdentifierType",

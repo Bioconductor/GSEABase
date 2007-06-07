@@ -84,7 +84,7 @@ setReplaceMethod("setType",
                          stop(sprintf("could not create setType tag of '%s'",
                                       value))
                      })
-                     mapIdentifiers(setType(object), tag, object)
+                     mapIdentifiers(object, tag, setType(object))
                  })
 
 setReplaceMethod("setType",
@@ -92,7 +92,7 @@ setReplaceMethod("setType",
                    object="GeneSet",
                    value="GeneIdentifierType"),
                  function(object, value) {
-                     mapIdentifiers(setType(object), value, object)
+                     mapIdentifiers(object, value, setType(object))
                  })
 
 ## subset

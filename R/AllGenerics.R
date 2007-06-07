@@ -3,8 +3,19 @@
 ## GeneIdentifierType
 
 setGeneric("mapIdentifiers",
-           function(from, to, what)
-           standardGeneric("mapIdentifiers"))
+           function(what, to, from, ...)
+           standardGeneric("mapIdentifiers"),
+           useAsDefault=function(what, to, from, ...) {
+               if (setType(from) == setType(to)) {
+                   warning(sprintf("map from '%s' to '%s': identical types",
+                                   setType(from), setType(to)))
+                   what
+               } else {
+                   stop(sprintf("cannot map from '%s' to '%s' on object of class '%s'",
+                                setType(from), setType(to),
+                                class(what)))
+               }
+           })
 
 setGeneric("validIdentifiers",
            function(identifier, genes) {

@@ -79,17 +79,17 @@ setMethod("mapIdentifiers",
 
 .checkPackageAndMap <- function(pkg, map) {
     if (!.requireQ(pkg))
-        stop(sprintf("cannot load annotation package '%s'", pkg))
+        .stopf("cannot load annotation package '%s'", pkg)
     if (!exists(map, where=getNamespace(pkg)))
-        stop(sprintf("map '%s' not found in annotation package '%s'",
-                     map, pkg))
+        .stopf("map '%s' not found in annotation package '%s'",
+               map, pkg)
 }
 
-.getMappedGenes <- function(genes, map, mapEnv, pkg, getter=mget) {
-    ngenes <- getter(genes, mapEnv)
+.getMappedGenes <- function(genes, mapEnv, map, pkg) {
+    ngenes <- mget(genes, mapEnv)
     if (any(length(ngenes) != 1) || any(is.na(ngenes)))
-        warning(sprintf("annotation map '%s' is not 1:1 in '%s'",
-                        map, pkg))
+        .warningf("annotation map '%s' is not 1:1 in '%s'",
+                  map, pkg)
     ugenes <- unique(unlist(ngenes))
     as.character(ugenes[!is.na(ugenes)])
 }
@@ -100,7 +100,7 @@ setMethod("mapIdentifiers",
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- get(map, envir=getNamespace(pkg))
-    .getMappedGenes(genes(what), map, mapEnv, pkg)
+    .getMappedGenes(genes(what), mapEnv, map, pkg)
 }
 
 setMethod("mapIdentifiers",
@@ -141,8 +141,7 @@ setMethod("mapIdentifiers",
             })
     }
     if (!ok)
-        stop(sprintf("unable to map from '%s' to '%s'",
-                     tag, setType(to)))
+        .stopf("unable to map from '%s' to '%s'", tag, setType(to))
     genes
 }
 
@@ -151,36 +150,18 @@ setMethod("mapIdentifiers",
     map <- paste(pkg, tag, "2PROBE",sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- get(map, envir=getNamespace(pkg))
-    .getMappedGenes(genes(what), map, mapEnv, pkg)
+    .getMappedGenes(genes(what), mapEnv, map, pkg)
 }
 
 .toAnnotationRevmap <- function(tag, to, what) {
     pkg <- annotation(to)
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
-    mapEnv <- get(map)
-    wgenes <- genes(what)
-    revMap <- new.env(hash=TRUE, parent=emptyenv(),
-                      size=length(genes))
-    probeIds <- ls(mapEnv)
-    entrezIds <- mget(probeIds, mapEnv)
-    okIds <- lapply(entrezIds, match, wgenes, nomatch=0)
-    okIds <- lapply(okIds, `>`, 0)
-    mapply(function(probeId, entrezIds, okIds) {
-        if (any(okIds)) {
-            entrezIds <- entrezIds[okIds]
-            for (eid in entrezIds)
-                if (exists(eid, revMap))
-                    revMap[[eid]] <- c(revMap[[eid]], probeId)
-                else
-                    revMap[[eid]] <- probeId
-        }
-    }, probeIds, entrezIds, okIds)
-    if (length(revMap) != length(wgenes) ||
-        any(eapply(revMap, length) != 1))
-        warning(sprintf("annotation map '%s' is not 1:1 in '%s'",
-                        map, pkg))
-    as.character(unique(unlist(mget(ls(revMap), revMap))))
+    revMap <- revmap(get(map))
+    genes <- genes(what)
+    ogenes <- genes[sapply(genes, exists, envir=revMap)]
+    .getMappedGenes(ogenes, revMap,
+                    paste("revmap(", map, ")", sep=""), pkg)
 }
 
 .toAnnotationDbi <- function(tag, to, what) {
@@ -189,7 +170,7 @@ setMethod("mapIdentifiers",
     .checkPackageAndMap(pkg, map)
     mapEnv <- getNamespace(pkg)
     mapEnv <- revmap(get(map, envir=mapEnv))
-    .getMappedGenes(genes(what), map, mapEnv, pkg, getter=AnnotationDbi:::mget)
+    .getMappedGenes(genes(what), mapEnv, map, pkg)
 }
 
 setMethod("mapIdentifiers",

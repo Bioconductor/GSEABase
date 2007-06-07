@@ -20,7 +20,10 @@
     x
 }
 
+.stopf <- function(...)
+    stop(simpleError(sprintf(...),
+                     call=match.call(call=sys.call(sys.parent(1)))))
 
-
-
-
+.warningf <- function(...)
+    warning(simpleWarning(sprintf(...),
+                          call=match.call(call=sys.call(sys.parent(1)))))

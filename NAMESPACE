@@ -1,5 +1,7 @@
 import(methods)
 
+importMethodsFrom(AnnotationDbi, revmap, mget)
+
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType
@@ -13,7 +15,11 @@ exportClasses(## GeneIdentifierType
               BroadCollection,
 
               ## GeneSet
-              GeneSet, GeneColorSet)
+              GeneSet, GeneColorSet,
+
+              ## GeneSetCollection
+              GeneSetCollection
+              )
 
 exportMethods(show, initialize, intersect, union, setdiff,
               "&", "|",
@@ -42,7 +48,10 @@ exportMethods(show, initialize, intersect, union, setdiff,
               phenotype, geneColor, phenotypeColor, coloring,
               
               "phenotype<-", "geneColor<-", "phenotypeColor<-",
-              "coloring<-")
+              "coloring<-",
+
+              ## GeneSetCollection
+              GeneSetCollection, names, "[", "[[")
 
 export(## IdentifierType
        NullIdentifier, AnnotationIdentifier, EntrezIdentifier,

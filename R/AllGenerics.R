@@ -27,16 +27,6 @@ setGeneric("validIdentifiers",
 setGeneric("setType<-",
            function(object, value) standardGeneric("setType<-"))
 
-## GeneColorSet
-
-setGeneric("coloring",
-           function(object, ...) standardGeneric("coloring"))
-
-setGeneric("coloring<-",
-           function(object, ..., value) standardGeneric("coloring<-"))
-
-##
-
 setGeneric("intersect",
            function(x, y) standardGeneric("intersect"))
 
@@ -47,3 +37,16 @@ setGeneric("setdiff",
            function(x, y) standardGeneric("setdiff"))
 
 setGeneric("Logic")
+
+## GeneColorSet
+
+setGeneric("coloring",
+           function(object, ...) standardGeneric("coloring"))
+
+setGeneric("coloring<-",
+           function(object, ..., value) standardGeneric("coloring<-"))
+
+## GeneSetCollection
+
+setGeneric("GeneSetCollection",
+           function(object, ...) standardGeneric("GeneSetCollection"))

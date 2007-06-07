@@ -120,3 +120,23 @@ setClass("GeneColorSet",
                  msg
              else TRUE
          })
+
+## GeneSetCollection
+
+setClass("GeneSetCollection",
+         contains="list",
+         validity = function(object) {
+             msg <- NULL
+             if (!all(sapply(object, is, "GeneSet")))
+                 msg <- c(msg, "members must all be 'GeneSet' classes")
+             tryCatch({
+                 if (any(duplicated(names(object))))
+                     msg <- c(msg, "each setName must be distinct")
+                 }, error=function(err) {
+                     msg <<- c(msg, conditionMessage(err))
+                 })
+             if (!is.null(msg))
+                 msg
+             else
+                 TRUE
+         })

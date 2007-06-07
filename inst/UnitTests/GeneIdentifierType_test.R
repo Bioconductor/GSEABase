@@ -18,18 +18,18 @@ test_GeneIdentifierType_Constructors <- function() {
 }
 
 
-test_GeneIdentifierType_mapIdentifiers_via_setType <- function() {
+test_GeneIdentifierType_setType <- function() {
     data(sample.ExpressionSet)
 
     gs <- GeneSet(sample.ExpressionSet[100:110],
                   setName="123", setIdentifier="456")
-    setType(gs) <- "EntrezIdentifier"
+    suppressWarnings(setType(gs) <- "EntrezIdentifier")
     checkTrue(validObject(gs, complete=TRUE))
     checkTrue(is(setType(gs), "EntrezIdentifier"))
 
     gs <- GeneSet(sample.ExpressionSet[100:110],
                   setName="123", setIdentifier="456")
-    setType(gs) <- EntrezIdentifier()
+    suppressWarnings(setType(gs) <- EntrezIdentifier())
     checkTrue(validObject(gs, complete=TRUE))
     checkTrue(is(setType(gs), "EntrezIdentifier"))
 
@@ -46,15 +46,17 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
     suppressWarnings({
         res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2"))
     })
+    detach("package:hgu95av2")
     checkTrue(validObject(res))
     checkEquals(41, length(genes(res)))
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
     gss <- getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
-    suppressWarnings({
+    suppressMessages(suppressWarnings({
         res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2db"))
-    })
+    }))
+    detach("package:hgu95av2db")
     checkTrue(validObject(res))
     checkEquals(41, length(genes(res)))
 }

@@ -1,7 +1,5 @@
 import(methods)
 
-import(AnnotationDbi)
-
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType

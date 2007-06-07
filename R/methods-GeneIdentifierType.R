@@ -85,8 +85,8 @@ setMethod("mapIdentifiers",
                      map, pkg))
 }
 
-.getMappedGenes <- function(genes, map, mapEnv, pkg) {
-    ngenes <- mget(genes, mapEnv)
+.getMappedGenes <- function(genes, map, mapEnv, pkg, getter=mget) {
+    ngenes <- getter(genes, mapEnv)
     if (any(length(ngenes) != 1) || any(is.na(ngenes)))
         warning(sprintf("annotation map '%s' is not 1:1 in '%s'",
                         map, pkg))
@@ -124,21 +124,22 @@ setMethod("mapIdentifiers",
     if (length(grep(".*db$", pkg))==1) {
         genes <- .toAnnotationDbi(tag, to, what)
         ok <- TRUE
+    } else {
+        if (!ok)
+            tryCatch({
+                genes <- .toAnnotationDirect(tag, to, what)
+                ok <- TRUE
+            }, error=function(err) {
+                warning("direct map failed: ",  conditionMessage(err))
+            })
+        if (!ok)
+            tryCatch({
+                genes <- .toAnnotationRevmap(tag, to, what)
+                ok <- TRUE
+            }, error=function(err) {
+                warning("reverse map failed: ", conditionMessage(err))
+            })
     }
-    if (!ok)
-        tryCatch({
-            genes <- .toAnnotationDirect(tag, to, what)
-            ok <- TRUE
-        }, error=function(err) {
-            warning("direct map failed: ",  conditionMessage(err))
-        })
-    if (!ok)
-        tryCatch({
-            genes <- .toAnnotationRevmap(tag, to, what)
-            ok <- TRUE
-        }, error=function(err) {
-            warning("reverse map failed: ", conditionMessage(err))
-        })
     if (!ok)
         stop(sprintf("unable to map from '%s' to '%s'",
                      tag, setType(to)))
@@ -188,7 +189,7 @@ setMethod("mapIdentifiers",
     .checkPackageAndMap(pkg, map)
     mapEnv <- getNamespace(pkg)
     mapEnv <- revmap(get(map, envir=mapEnv))
-    .getMappedGenes(genes(what), map, mapEnv, pkg)
+    .getMappedGenes(genes(what), map, mapEnv, pkg, getter=AnnotationDbi:::mget)
 }
 
 setMethod("mapIdentifiers",

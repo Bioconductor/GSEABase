@@ -61,8 +61,6 @@ setMethod("mapIdentifiers",
               callGeneric(what, to, from=setType(what), ...)
           })
 
-## construct these programatically?
-
 ## Null --> X
 
 setMethod("mapIdentifiers",
@@ -172,6 +170,20 @@ setMethod("mapIdentifiers",
     mapEnv <- revmap(get(map, envir=mapEnv))
     .getMappedGenes(genes(what), mapEnv, map, pkg)
 }
+
+setMethod("mapIdentifiers",
+          ## this method resolves ambiguity between
+          ## GeneSet#AnnotationIdentifier#GeneIdentifierType
+          ## GeneSet#GeneIdentifierType#NullIdentifier
+          ## for
+          ## GeneSet#AnnotationIdentifier#NullIdentifier
+          signature=signature(
+            what="GeneSet",
+            to="AnnotationIdentifier",
+            from="NullIdentifier"),
+          function(what, to, from, ...) {
+              new(class(what), what, type=to)
+          })
 
 setMethod("mapIdentifiers",
           signature=signature(

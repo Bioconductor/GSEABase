@@ -51,6 +51,18 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
     checkEquals(41, length(genes(res)))
 }
 
+test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
+    ## Original bug: 
+    ##     1: Ambiguous method selection for "mapIdentifiers", target "GeneSet#AnnotationIdentifier#NullIdentifier" (the first of the signatures shown will be used)
+    ##     GeneSet#AnnotationIdentifier#GeneIdentifierType
+    ##     GeneSet#GeneIdentifierType#NullIdentifier
+    opts <- options(warn=2)
+    on.exit(options(opts))
+    gs <- GeneSet(setName="123", setIdentifier="345")
+    setType(gs) <- AnnotationIdentifier("xyz")
+    checkTrue(validObject(gs))
+}
+
 test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
     gss <- getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
     suppressMessages(suppressWarnings({

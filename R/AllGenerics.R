@@ -6,26 +6,26 @@ setGeneric("mapIdentifiers",
            function(what, to, from, ...)
            standardGeneric("mapIdentifiers"),
            useAsDefault=function(what, to, from, ...) {
-               if (setType(from) == setType(to)) {
+               if (geneIdType(from) == geneIdType(to)) {
                    warning(sprintf("map from '%s' to '%s': identical types",
-                                   setType(from), setType(to)))
+                                   geneIdType(from), geneIdType(to)))
                    what
                } else {
                    stop(sprintf("cannot map from '%s' to '%s' on object of class '%s'",
-                                setType(from), setType(to),
+                                geneIdType(from), geneIdType(to),
                                 class(what)))
                }
            })
 
 setGeneric("validIdentifiers",
-           function(identifier, genes) {
+           function(identifier, geneIds) {
                standardGeneric("validIdentifiers")
            })
 
 ## GeneSet
 
-setGeneric("setType<-",
-           function(object, value) standardGeneric("setType<-"))
+setGeneric("geneIdType<-",
+           function(object, value) standardGeneric("geneIdType<-"))
 
 setGeneric("intersect",
            function(x, y) standardGeneric("intersect"))

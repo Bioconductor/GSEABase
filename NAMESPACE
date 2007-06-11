@@ -33,11 +33,11 @@ exportMethods(show, initialize, intersect, union, setdiff,
               ## GeneSet
               GeneSet,
               
-              setType, genes, setIdentifier, setName, description,
+              geneIdType, geneIds, setIdentifier, setName, description,
               longDescription, organism, pubMedIds, urls, contributor,
               setVersion, creationDate, collectionType,
 
-              "setType<-", "genes<-", "setIdentifier<-", "setName<-",
+              "geneIdType<-", "geneIds<-", "setIdentifier<-", "setName<-",
               "description<-", "longDescription<-", "organism<-",
               "pubMedIds<-", "urls<-", "contributor<-",
               "setVersion<-", "creationDate<-", "collectionType<-",

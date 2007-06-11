@@ -15,9 +15,9 @@ test_getBroadSets2 <- function() {
     gs <- getBroadSets(.broadXML)[[1]]
     checkTrue(setName(gs)=="chr16q24")
     checkTrue(setIdentifier(gs)=="c1:102")
-    checkIdentical(length(genes(gs)), 129L)
-    checkTrue(genes(gs)[length(genes(gs))]=="TRAPPC2L")
-    checkTrue(class(setType(gs))=="SymbolIdentifier")
+    checkIdentical(length(geneIds(gs)), 129L)
+    checkTrue(geneIds(gs)[length(geneIds(gs))]=="TRAPPC2L")
+    checkTrue(class(geneIdType(gs))=="SymbolIdentifier")
     checkIdentical(collectionType(gs),
                    new("BroadCollection",
                        category=mkScalar("c1"),

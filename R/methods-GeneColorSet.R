@@ -6,12 +6,12 @@ setMethod("initialize",
           signature=signature(.Object="GeneColorSet"),
           function(.Object, .Template=.Object, ...,
                    ## additional args
-                   genes=.Template@genes,
+                   geneIds=.Template@geneIds,
                    phenotype=.Template@phenotype,
-                   geneColor=factor(character(length(genes))),
-                   phenotypeColor=factor(character(length(genes)))) {
+                   geneColor=factor(character(length(geneIds))),
+                   phenotypeColor=factor(character(length(geneIds)))) {
               callNextMethod(.Object, .Template, ...,
-                             genes=genes,
+                             geneIds=geneIds,
                              phenotype=mkScalar(phenotype),
                              geneColor=geneColor,
                              phenotypeColor=phenotypeColor)
@@ -49,7 +49,7 @@ setMethod("coloring",
           function(object, ...) {
               data.frame(geneColor=geneColor(object),
                          phenotypeColor=phenotypeColor(object),
-                         row.names=genes(object))
+                         row.names=geneIds(object))
           })
 
 setReplaceMethod("coloring",
@@ -57,11 +57,11 @@ setReplaceMethod("coloring",
                    object="GeneColorSet",
                    value="data.frame"),
                  function(object, ..., value) {
-                     ogenes <- genes(object)
+                     ogenes <- geneIds(object)
                      if (!all(row.names(value) %in% ogenes))
                          stop("'data.frame' row.names must all be gene symbols")
                      if (nrow(value) != length(ogenes))
-                         stop("'data.frame' must define colors for all genes")
+                         stop("'data.frame' must define colors for all geneIds")
                      if (length(colnames(value)) !=2 ||
                                 !all(c("geneColor", "phenotypeColor") %in%
                                      colnames(value)))
@@ -69,7 +69,7 @@ setReplaceMethod("coloring",
                      if (!all("factor" %in% sapply(value, class)))
                          stop("'data.frame columns must be of class 'factor'")
                      new(class(object), object,
-                         genes=genes(object),
+                         geneIds=geneIds(object),
                          geneColor=value[ogenes, "geneColor"],
                          phenotypeColor=value[ogenes, "phenotypeColor"],
                          setName=setName(object),
@@ -86,12 +86,12 @@ setMethod("[",
               if (any(duplicated(i)))
                   stop("duplicate index: ",
                        paste(i[duplicated(i)], collapse=" "))
-              genes <- genes(x)[i]
-              if (any(is.na(genes)))
+              geneIds <- geneIds(x)[i]
+              if (any(is.na(geneIds)))
                   stop("unmatched index: ",
-                       paste(i[is.na(genes)], collapse=" "))
+                       paste(i[is.na(geneIds)], collapse=" "))
               new(class(x), x,
-                  genes=genes,
+                  geneIds=geneIds,
                   geneColor=factor(
                     as.character(geneColor(x)[i])),
                   phenotypeColor=factor(
@@ -102,12 +102,12 @@ setMethod("[",
           signature=signature(
             x="GeneColorSet", i="character"),
           function(x, i, j, ..., drop=TRUE) {
-              idx <- pmatch(i, genes(x))
+              idx <- pmatch(i, geneIds(x))
               if (any(is.na(idx)))
-                  stop(sprintf("unmatched / duplicate genes: '%s'",
+                  stop(sprintf("unmatched / duplicate geneIds: '%s'",
                                paste(i[is.na(idx)], collapse="', '")))
               new(class(x), x,
-                  genes=genes(x)[idx],
+                  geneIds=geneIds(x)[idx],
                   geneColor=factor(
                     as.character(geneColor(x))[idx]),
                   phenotypeColor=factor(
@@ -118,7 +118,7 @@ setMethod("[[",
           signature=signature(
             x="GeneColorSet", i="numeric"),
           function(x, i, j, ...) {
-              c(gene=genes(x)[[i]],
+              c(geneId=geneIds(x)[[i]],
                 geneColor= as.character(geneColor(x)[[i]]),
                 phenotypeColor= as.character(phenotypeColor(x)[[i]]))
           })
@@ -127,7 +127,7 @@ setMethod("[[",
           signature=signature(
             x="GeneColorSet", i="character"),
           function(x, i, j, ...) {
-              idx <- match(i, genes(x))
+              idx <- match(i, geneIds(x))
               if (is.na(idx))
                   stop("unmatched gene: ", i)
               ## 'next' method is GeneSet, so want to re-start...
@@ -137,10 +137,10 @@ setMethod("[[",
 setMethod("$",
           signature=signature(x="GeneColorSet"),
           function(x, name) {
-              i <- pmatch(name, genes(x), duplicates.ok=FALSE)
+              i <- pmatch(name, geneIds(x), duplicates.ok=FALSE)
               if (is.na(i))
                   stop("unmatched gene: ", i)
-              c(gene=genes(x)[i],
+              c(geneId=geneIds(x)[i],
                 geneColor=as.character(geneColor(x)[[i]]),
                 phenotypeColor=as.character(phenotypeColor(x)[[i]]))
           })
@@ -170,11 +170,11 @@ setMethod("$",
         else x
     }
     .checkGeneColorSetLogicTypes(x, y, "'&' or 'intersect'")
-    vx <- as.vector(genes(x))
-    vy <- as.vector(genes(y))
+    vx <- as.vector(geneIds(x))
+    vy <- as.vector(geneIds(y))
     idx <- match(vy, vx, 0)             # x index
     idy <- match(vx[idx], vy, 0)        # y index
-    genes <- vy[idy]
+    geneIds <- vy[idy]
     phenotype <- phenotype(x)
     phenotypesIdentical <- phenotype == phenotype(y)
     if (!phenotypesIdentical)
@@ -187,13 +187,13 @@ setMethod("$",
         setName = .glue(setName(x), setName(y), " & "),
         urls = .unique(urls(x), urls(y)),
         phenotype = phenotype,
-        genes = genes, geneColor = gc, phenotypeColor = pc)      
+        geneIds = geneIds, geneColor = gc, phenotypeColor = pc)      
 }
 
 .geneColorSetUnion <- function(x, y) {
     .checkGeneColorSetLogicTypes(x, y, "'|' or 'union'")
-    idy <- which(!(genes(y) %in% genes(x)))
-    genes <- c(genes(x), genes(y)[idy])
+    idy <- which(!(geneIds(y) %in% geneIds(x)))
+    geneIds <- c(geneIds(x), geneIds(y)[idy])
     phenotype <- phenotype(x)
     phenotypesIdentical <- phenotype == phenotype(y)
     if (!phenotypesIdentical)
@@ -212,13 +212,13 @@ setMethod("$",
         setIdentifier=setIdentifier(x),
         setName = .glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
-        genes = genes, geneColor = gc, phenotypeColor = pc)      
+        geneIds = geneIds, geneColor = gc, phenotypeColor = pc)      
 }
 
 .geneColorSetSetdiff <- function(x, y) {
     .checkGeneColorSetLogicTypes(x, y, "'setdiff'")
-    gx <- genes(x)
-    gy <- genes(y)
+    gx <- geneIds(x)
+    gy <- geneIds(y)
     idx <- 
         if (length(gx) || length(gy))
             match(gx, gy, 0)==0
@@ -232,7 +232,7 @@ setMethod("$",
         setIdentifier=setIdentifier(x),
         setName = .glue(setName(x), setName(y), " - "),
         urls = .unique(urls(x), urls(y)),
-        genes=gx[idx], geneColor = gc, phenotypeColor = pc)
+        geneIds=gx[idx], geneColor = gc, phenotypeColor = pc)
 }
 
 setMethod("intersect",
@@ -252,11 +252,11 @@ setMethod("&",
 setMethod("&",
           signature=signature(e1="GeneColorSet", e2="character"),
           function(e1, e2) {
-              idx <- which(genes(e1)==e2)
+              idx <- which(geneIds(e1)==e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " & "),
-                  genes=genes(e1)[idx],
+                  geneIds=geneIds(e1)[idx],
                   geneColor=geneColor(e1)[idx],
                   phenotypeColor=phenotypeColor(e1)[idx])
           })
@@ -269,7 +269,7 @@ setMethod("|",
           signature=signature(e1="GeneColorSet", e2="character"),
           function(e1, e2) {
               if (!all(e2 %in% e1))
-                  stop("named genes not present in ", class(e1))
+                  stop("named geneIds not present in ", class(e1))
               e1
           })
 

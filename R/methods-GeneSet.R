@@ -58,8 +58,8 @@ setMethod("initialize",
                              creationDate = creationDate)
           })
 
-.GETTERS_GeneSet <- c(setType="type", "genes", "setIdentifier",
-                      setName="setName", description="shortDescription",
+.GETTERS_GeneSet <- c("geneIdType", "geneIds", "setIdentifier",
+                      "setName", description="shortDescription",
                       "longDescription", "organism", "pubMedIds", "urls",
                       "contributor", setVersion="version",
                       "creationDate", "collectionType")
@@ -67,13 +67,13 @@ setMethod("initialize",
 .getters("GeneSet", .GETTERS_GeneSet)
 
 .SETTERS_GeneSet <-
-    .GETTERS_GeneSet["setType" != names(.GETTERS_GeneSet)]
+    .GETTERS_GeneSet["geneIdType" != .GETTERS_GeneSet]
 
 .setters("GeneSet", .SETTERS_GeneSet)
 
 ## convert between GeneIdentifier types
 
-setReplaceMethod("setType",
+setReplaceMethod("geneIdType",
                  signature=signature(
                    object="GeneSet",
                    value="character"),
@@ -81,18 +81,18 @@ setReplaceMethod("setType",
                      tag <- tryCatch({
                          do.call(value, list())
                      }, error=function(err) {
-                         stop(sprintf("could not create setType tag of '%s'",
+                         stop(sprintf("could not create geneIdType tag of '%s'",
                                       value))
                      })
-                     mapIdentifiers(object, tag, setType(object))
+                     mapIdentifiers(object, tag, geneIdType(object))
                  })
 
-setReplaceMethod("setType",
+setReplaceMethod("geneIdType",
                  signature=signature(
                    object="GeneSet",
                    value="GeneIdentifierType"),
                  function(object, value) {
-                     mapIdentifiers(object, value, setType(object))
+                     mapIdentifiers(object, value, geneIdType(object))
                  })
 
 ## subset
@@ -104,11 +104,11 @@ setMethod("[",
               if (any(duplicated(i)))
                   stop("duplicate index: ",
                        paste(i[duplicated(i)], collapse=" "))
-              genes <- genes(x)[i]
-              if (any(is.na(genes)))
+              geneIds <- geneIds(x)[i]
+              if (any(is.na(geneIds)))
                   stop("unmatched index: ",
-                       paste(i[is.na(genes)], collapse=" "))
-              genes(x) <- genes
+                       paste(i[is.na(geneIds)], collapse=" "))
+              geneIds(x) <- geneIds
               x
           })
 
@@ -116,11 +116,11 @@ setMethod("[",
           signature=signature(
             x="GeneSet", i="character"),
           function(x, i, j, ..., drop=TRUE) {
-              idx <- pmatch(i, genes(x))
+              idx <- pmatch(i, geneIds(x))
               if (any(is.na(idx)))
-                  stop(sprintf("unmatched / duplicate genes: '%s'",
+                  stop(sprintf("unmatched / duplicate geneIds: '%s'",
                                paste(i[is.na(idx)], collapse="', '")))
-              genes(x) <- genes(x)[idx]
+              geneIds(x) <- geneIds(x)[idx]
               x
           })
 
@@ -128,35 +128,35 @@ setMethod("[[",
           signature=signature(
             x="GeneSet", i="numeric"),
           function(x, i, j, ...) {
-              genes(x)[[i]]
+              geneIds(x)[[i]]
           })
 
 setMethod("[[",
           signature=signature(
             x="GeneSet", i="character"),
           function(x, i, j, ...) {
-              idx <- pmatch(i, genes(x))
+              idx <- pmatch(i, geneIds(x))
               if (is.na(idx))
                   stop("unmatched gene: ", i)
-              genes(x)[[idx]]
+              geneIds(x)[[idx]]
           })
 
 setMethod("$",
           signature=signature(x="GeneSet"),
           function(x, name) {
-              i <- pmatch(name, genes(x), duplicates.ok=FALSE)
+              i <- pmatch(name, geneIds(x), duplicates.ok=FALSE)
               if (is.na(i))
                   stop("unmatched gene: ", i)
-              genes(x)[i]
+              geneIds(x)[i]
           })
 
 ## Logic operations
 
 .checkGeneSetLogicTypes <- function(x, y, functionName) {
-    tx <- setType(x)
-    ty <- setType(y)
+    tx <- geneIdType(x)
+    ty <- geneIdType(y)
     if (!(is(tx, class(ty)) || is(ty, class(tx))))
-        stop(functionName, " incompatible GeneSet setTypes;",
+        stop(functionName, " incompatible GeneSet geneIdTypes;",
              "\n\tgot: ", class(tx), ", ", class(ty))
 }
 
@@ -166,7 +166,7 @@ setMethod("$",
         setIdentifier=setIdentifier(x),
         setName=.glue(setName(x), setName(y), " & "),
         urls=.unique(urls(x), urls(y)),
-        genes=intersect(genes(x), genes(y)))
+        geneIds=intersect(geneIds(x), geneIds(y)))
 }
 
 .geneSetUnion <- function(x, y) {
@@ -175,7 +175,7 @@ setMethod("$",
         setIdentifier=setIdentifier(x),
         setName=.glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
-        genes=union(genes(x), genes(y)))
+        geneIds=union(geneIds(x), geneIds(y)))
 }
 
 setMethod("intersect",
@@ -193,11 +193,11 @@ setMethod("&",
 setMethod("&",
           signature=signature(e1="GeneSet", e2="character"),
           function(e1, e2) {
-              genes <- intersect(genes(e1), e2)
+              geneIds <- intersect(geneIds(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " & "),
-                  genes=genes)
+                  geneIds=geneIds)
           })
 
 setMethod("|",
@@ -207,11 +207,11 @@ setMethod("|",
 setMethod("|",
           signature=signature(e1="GeneSet", e2="character"),
           function(e1, e2) {
-              genes <- union(genes(e1), e2)
+              geneIds <- union(geneIds(e1), e2)
               new(class(e1), e1,
                   setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " | "),
-                  genes=genes)
+                  geneIds=geneIds)
           })
 
 setMethod("Logic",
@@ -222,11 +222,11 @@ setMethod("setdiff",
           signature=signature(x="GeneSet", y="GeneSet"),
           function(x, y) {
               .checkGeneSetLogicTypes(x, y, "'setdiff'")
-              genes=setdiff(genes(x), genes(y))
+              geneIds=setdiff(geneIds(x), geneIds(y))
               new(class(x), x,
                   setIdentifier=setIdentifier(x),
                   setName=.glue(setName(x), setName(y), " - "),
-                  genes=setdiff(genes(x), genes(y)),
+                  geneIds=setdiff(geneIds(x), geneIds(y)),
                   creationDate=date())
           })
 
@@ -237,12 +237,12 @@ setMethod("show",
           function(object) {
               cat("setName: ", setName(object), "\n",
                   "setIdentifier: ", setIdentifier(object), "\n", sep="")
-              cat("genes:",
-                  paste(selectSome(genes(object), maxToShow=4), collapse=", "),
-                  paste("(total: ", length(genes(object)), ")\n",
+              cat("geneIds:",
+                  paste(selectSome(geneIds(object), maxToShow=4), collapse=", "),
+                  paste("(total: ", length(geneIds(object)), ")\n",
                         sep=""),
                   sep=" ")
-              show(setType(object))
+              show(geneIdType(object))
               show(collectionType(object))
               cat("description: ", description(object), "\n",
                   if(nchar(longDescription(object))!=0 &&

@@ -18,27 +18,27 @@ test_GeneIdentifierType_Constructors <- function() {
 }
 
 
-test_GeneIdentifierType_setType <- function() {
+test_GeneIdentifierType_geneIdType <- function() {
     data(sample.ExpressionSet)
 
     gs <- GeneSet(sample.ExpressionSet[100:110],
                   setName="123", setIdentifier="456")
-    suppressWarnings(setType(gs) <- "EntrezIdentifier")
+    suppressWarnings(geneIdType(gs) <- "EntrezIdentifier")
     checkTrue(validObject(gs, complete=TRUE))
-    checkTrue(is(setType(gs), "EntrezIdentifier"))
+    checkTrue(is(geneIdType(gs), "EntrezIdentifier"))
 
     gs <- GeneSet(sample.ExpressionSet[100:110],
                   setName="123", setIdentifier="456")
-    suppressWarnings(setType(gs) <- EntrezIdentifier())
+    suppressWarnings(geneIdType(gs) <- EntrezIdentifier())
     checkTrue(validObject(gs, complete=TRUE))
-    checkTrue(is(setType(gs), "EntrezIdentifier"))
+    checkTrue(is(geneIdType(gs), "EntrezIdentifier"))
 
     ## duplicate gene names exception
     gs <- GeneSet(sample.ExpressionSet[100:200],
                   setName="123", setIdentifier="456")
     opt <- options(warn=2)
     on.exit(options(opt))
-    checkException(setType(gs) <- EntrezIdentifier(), silent=TRUE)
+    checkException(geneIdType(gs) <- EntrezIdentifier(), silent=TRUE)
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
@@ -48,7 +48,7 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
     })
     detach("package:hgu95av2")
     checkTrue(validObject(res))
-    checkEquals(41, length(genes(res)))
+    checkEquals(41, length(geneIds(res)))
 }
 
 test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
@@ -59,7 +59,7 @@ test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
     opts <- options(warn=2)
     on.exit(options(opts))
     gs <- GeneSet(setName="123", setIdentifier="345")
-    setType(gs) <- AnnotationIdentifier("xyz")
+    geneIdType(gs) <- AnnotationIdentifier("xyz")
     checkTrue(validObject(gs))
 }
 
@@ -70,5 +70,5 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
     }))
     detach("package:hgu95av2db")
     checkTrue(validObject(res))
-    checkEquals(41, length(genes(res)))
+    checkEquals(41, length(geneIds(res)))
 }

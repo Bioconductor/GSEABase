@@ -18,8 +18,8 @@
 \alias{creationDate,GeneSet-method}
 \alias{description<-,GeneSet,character-method}
 \alias{description,GeneSet-method}
-\alias{genes<-,GeneSet,character-method}
-\alias{genes,GeneSet-method}
+\alias{geneIds<-,GeneSet,character-method}
+\alias{geneIds,GeneSet-method}
 \alias{initialize,GeneSet-method}
 \alias{intersect,GeneSet,GeneSet-method}
 \alias{longDescription<-,GeneSet,character-method}
@@ -33,9 +33,9 @@
 \alias{setIdentifier,GeneSet-method}
 \alias{setName<-,GeneSet,character-method}
 \alias{setName,GeneSet-method}
-\alias{setType<-,GeneSet,character-method}
-\alias{setType<-,GeneSet,GeneIdentifierType-method}
-\alias{setType,GeneSet-method}
+\alias{geneIdType<-,GeneSet,character-method}
+\alias{geneIdType<-,GeneSet,GeneIdentifierType-method}
+\alias{geneIdType,GeneSet-method}
 \alias{setVersion<-,GeneSet,Versions-method}
 \alias{setVersion,GeneSet-method}
 \alias{show,GeneSet-method}
@@ -45,8 +45,8 @@
 
 \title{Class "GeneSet"}
 \description{
-  A \code{GeneSet} contains a set of genes names. Each gene set has a
-  \code{setType}, indicating how the gene names should be interpreted
+  A \code{GeneSet} contains a set of gene identifiers. Each gene set has a
+  \code{geneIdType}, indicating how the gene names should be interpreted
   (e.g., as Entrez identifiers), and a \code{collectionType}, indicating
   the origin of the gene set (perhaps including additional information
   about the set, as in the \code{\linkS4class{BroadCollection}} type).
@@ -75,13 +75,13 @@
     \item{\code{setIdentifier}:}{Object of class
       \code{"ScalarCharacter"} containing a (unique) identifier for the
       set.}
-    \item{\code{type}:}{Object of class \code{"GeneIdentifierType"}
-      containing information about how the genes are encoded. See
+    \item{\code{geneIdType}:}{Object of class \code{"GeneIdentifierType"}
+      containing information about how the gene identifiers are encoded. See
       \code{\linkS4class{GeneIdentifierType}} and related classes.}
-    \item{\code{genes}:}{Object of class \code{"character"} containing
+    \item{\code{geneIds}:}{Object of class \code{"character"} containing
       the gene symbols.}
     \item{\code{collectionType}:}{Object of class
-      \code{"CollectionType"} containing information about how the genes
+      \code{"CollectionType"} containing information about how the geneIds
       were collected, including perhaps additional information unique to
       the collection methodology. See \code{\linkS4class{CollectionType}}
       and related classes.}
@@ -113,8 +113,8 @@
       \code{\link{getBroadSets}} for convenient construction.}
   }
   
-  Slot access (e.g., \code{collectionType}) and retrieve
-  (e.g., \code{collectionType<-}) :
+  Slot access (e.g., \code{setName}) and retrieve
+  (e.g., \code{setName<-}) :
   \describe{
     \item{collectionType<-}{\code{signature(object = "GeneSet", value = "CollectionType")}}
     \item{collectionType}{\code{signature(object = "GeneSet")}}
@@ -124,8 +124,8 @@
     \item{creationDate}{\code{signature(object = "GeneSet")}}
     \item{description<-}{\code{signature(object = "GeneSet", value = "character")}}
     \item{description}{\code{signature(object = "GeneSet")}}
-    \item{genes<-}{\code{signature(object = "GeneSet", value = "character")}}
-    \item{genes}{\code{signature(object = "GeneSet")}}
+    \item{geneIds<-}{\code{signature(object = "GeneSet", value = "character")}}
+    \item{geneIds}{\code{signature(object = "GeneSet")}}
     \item{longDescription<-}{\code{signature(object = "GeneSet", value = "character")}}
     \item{longDescription}{\code{signature(object = "GeneSet")}}
     \item{organism<-}{\code{signature(object = "GeneSet", value = "character")}}
@@ -137,13 +137,13 @@
     \item{setIdentifier}{\code{signature(object = "GeneSet")}}
     \item{setName<-}{\code{signature(object = "GeneSet", value = "character")}}
     \item{setName}{\code{signature(object = "GeneSet")}}
-    \item{setType<-}{
+    \item{geneIdType<-}{
       \code{signature(object = "GeneSet", value = "character")},
       \code{signature(object = "GeneSet", value = "GeneIdentifierType")}:
-      These method attempt to coerce genes from
+      These method attempt to coerce geneIds from
       the current type to the type named by \code{value}. Successful
       coercion requires an appropriate method for \code{\link{mapIdentifiers}}.}
-    \item{setType}{\code{signature(object = "GeneSet")}}
+    \item{geneIdType}{\code{signature(object = "GeneSet")}}
     \item{setVersion<-}{\code{signature(object = "GeneSet", value = "Versions")}}
     \item{setVersion}{\code{signature(object = "GeneSet")}}
     \item{urls<-}{\code{signature(object = "GeneSet", value = "character")}}
@@ -155,10 +155,10 @@
     \item{union}{\code{signature(x = "GeneSet", y = "GeneSet")}: ... }
     \item{|}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
       the logical `or' (union) of two gene sets. The sets must contain elements of
-      the same \code{setType}.}
+      the same \code{geneIdType}.}
     \item{|}{\code{signature(e1 = "GeneSet", e2 = "character")}:
       calculate the logical `or' (union) of a gene set and a character vector,
-      i.e., determine the genes named in the character vector also
+      i.e., determine the geneIds named in the character vector also
       present in the gene set.}
     \item{intersect}{\code{signature(x = "GeneSet", y = "GeneSet")}:{}}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
@@ -166,7 +166,7 @@
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "character")}:
       calculate the logical `and' (intersection) of a gene set and a
       character vector, creating a new gene set with the character
-      vector coerced to be of type \code{setType}.}
+      vector coerced to be of type \code{geneIdType}.}
 
     \item{[}{
       \code{signature(x = "GeneSet", i="character")}
@@ -187,7 +187,7 @@
       \code{phenotype}, a character string describing the phenotype for
       which color is available. See \code{\linkS4class{GeneColorSet}}.}
     \item{mapIdentifiers}{Use the code in the examples to list available
-      methods. These are used internally (by \code{setType<-}) or by the
+      methods. These are used internally (by \code{geneIdType<-}) or by the
       user to convert gene from one \code{GeneIdentifierType} to another. See
       \code{\link{mapIdentifiers}} and specific methods in
       \code{\linkS4class{GeneIdentifierType}} for additional detail.}
@@ -198,6 +198,7 @@
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
+  \code{\linkS4class{GeneColorSet}}
   \code{\linkS4class{CollectionType}}
   \code{\linkS4class{GeneIdentifierType}}
 }
@@ -211,21 +212,21 @@ gs1 <- GeneSet(sample.ExpressionSet[100:109],
 ## GeneSet from Broad XML; 'fl' could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gs2 <- getBroadSets(fl)[[1]] # actually, a list of two gene sets
-## GeneSet from list of genes
-genes <- genes(gs2) # any character vector would do
-gs3 <- GeneSet(genes=genes, setName="another", setIdentifier="101")
+## GeneSet from list of geneIds
+geneIds <- geneIds(gs2) # any character vector would do
+gs3 <- GeneSet(geneIds=geneIds, setName="another", setIdentifier="101")
 ## unspecified set type, so...
-is(setType(gs3), "NullIdentifier") == TRUE
+is(geneIdType(gs3), "NullIdentifier") == TRUE
 ## update set type to match encoding of identifiers
-setType(gs2)
-setType(gs3) <- SymbolIdentifier()
+geneIdType(gs2)
+geneIdType(gs3) <- SymbolIdentifier()
 
 ## Convert between set types; this consults the 'annotation'
 ## information encoded in the 'AnnotationIdentifier' set type and the
 ## corresponding annotation package.
 \dontrun{
 gs4 <- gs1
-setType(gs4) <- EntrezIdentifier()
+geneIdType(gs4) <- EntrezIdentifier()
 }
 
 ## logical (set) operations
@@ -240,7 +241,7 @@ gs5 | gs6
 ## an identity
 gs7 <- gs5 | gs6
 gs8 <- setdiff(gs5, gs6) | (gs5 & gs6) | setdiff(gs6, gs5)
-identical(genes(gs7), genes(gs8))
+identical(geneIds(gs7), geneIds(gs8))
 identical(gs7, gs8) == FALSE # gs7 and gs8 setNames differ
 
 ## output
@@ -254,7 +255,7 @@ collectionType(gs9) <- BroadCollection()
 toBroadXML(gs9, tmp)
 unlink(tmp)
 toBroadXML(gs9) # no connection --> character vector
-## list of genes --> vector of Broad GENESET XML
+## list of geneIds --> vector of Broad GENESET XML
 gs10 <- getBroadSets(fl) # two sets
 entries <- sapply(gs10, function(x) toBroadXML(x)[[2]])
 

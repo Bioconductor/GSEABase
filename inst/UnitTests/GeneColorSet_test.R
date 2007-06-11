@@ -13,11 +13,11 @@
 
 .check_subset_Ok <- function(expected, gs) {
     checkTrue(validObject(gs))
-    len <- length(genes(expected))
-    checkIdentical(len, length(genes(gs)))
+    len <- length(geneIds(expected))
+    checkIdentical(len, length(geneIds(gs)))
     checkIdentical(len, length(geneColor(gs)))
     checkIdentical(len, length(phenotypeColor(gs)))
-    checkTrue(all(genes(expected)==genes(gs)))
+    checkTrue(all(geneIds(expected)==geneIds(gs)))
     checkTrue(all(geneColor(expected)==geneColor(gs)))
     checkTrue(all(phenotypeColor(expected)==phenotypeColor(gs)))
 }
@@ -33,7 +33,7 @@ test_GCS_ConstructorDefaultArgs <- function() {
                        setName="Set name",
                        phenotype="A phenotype")
     checkTrue(validObject(gs, complete=TRUE))
-    checkTrue(length(genes(gs))==0)
+    checkTrue(length(geneIds(gs))==0)
     checkTrue(length(geneColor(gs))==0)
     checkTrue(length(phenotypeColor(gs))==0)
 }
@@ -43,9 +43,9 @@ test_GCS_ConstructorAllColorArgs <- function() {
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype",
-                       genes=LETTERS[1:24])
+                       geneIds=LETTERS[1:24])
     checkTrue(validObject(gs, complete=TRUE))
-    checkIdentical(genes(gs), LETTERS[1:24])
+    checkIdentical(geneIds(gs), LETTERS[1:24])
     checkTrue(length(geneColor(gs))==24)
     checkTrue(length(phenotypeColor(gs))==24)
 
@@ -55,7 +55,7 @@ test_GCS_ConstructorAllColorArgs <- function() {
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype",
-                       genes=LETTERS[1:24],
+                       geneIds=LETTERS[1:24],
                        geneColor=gfactor,
                        phenotypeColor=pfactor)
     checkTrue(validObject(gs, complete=TRUE))
@@ -67,7 +67,7 @@ test_GCS_show <- function() {
     gs <- GeneColorSet(setIdentifier="123",
                        setName="Set name",
                        phenotype="A phenotype",
-                       genes=LETTERS[1:24])
+                       geneIds=LETTERS[1:24])
     con <- textConnection("tmp", open="w", local=TRUE)
     sink(con)
     on.exit(sink())
@@ -90,9 +90,9 @@ test_GCS_colorizeReplace <- function() {
 
 test_GCS_colorizeReplaceRetainGeneOrder <- function() {
     gcs <- .colorBroadSets()[[1]]
-    ogenes <- genes(gcs)
-    coloring(gcs) <- coloring(gcs)[sample(ogenes, length(ogenes)),]
-    checkIdentical(genes(gcs), ogenes)
+    ogeneIds <- geneIds(gcs)
+    coloring(gcs) <- coloring(gcs)[sample(ogeneIds, length(ogeneIds)),]
+    checkIdentical(geneIds(gcs), ogeneIds)
 }
 
 test_GCS_intersect <- function() {
@@ -100,7 +100,7 @@ test_GCS_intersect <- function() {
 
     res <- GSEABase::intersect(gcss[[1]], gcss[[2]])
     checkTrue(validObject(res, complete=TRUE))
-    checkTrue(length(genes(res))==0)
+    checkTrue(length(geneIds(res))==0)
     checkTrue(length(urls(res))==4)
     checkIdentical(levels(geneColor(gcss[[1]])),
                    levels(geneColor(res)))
@@ -109,7 +109,7 @@ test_GCS_intersect <- function() {
 
     res <- GSEABase::intersect(gcss[[1]], gcss[[1]])
     checkTrue(validObject(res, complete=TRUE))
-    checkIdentical(genes(gcss[[1]]), genes(res))
+    checkIdentical(geneIds(gcss[[1]]), geneIds(res))
     checkIdentical(urls(gcss[[1]]), urls(res))
     checkIdentical(levels(geneColor(gcss[[1]])),
                    levels(geneColor(res)))
@@ -121,7 +121,7 @@ test_GCS_intersectDifferentColors <- function() {
     gcs1 <- .colorBroadSets()[[1]]
     gcs2 <- gcs1
     phenotype(gcs2) <- paste(phenotype(gcs2), "A")
-    geneColor(gcs2) <- factor(rep(c("Q", "R"), length=length(genes(gcs2))))
+    geneColor(gcs2) <- factor(rep(c("Q", "R"), length=length(geneIds(gcs2))))
     ## warning about synthetic phenotype
     oldOpts <- options(warn=2)
     on.exit(options(oldOpts))
@@ -140,11 +140,11 @@ test_GCS_union <- function() {
 
     res <- GSEABase::union(gcss[[1]], gcss[[2]])
     checkTrue(validObject(res, complete=TRUE))
-    checkIdentical(length(genes(res)),
+    checkIdentical(length(geneIds(res)),
                    sum(sapply(gcss,
-                              function(x) length(genes(x)))))
-    checkTrue(all(genes(res) %in% c(genes(gcss[[1]]),
-                                    genes(gcss[[2]]))))
+                              function(x) length(geneIds(x)))))
+    checkTrue(all(geneIds(res) %in% c(geneIds(gcss[[1]]),
+                                    geneIds(gcss[[2]]))))
     checkIdentical(levels(geneColor(gcss[[1]])),
                    levels(geneColor(res)))
     checkIdentical(levels(phenotypeColor(gcss[[1]])),
@@ -153,7 +153,7 @@ test_GCS_union <- function() {
 
     res <- GSEABase::union(gcss[[1]], gcss[[1]])
     checkTrue(validObject(res))
-    checkIdentical(genes(res), genes(gcss[[1]]))
+    checkIdentical(geneIds(res), geneIds(gcss[[1]]))
     checkIdentical(geneColor(res), geneColor(gcss[[1]]))
     checkIdentical(phenotypeColor(res), phenotypeColor(gcss[[1]]))
     checkIdentical(urls(gcss[[1]]), urls(res))
@@ -164,19 +164,19 @@ test_GCS_setdiff <- function() {
 
     res <- GSEABase::setdiff(gcss[[1]], gcss[[2]])
     checkTrue(validObject(res, complete=TRUE))
-    checkIdentical(genes(gcss[[1]]), genes(res))
+    checkIdentical(geneIds(gcss[[1]]), geneIds(res))
     checkIdentical(geneColor(gcss[[1]]), geneColor(res))
     checkIdentical(phenotypeColor(gcss[[1]]), phenotypeColor(res))
     
     res <- GSEABase::setdiff(gcss[[2]], gcss[[1]])
     checkTrue(validObject(res, complete=TRUE))
-    checkIdentical(genes(gcss[[2]]), genes(res))
+    checkIdentical(geneIds(gcss[[2]]), geneIds(res))
     checkIdentical(geneColor(gcss[[2]]), geneColor(res))
     checkIdentical(phenotypeColor(gcss[[2]]), phenotypeColor(res))
 
     res <- GSEABase::setdiff(gcss[[1]], gcss[[1]])
     checkTrue(validObject(res, complete=TRUE))
-    checkTrue(length(genes(res))==0)
+    checkTrue(length(geneIds(res))==0)
     checkIdentical(levels(geneColor(gcss[[1]])), levels(geneColor(res)))
     checkIdentical(levels(phenotypeColor(gcss[[1]])), levels(phenotypeColor(res)))
 }
@@ -187,27 +187,27 @@ test_GCS_LogicalNonOverlapping <- function() {
     gs2 <- gcss[[2]]
 
     gs12 <- gs1 & gs2
-    checkTrue(length(genes(gs12))==0)
+    checkTrue(length(geneIds(gs12))==0)
 
     gs12 <- gs1 | gs2
-    checkTrue(length(genes(gs12))==length(c(genes(gs1), genes(gs2))))
-    checkTrue(all(genes(gs1) %in% genes(gs12)))
-    checkTrue(all(genes(gs2) %in% genes(gs12)))
-    checkIdentical(genes(GSEABase::setdiff(gs12, gs1)), genes(gs2))
-    checkIdentical(genes(GSEABase::setdiff(gs12, gs2)), genes(gs1))
+    checkTrue(length(geneIds(gs12))==length(c(geneIds(gs1), geneIds(gs2))))
+    checkTrue(all(geneIds(gs1) %in% geneIds(gs12)))
+    checkTrue(all(geneIds(gs2) %in% geneIds(gs12)))
+    checkIdentical(geneIds(GSEABase::setdiff(gs12, gs1)), geneIds(gs2))
+    checkIdentical(geneIds(GSEABase::setdiff(gs12, gs2)), geneIds(gs1))
 }
 
 test_GCS_LogicalOverlapping <- function() {
     gcss <- .colorBroadSets()
     gs1 <- gcss[[1]]
 
-    idx1 <- sample(seq_along(genes(gs1)), 20)
-    idx2 <- sample(seq_along(genes(gcss[[2]])), 20)
+    idx1 <- sample(seq_along(geneIds(gs1)), 20)
+    idx2 <- sample(seq_along(geneIds(gcss[[2]])), 20)
 
     gs2 <-
-        GeneColorSet(type=setType(gs1),
+        GeneColorSet(type=geneIdType(gs1),
                      setName="123", setIdentifier="456",
-                     genes=c(genes(gs1)[idx1], genes(gcss[[2]])[idx2]),
+                     geneIds=c(geneIds(gs1)[idx1], geneIds(gcss[[2]])[idx2]),
                      phenotype=phenotype(gs1),
                      geneColor=factor(c(
                        as.character(geneColor(gs1))[idx1],
@@ -215,8 +215,8 @@ test_GCS_LogicalOverlapping <- function() {
                      phenotypeColor=factor(c(
                        as.character(phenotypeColor(gs1))[idx1],
                        as.character(phenotypeColor(gcss[[2]]))[idx2])))
-    checkTrue(all(genes(gs1 | gs2) %in%
-                  genes(GSEABase::setdiff(gs1, gs2) |
+    checkTrue(all(geneIds(gs1 | gs2) %in%
+                  geneIds(GSEABase::setdiff(gs1, gs2) |
                         (gs1 & gs2) |
                         GSEABase::setdiff(gs2, gs1))))
 }
@@ -225,16 +225,16 @@ test_GCS_subset <- function() {
     gcs <- .colorBroadSets()[[1]]
 
     expected <- new(class(gcs), gcs,
-                    genes=genes(gcs)[4:1],
+                    geneIds=geneIds(gcs)[4:1],
                     geneColor=factor(as.character(
                       geneColor(gcs)[4:1])),
                     phenotypeColor=factor(as.character(
                       phenotypeColor(gcs)[4:1])))
 
     .check_subset_Ok(expected, gcs[4:1])
-    .check_subset_Ok(expected, gcs[ genes(gcs)[4:1] ])
+    .check_subset_Ok(expected, gcs[ geneIds(gcs)[4:1] ])
 
-    max <- length(genes(gcs))
+    max <- length(geneIds(gcs))
     checkException(gcs[(max-1):(max+1)], silent=TRUE)
     checkException(gcs["adfas"], silent=TRUE)
 }
@@ -242,16 +242,16 @@ test_GCS_subset <- function() {
 test_GCS_subset2 <- function() {
     gcs <- .colorBroadSets()[[1]]
 
-    expected <- c(gene=genes(gcs)[[2]],
+    expected <- c(geneId=geneIds(gcs)[[2]],
                   geneColor=as.character(geneColor(gcs)[[2]]),
                   phenotypeColor=as.character(phenotypeColor(gcs)[[2]]))
 
     checkIdentical(expected, gcs[[2]])
-    checkIdentical(expected, gcs[[ genes(gcs)[[2]] ]])
+    checkIdentical(expected, gcs[[ geneIds(gcs)[[2]] ]])
 
-    max <- length(genes(gcs))
+    max <- length(geneIds(gcs))
     checkException(gcs[["sdfsf"]], silent=TRUE)
     checkException(gcs[[ max+1 ]], silent=TRUE)
 
-    checkIdentical(expected, do.call("$",list(gcs, genes(gcs)[[2]])))
+    checkIdentical(expected, do.call("$",list(gcs, geneIds(gcs)[[2]])))
 }

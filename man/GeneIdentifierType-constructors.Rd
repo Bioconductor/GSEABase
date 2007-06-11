@@ -39,19 +39,19 @@ NullIdentifier()
 data(sample.ExpressionSet)
 gs1 <- GeneSet(sample.ExpressionSet[100:109],
                setName="sample1", setIdentifier="100")
-setType(gs1) # AnnotationIdentifier
+geneIdType(gs1) # AnnotationIdentifier
 
-genes <- featureNames(sample.ExpressionSet)[100:109]
-gs2 <- GeneSet(genes=genes,
+geneIds <- featureNames(sample.ExpressionSet)[100:109]
+gs2 <- GeneSet(geneIds=geneIds,
                setName="sample1", setIdentifier="101")
-setType(gs2) # NullIdentifier, since no info about genes provided
+geneIdType(gs2) # NullIdentifier, since no info about genes provided
 
 ## Convert...
 ai <- AnnotationIdentifier(annotation(sample.ExpressionSet))
-setType(gs2) <- ai
-setType(gs2)
+geneIdType(gs2) <- ai
+geneIdType(gs2)
 ## ...or provide more explicit construction
-gs3 <- GeneSet(genes=genes, type=ai,
+gs3 <- GeneSet(geneIds=geneIds, type=ai,
                setName="sample1", setIdentifier="102")
 }
 \keyword{manip}

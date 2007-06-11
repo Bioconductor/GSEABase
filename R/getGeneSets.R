@@ -35,7 +35,7 @@
         args <- list(new("SymbolIdentifier"),
                      setName=attrs[["STANDARD_NAME"]],
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
-                     genes=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
+                     geneIds=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
                      organism=attrs[["ORGANISM"]],
                      urls= c(getBroadSet=url,
                        .mkSplit(attrs[["EXTERNAL_DETAILS_URL"]])),
@@ -87,7 +87,7 @@
               PMID=pubMedIds(geneSet),
               DESCRIPTION_FULL=longDescription(geneSet),
               DESCRIPTION_BRIEF=description(geneSet),
-              MEMBERS_SYMBOLIZED=paste(genes(geneSet), collapse=",")
+              MEMBERS_SYMBOLIZED=paste(geneIds(geneSet), collapse=",")
 ##               TAGS="",
 ##               MESH="",
 ##               CHIP="",

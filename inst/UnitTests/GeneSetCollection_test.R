@@ -1,16 +1,16 @@
 .gsc <- function() {
     gs1 <- GeneSet(setName="set1", setIdentifier="id1",
-                   genes=LETTERS[1:5])
+                   geneIds=LETTERS[1:5])
     gs2 <- GeneSet(setName="set2", setIdentifier="id2",
-                   genes=letters[1:5])
+                   geneIds=letters[1:5])
     GeneSetCollection(list(gs1, gs2))
 }
 
 test_GSC_list_constructor <- function() {
     gs1 <- GeneSet(setName="123", setIdentifier="456",
-                   genes=LETTERS[1:5])
+                   geneIds=LETTERS[1:5])
     gs2 <- GeneSet(setName="234", setIdentifier="567",
-                   genes=letters[1:5])
+                   geneIds=letters[1:5])
     gsc <- GeneSetCollection(list(gs1, gs2))
     checkTrue(validObject(gsc))
     checkEquals(2, length(gsc))
@@ -23,9 +23,9 @@ test_GSC_list_constructor <- function() {
 
 test_GSC_docs_constructor <- function() {
     gs1 <- GeneSet(setName="123", setIdentifier="456",
-                   genes=LETTERS[1:5])
+                   geneIds=LETTERS[1:5])
     gs2 <- GeneSet(setName="234", setIdentifier="567",
-                   genes=letters[1:5])
+                   geneIds=letters[1:5])
     gsc <- GeneSetCollection(gs1, gs2)
     checkTrue(validObject(gsc))
     checkEquals(2, length(gsc))

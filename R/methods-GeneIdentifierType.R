@@ -11,18 +11,18 @@
 
 .constructors_Simple("AnnotationIdentifier", required="annotation")
 
-.getters("GeneIdentifierType", c(setType="type"))
+.getters("GeneIdentifierType", c(geneIdType="type"))
 
 setMethod("validIdentifiers",
           signature=signature(
             identifier="GeneIdentifierType"),
-          function(identifier, genes) {
+          function(identifier, geneIds) {
               TRUE
           })
 
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),
-          function(object) cat("setType:", setType(object), "\n"))
+          function(object) cat("geneIdType:", geneIdType(object), "\n"))
 
 ## AnnotationIdentifier
 
@@ -44,7 +44,7 @@ setMethod("initialize",
 setMethod("show",
           signature=signature(object="AnnotationIdentifier"),
           function(object) {
-              cat("setType:", setType(object),
+              cat("geneIdType:", geneIdType(object),
                   if (nchar(annotation(object))>0) {
                       paste("(", annotation(object), ")", sep="")
                   }, "\n")
@@ -58,7 +58,7 @@ setMethod("mapIdentifiers",
             to="GeneIdentifierType",
             from="missing"),
           function(what, to, from, ...) {
-              callGeneric(what, to, from=setType(what), ...)
+              callGeneric(what, to, from=geneIdType(what), ...)
           })
 
 ## Null --> X
@@ -69,7 +69,7 @@ setMethod("mapIdentifiers",
             to="GeneIdentifierType",
             from="NullIdentifier"),
           function(what, to, from, ...) {
-              new(class(what), what, type=to)
+              new(class(what), what, geneIdType=to)
           })
           
 
@@ -83,8 +83,8 @@ setMethod("mapIdentifiers",
                map, pkg)
 }
 
-.getMappedGenes <- function(genes, mapEnv, map, pkg) {
-    ngenes <- mget(genes, mapEnv)
+.getMappedGenes <- function(geneIds, mapEnv, map, pkg) {
+    ngenes <- mget(geneIds, mapEnv)
     if (any(length(ngenes) != 1) || any(is.na(ngenes)))
         .warningf("annotation map '%s' is not 1:1 in '%s'",
                   map, pkg)
@@ -98,7 +98,7 @@ setMethod("mapIdentifiers",
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- get(map, envir=getNamespace(pkg))
-    .getMappedGenes(genes(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 
 setMethod("mapIdentifiers",
@@ -107,10 +107,10 @@ setMethod("mapIdentifiers",
             to="GeneIdentifierType",
             from="AnnotationIdentifier"),
           function(what, to, from, ...) {
-              tag <- toupper(setType(to))
+              tag <- toupper(geneIdType(to))
               new(class(what), what,
-                  genes=.fromAnnotation(from, tag, what),
-                  type=to)
+                  geneIds=.fromAnnotation(from, tag, what),
+                  geneIdType=to)
           })
 
 ## X --> AnnotationIdentifier
@@ -120,27 +120,27 @@ setMethod("mapIdentifiers",
     pkg <- annotation(to)
     ok <- FALSE
     if (length(grep(".*db$", pkg))==1) {
-        genes <- .toAnnotationDbi(tag, to, what)
+        geneIds <- .toAnnotationDbi(tag, to, what)
         ok <- TRUE
     } else {
         if (!ok)
             tryCatch({
-                genes <- .toAnnotationDirect(tag, to, what)
+                geneIds <- .toAnnotationDirect(tag, to, what)
                 ok <- TRUE
             }, error=function(err) {
                 warning("direct map failed: ",  conditionMessage(err))
             })
         if (!ok)
             tryCatch({
-                genes <- .toAnnotationRevmap(tag, to, what)
+                geneIds <- .toAnnotationRevmap(tag, to, what)
                 ok <- TRUE
             }, error=function(err) {
                 warning("reverse map failed: ", conditionMessage(err))
             })
     }
     if (!ok)
-        .stopf("unable to map from '%s' to '%s'", tag, setType(to))
-    genes
+        .stopf("unable to map from '%s' to '%s'", tag, geneIdType(to))
+    geneIds
 }
 
 .toAnnotationDirect <- function(tag, to, what) {
@@ -148,7 +148,7 @@ setMethod("mapIdentifiers",
     map <- paste(pkg, tag, "2PROBE",sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- get(map, envir=getNamespace(pkg))
-    .getMappedGenes(genes(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 
 .toAnnotationRevmap <- function(tag, to, what) {
@@ -156,8 +156,8 @@ setMethod("mapIdentifiers",
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     revMap <- revmap(get(map))
-    genes <- genes(what)
-    ogenes <- genes[sapply(genes, exists, envir=revMap)]
+    geneIds <- geneIds(what)
+    ogenes <- geneIds[sapply(geneIds, exists, envir=revMap)]
     .getMappedGenes(ogenes, revMap,
                     paste("revmap(", map, ")", sep=""), pkg)
 }
@@ -168,7 +168,7 @@ setMethod("mapIdentifiers",
     .checkPackageAndMap(pkg, map)
     mapEnv <- getNamespace(pkg)
     mapEnv <- revmap(get(map, envir=mapEnv))
-    .getMappedGenes(genes(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 
 setMethod("mapIdentifiers",
@@ -182,7 +182,7 @@ setMethod("mapIdentifiers",
             to="AnnotationIdentifier",
             from="NullIdentifier"),
           function(what, to, from, ...) {
-              new(class(what), what, type=to)
+              new(class(what), what, geneIdType=to)
           })
 
 setMethod("mapIdentifiers",
@@ -191,8 +191,8 @@ setMethod("mapIdentifiers",
             to="AnnotationIdentifier",
             from="GeneIdentifierType"), 
           function(what, from, to, ...) {
-              tag <- toupper(setType(from))
+              tag <- toupper(geneIdType(from))
               new(class(what), what,
-                  genes=.toAnnotation(tag, to, what),
-                  type=to)
+                  geneIds=.toAnnotation(tag, to, what),
+                  geneIdType=to)
           })

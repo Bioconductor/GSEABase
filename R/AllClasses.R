@@ -73,11 +73,11 @@ setClass("BroadCollection",
 setClass("GeneSet",
          representation = representation(
            ## Gene set representation
-           type = "GeneIdentifierType",
-           genes = "character",
+           geneIdType = "GeneIdentifierType",
+           geneIds = "character",
            ## Descriptive metadata
-           setIdentifier = "ScalarCharacter",
            setName = "ScalarCharacter",
+           setIdentifier = "ScalarCharacter",
            shortDescription = "ScalarCharacter",
            longDescription = "ScalarCharacter",
            organism = "ScalarCharacter",
@@ -90,11 +90,11 @@ setClass("GeneSet",
          prototype = prototype(
            setName = new("ScalarCharacter", "<undefined>"),
            setIdentifier = new("ScalarCharacter", "<undefined>"),
-           type = new("NullIdentifier"),
+           geneIdType = new("NullIdentifier"),
            version = new("Versions", "0.0.1"),
            collectionType = new("AdHocCollection")),
          validity = function(object) {
-             if (any(duplicated(genes(object))))
+             if (any(duplicated(geneIds(object))))
                  "gene symbols must be unique"
              else
                  TRUE
@@ -111,7 +111,7 @@ setClass("GeneColorSet",
              clen <- c(length(geneColor(object)),
                        length(phenotypeColor(object)))
              if (any(clen > 0) &
-                 any(clen != length(genes(object))))
+                 any(clen != length(geneIds(object))))
                  msg <- c(msg,"gene and color lengths differ")
              if (!("factor" %in% class(geneColor(object))) ||
                  !("factor" %in% class(phenotypeColor(object))))

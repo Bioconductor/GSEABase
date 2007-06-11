@@ -2,7 +2,7 @@
 \docType{class}
 % GeneIdentifierType-class
 \alias{GeneIdentifierType-class}
-\alias{setType,GeneIdentifierType-method}
+\alias{geneIdType,GeneIdentifierType-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,missing-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,NullIdentifier-method}
 \alias{show,GeneIdentifierType-method}
@@ -10,6 +10,7 @@
 % AnnotationIdentifier-class
 \alias{AnnotationIdentifier-class}
 \alias{annotation,AnnotationIdentifier-method}
+\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
 \alias{initialize,AnnotationIdentifier-method}
@@ -33,16 +34,13 @@
 \section{Objects from the Class}{
   The following classes are available:
   \describe{
-    \item{NullIdentifier}{No formal information about what genes represent.}
-    \item{AnnotationIdentifier}{'Genes' are represented by the
-      Affymetrix chip-specific probe identifier, as represented in Bioconductor
+    \item{NullIdentifier}{No formal information about what gene identifiers represent.}
+    \item{AnnotationIdentifier}{Gene identifiers are Affymetrix
+      chip-specific probe identifier, as represented in Bioconductor
       annotation packages.}
-    \item{EntrezIdentifier}{Genes are represented by their Entrez
-      identifier.}
-    \item{PfamIdentifier}{Genes are represented by their Pfam
-      identifier.}
-    \item{SymbolIdentifier}{Genes are represented by their Symbol
-      identifier.}
+    \item{EntrezIdentifier}{Gene identifiers \sQuote{Entrez} identifiers.}
+    \item{PfamIdentifier}{Gene identifiers are \sQuote{Pfam} identifiers.}
+    \item{SymbolIdentifier}{Genes identifiers are \sQuote{Symbol} identifiers.}
     \item{GeneIdentifierType}{A virtual Class: No objects may be created
       from it; all classes listed above are subclasses of
       \code{GeneIdentifierType}.}
@@ -75,30 +73,30 @@
       Create a new \code{\link{GeneColorSet}} using identifiers of
       \code{GeneIdentifierType}.}
 
-    \item{setType<-}{\code{signature(object = "GeneSet", value =
+    \item{geneIdType<-}{\code{signature(object = "GeneSet", value =
         "GeneIdentifierType")}: Changes the \code{GeneIdentifierType} of
       \code{object} to \code{value}, attempting to convert symbols in
       the process. This method calls \code{mapIdentifiers(what=object,
-        to=value, from=setType(what))}.}
+        to=value, from=geneIdType(what))}.}
 
-    \item{setType}{\code{signature(object = "GeneIdentifierType")}:
+    \item{geneIdType}{\code{signature(object = "GeneIdentifierType")}:
       return a character string representation of the type of this
       \code{object}.}
 
     \item{mapIdentifiers}{\code{signature(what="GeneSet",
         to="GeneIdentifierType" from="missing")}: This method will
       re-dispatch to a method with signature
-      \code{signature(what=what, to=to, from=setType(what))}, and is
+      \code{signature(what=what, to=to, from=geneIdType(what))}, and is
       present so that a user can call \code{mapIdentifiers} with
       providing an explicit argument to \code{from}.}
 
     \item{mapIdentifiers}{\code{signature(what="GeneSet",
-        to="GeneIdentifierType" from="NullIdentifier")}: This maps
-      a gene set from genes represented by the \code{NullIdentifier}
-      type (i.e., no type associated with the genes) to genes represent
+        to="GeneIdentifierType" from="NullIdentifier")}: This maps a gene set
+      from gene identifiers represented by the \code{NullIdentifier} type
+      (i.e., no type associated with the genes) to gene identifiers represent
       by any class derived from \code{GeneIdentifierType}. Other
-      \code{mapIdentifier} methods may change the representation of genes, but
-      this method does not.}
+      \code{mapIdentifier} methods may change the representation of gene
+      identifiers, but this method does not.}
 
     \item{show}{\code{signature(object = "GeneIdentifierType")}: display
       this object.}
@@ -112,8 +110,8 @@
   \code{AnnotationIdentifier} has the
   following method:
   \describe{
-    \item{geneType}{\code{signature(object = "AnnotationIdentifier")}:
-      Retrieve the \code{geneType} (e.g., annotation string for
+    \item{geneIdType}{\code{signature(object = "AnnotationIdentifier")}:
+      Retrieve the \code{geneIdType} (e.g., annotation string for
       \code{AnnotationIdentifier}; ad hoc string for \code{NullIdentifier}).}
   }
 
@@ -127,7 +125,7 @@
       between identifiers of type \code{AnnotationIdentifier} and other
       identifiers. This method consults the annotation package specified in
       \code{from}, looking for a mapping between \code{genes(what)} and
-      \code{paste(annotation(what), toupper(setType(to)), sep="")}.}
+      \code{paste(annotation(what), toupper(geneIdType(to)), sep="")}.}
 
     \item{mapIdentifiers}{\code{signature(what = "GeneSet",
         to="AnnotationIdentifier", from = "GeneIdentifierType")}: Maps
@@ -155,20 +153,20 @@
 getSubclasses(getClass("GeneIdentifierType"))
 
 # create an AnnotationIdentifier, and ask it's type
-setType(AnnotationIdentifier(annotation="hgu95av2"))
+geneIdType(AnnotationIdentifier(annotation="hgu95av2"))
 
 # Construct a GeneSet from an ExpressionSet, using the 'annotation'
 # field of ExpressionSet to recognize the genes as AnnotationType
 data(sample.ExpressionSet)
 gs <- GeneSet(sample.ExpressionSet[100:109],
               setName="sample.GeneSet", setIdentifier="123")
-setType(gs) # AnnotationIdentifier
+geneIdType(gs) # AnnotationIdentifier
 
 ## Read a Broad set from the system (or a url), and discover their
 ## GeneIdentifierType
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 bsets <- getBroadSets(fl)
-sapply(bsets, setType)
+sapply(bsets, geneIdType)
 
 ## try to combine gene sets with different set types
 try(gs & sets[[1]])
@@ -176,16 +174,16 @@ try(gs & sets[[1]])
 \dontrun{
 ## Use the annotation package associated with the original
 ## ExpressionSet to map to EntrezIdentifier() ...
-setType(gs) <- EntrezIdentifier()
+geneIdType(gs) <- EntrezIdentifier()
 ...## and try again
 gs & bsets[[1]]
 
 ## Another way to change annotation to Entrez (or other) ids
 probeIds <- featureNames(sample.ExpressionSet)[100:109]
-genes <- as.character(unlist(mget(probeIds, hgu95av2ENTREZID)))
+geneIds <- as.character(unlist(mget(probeIds, hgu95av2ENTREZID)))
 GeneSet(EntrezIdentifier(),
         setName="sample.GenSet2", setIdentifier="101",
-        genes=genes)
+        geneIds=geneIds)
 }
 
 ## Create a new identifier
@@ -195,7 +193,7 @@ setClass("FooIdentifier",
            type=new("ScalarCharacter", "Foo")))
 ## Create a constructor (optional)
 FooIdentifier <- function() new("FooIdentifier")
-setType(FooIdentifier())
+geneIdType(FooIdentifier())
 
 ## tidy up
 removeClass("FooIdentifier")

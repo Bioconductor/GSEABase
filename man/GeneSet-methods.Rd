@@ -26,31 +26,34 @@ GeneSet(type, ...)
     \item{\code{signature(type = "missing", setName =
         "character", setIdentifier = "character", ...)}}{Construct an
       empty gene set. The arguments \code{setName} and \code{setIdentifier} are
-      required. The gene set has \code{setType=NullIdentifier},
+      required. The gene set has \code{geneIdType=NullIdentifier},
       \code{collectionType=AdHocCollection}.}
 
     \item{\code{signature(type = "character", setName =
         "character", setIdentifier = "character", ...)}}{Construct an
       empty gene set. The arguments \code{setName} and \code{setIdentifier} are
-      required. The gene set has \code{setType} created from the
+      required. The gene set has \code{geneIdType} created from the
       \code{GeneIdentifierType} named by \code{type}.}
 
     \item{\code{signature=(type = "GeneIdentifierType", setName =
         "character", setIdentifier = "character", ...)}}{Construct a
-      empty gene set. The arguments \code{setName} and \code{setType} are
-      required. The gene set has \code{setType} created from the
+      empty gene set. The arguments \code{setName} and \code{geneIdType} are
+      required. The gene set has \code{geneIdType} created from the
       \code{GeneIdentifierType} named by \code{type}.}
 
   \item{\code{signature=(type = "ExpressionSet", setName =
         "character", setIdentifier = "character", ...)}}{Construct a
       gene set from an
-      \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{setType} is set to
+      \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{geneIdType} is set to
       \code{AnnotationIdentifier}; the annotation field and annotation package
       of the \code{ExpressionSet} are consulted to determine \code{organism},
       if possible.}
   }
 }
-\seealso{}
+\seealso{
+  \code{\linkS4class{GeneSet}}
+  \code{\link{GeneColorSet}}
+}
 \examples{
 ## Empty gene set
 GeneSet(setName="name", setIdentifier="100")
@@ -61,13 +64,13 @@ gs1 <- GeneSet(sample.ExpressionSet[100:109],
 ## GeneSet from Broad XML; 'fl' could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gs2 <- getBroadSets(fl)[[1]] # actually, a list of two gene sets
-## GeneSet from list of genes
-genes <- genes(gs2) # any character vector would do
-gs3 <- GeneSet(genes=genes, setName="another", setIdentifier="101")
+## GeneSet from list of gene identifiers
+geneIds <- geneIds(gs2) # any character vector would do
+gs3 <- GeneSet(geneIds=geneIds, setName="another", setIdentifier="101")
 ## unspecified set type, so...
-is(setType(gs3), "NullIdentifier") == TRUE
+is(geneIdType(gs3), "NullIdentifier") == TRUE
 ## update set type to match encoding of identifiers
-setType(gs2)
-setType(gs3) <- EntrezIdentifier()
+geneIdType(gs2)
+geneIdType(gs3) <- EntrezIdentifier()
 }
 \keyword{methods}

@@ -29,23 +29,31 @@ toBroadXML(geneSet, con, ...)
     for \code{toBroadXML}.}
 }
 \value{
-  \code{getBroadSets} returns a \code{list} of \code{GeneSet} objects.
+  \code{getBroadSets} returns a \code{GeneSetCollection} of gene sets.
 
   \code{toBroadXML} returns a character vector of a single
-  \code{GeneSet} or, if \code{file} is provided
+  \code{GeneSet} or, if \code{file} is provided, writes the XML to a
+  file.
 }
-\references{ ~put references to the literature/web site here ~ }
+
+\references{
+  \url{http://www.broad.mit.edu/gsea/}
+}
 \author{Martin Morgan <mtmrogan@fhcrc.org>}
 \note{
   Actual Broad XML files differ from the DTD (e.g., an implied ','
   separator between genes in a set); we parse to and from files as they
   exists the actual files.
 }
-\seealso{\url{http://www.broad.mit.edu/gsea/}}
+\seealso{
+  \code{\linkS4class{GeneSetCollection}}
+  \code{\linkS4class{GeneSet}}
+}
 \examples{
 ## could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
-gss <- getBroadSets(fl) # list of 2 sets
+gss <- getBroadSets(fl) # GeneSetCollection of 2 sets
+names(gss)
 gss[[1]]
 
 fl <- tempfile()

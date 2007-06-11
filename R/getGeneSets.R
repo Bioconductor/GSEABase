@@ -5,7 +5,7 @@
     res <- xmlTreeParse(file, useInternalNodes=TRUE, ...)
     geneSets <- getNodeSet(res, node, fun=handler)
     free(res)
-    geneSets
+    GeneSetCollection(geneSets)
 }
 
 .toXML <- function(geneSet, handler, con, ...) {

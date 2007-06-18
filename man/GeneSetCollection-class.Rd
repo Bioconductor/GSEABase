@@ -35,7 +35,7 @@
 \section{Extends}{
 Class \code{"\linkS4class{list}"}, from data part.
 Class \code{"\linkS4class{vector}"}, by class "list", distance 2.
-Class \code{"\linkS4class{AssayData}"}, by class "list", distance 2.
+Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", distance 2.
 }
 \section{Methods}{
   Gene set collection construction

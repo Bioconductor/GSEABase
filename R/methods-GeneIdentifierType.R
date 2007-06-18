@@ -13,13 +13,6 @@
 
 .getters("GeneIdentifierType", c(geneIdType="type"))
 
-setMethod("validIdentifiers",
-          signature=signature(
-            identifier="GeneIdentifierType"),
-          function(identifier, geneIds) {
-              TRUE
-          })
-
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),
           function(object) cat("geneIdType:", geneIdType(object), "\n"))

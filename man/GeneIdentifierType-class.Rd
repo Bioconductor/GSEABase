@@ -3,16 +3,10 @@
 % GeneIdentifierType-class
 \alias{GeneIdentifierType-class}
 \alias{geneIdType,GeneIdentifierType-method}
-\alias{mapIdentifiers,GeneSet,GeneIdentifierType,missing-method}
-\alias{mapIdentifiers,GeneSet,GeneIdentifierType,NullIdentifier-method}
 \alias{show,GeneIdentifierType-method}
-\alias{validIdentifiers,GeneIdentifierType-method}
 % AnnotationIdentifier-class
 \alias{AnnotationIdentifier-class}
 \alias{annotation,AnnotationIdentifier-method}
-\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
-\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
-\alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
 \alias{initialize,AnnotationIdentifier-method}
 \alias{show,AnnotationIdentifier-method}
 % additional classes
@@ -83,28 +77,13 @@
       return a character string representation of the type of this
       \code{object}.}
 
-    \item{mapIdentifiers}{\code{signature(what="GeneSet",
-        to="GeneIdentifierType" from="missing")}: This method will
-      re-dispatch to a method with signature
-      \code{signature(what=what, to=to, from=geneIdType(what))}, and is
-      present so that a user can call \code{mapIdentifiers} with
-      providing an explicit argument to \code{from}.}
-
-    \item{mapIdentifiers}{\code{signature(what="GeneSet",
-        to="GeneIdentifierType" from="NullIdentifier")}: This maps a gene set
-      from gene identifiers represented by the \code{NullIdentifier} type
-      (i.e., no type associated with the genes) to gene identifiers represent
-      by any class derived from \code{GeneIdentifierType}. Other
-      \code{mapIdentifier} methods may change the representation of gene
-      identifiers, but this method does not.}
+    \item{mapIdentifiers}{
+      \code{signature(what="GeneSet", to="GeneIdentifierType" from="missing")},
+      \code{signature(what="GeneSet", to="GeneIdentifierType" from="NullIdentifier")}
+      : See \code{\link{mapIdentifiers}}.}
 
     \item{show}{\code{signature(object = "GeneIdentifierType")}: display
       this object.}
-
-    \item{validIdentifiers}{\code{signature(identifier =
-        "GeneIdentifierType")}: validate that the identifier are
-      legitimate; subclasses are responsible for implementing this
-      method.}
   }
 
   \code{AnnotationIdentifier} has the
@@ -120,22 +99,10 @@
     \item{annotation}{\code{signature(object = "AnnotationIdentifier")}:
       extract the name of the annotation package as a character string.}
 
-    \item{mapIdentifiers}{\code{signature(what = "GeneSet", to =
-        "GeneIdentifierType", from = "AnnotationIdentifier")}: Maps
-      between identifiers of type \code{AnnotationIdentifier} and other
-      identifiers. This method consults the annotation package specified in
-      \code{from}, looking for a mapping between \code{genes(what)} and
-      \code{paste(annotation(what), toupper(geneIdType(to)), sep="")}.}
-
-    \item{mapIdentifiers}{\code{signature(what = "GeneSet",
-        to="AnnotationIdentifier", from = "GeneIdentifierType")}: Maps
-      between identifiers of type \code{GeneIdentifierType} to
-      \code{AnnotationIdentifier}. This method uses the annotation
-      package specified in \code{from}. It tries first to use 
-      \code{AnnotationDbi} and DBI-based chip annotations to find the
-      reverse mapping. If that fails, the method then tries to use the
-      \code{annotation} package and environment-based mappings to find a
-      reverse map. }
+    \item{mapIdentifiers}{
+      \code{signature(what = "GeneSet", to = "GeneIdentifierType", from = "AnnotationIdentifier")},
+      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from = "GeneIdentifierType")}:
+      see \code{\link{mapIdentifiers}}.}
 
     \item{show}{\code{signature(object = "AnnotationIdentifier")}:
       Display \code{object}, including the annotation string if available.}

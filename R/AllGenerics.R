@@ -17,11 +17,6 @@ setGeneric("mapIdentifiers",
                }
            })
 
-setGeneric("validIdentifiers",
-           function(identifier, geneIds) {
-               standardGeneric("validIdentifiers")
-           })
-
 ## GeneSet
 
 setGeneric("geneIdType<-",

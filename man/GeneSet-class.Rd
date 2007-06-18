@@ -3,6 +3,7 @@
 \alias{GeneSet-class}
 \alias{[,GeneSet,character-method}
 \alias{[,GeneSet,numeric-method}
+\alias{[,ExpressionSet,GeneSet-method}
 \alias{[[,GeneSet,character-method}
 \alias{[[,GeneSet,numeric-method}
 \alias{|,GeneSet,GeneSet-method}
@@ -42,6 +43,29 @@
 \alias{union,GeneSet,GeneSet-method}
 \alias{urls<-,GeneSet,character-method}
 \alias{urls,GeneSet-method}
+
+\alias{collectionType<-}
+\alias{collectionType}
+\alias{contributor<-}
+\alias{contributor}
+\alias{creationDate<-}
+\alias{creationDate}
+\alias{geneIds<-}
+\alias{geneIds}
+\alias{geneIdType}
+\alias{geneIdType<-}
+\alias{longDescription<-}
+\alias{longDescription}
+\alias{organism<-}
+\alias{organism}
+\alias{setIdentifier<-}
+\alias{setIdentifier}
+\alias{setName<-}
+\alias{setName}
+\alias{setVersion<-}
+\alias{setVersion}
+\alias{urls<-}
+\alias{urls}
 
 \title{Class "GeneSet"}
 \description{
@@ -173,6 +197,12 @@
       \code{signature(x = "GeneSet", i="numeric")}: subset the gene set by
       index (\code{i="numeric"}) or value (\code{i="character"}). Genes
       are re-ordered as required}
+    \item{[}{
+      \code{signature(x = "ExpressionSet", i = "GeneSet")}: subset the
+      expression set, using genes in the gene set to select
+      features. Genes in the gene set are coerced to appropriate annotation type
+      if necessary (by consulting the \code{annotation} slot of the
+      expression set, and using \code{geneIdType<-}).}
     \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set; not particularly useful.}
     \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from

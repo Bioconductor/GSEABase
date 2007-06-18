@@ -24,6 +24,14 @@
 \alias{[[,GeneColorSet,character-method}
 \alias{$,GeneColorSet-method}
 
+\alias{coloring<-}
+\alias{coloring}
+\alias{geneColor<-}
+\alias{geneColor}
+\alias{phenotype<-}
+\alias{phenotype}
+\alias{phenotypeColor<-}
+\alias{phenotypeColor}
 
 \title{Class "GeneColorSet"}
 \description{

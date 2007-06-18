@@ -13,6 +13,8 @@
 \alias{bcCategory,BroadCollection-method}
 \alias{bcSubCategory,BroadCollection-method}
 \alias{show,BroadCollection-method}
+\alias{bcCategory}
+\alias{bcSubCategory}
 % GOCollection-class
 \alias{GOCollection-class}
 % KEGGCollection-class

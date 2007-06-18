@@ -25,7 +25,7 @@ exportMethods(show, initialize, intersect, union, setdiff,
               "&", "|",
 
               ## IdentifierType
-              mapIdentifiers, validIdentifiers, annotation,
+              mapIdentifiers, annotation,
 
               ## CollectionType
               bcCategory, bcSubCategory,

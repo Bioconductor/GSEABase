@@ -182,15 +182,14 @@
       the same \code{geneIdType}.}
     \item{|}{\code{signature(e1 = "GeneSet", e2 = "character")}:
       calculate the logical `or' (union) of a gene set and a character vector,
-      i.e., determine the geneIds named in the character vector also
-      present in the gene set.}
+      i.e., add the geneIds named in the character vector to the gene set.}
     \item{intersect}{\code{signature(x = "GeneSet", y = "GeneSet")}:{}}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
     the logical `and' (intersection) of two gene sets.}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "character")}:
       calculate the logical `and' (intersection) of a gene set and a
-      character vector, creating a new gene set with the character
-      vector coerced to be of type \code{geneIdType}.}
+      character vector, creating a new gene set containing only those
+      genes named in the character vector.}
 
     \item{[}{
       \code{signature(x = "GeneSet", i="character")}
@@ -204,7 +203,7 @@
       if necessary (by consulting the \code{annotation} slot of the
       expression set, and using \code{geneIdType<-}).}
     \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
-      the gene set; not particularly useful.}
+      the gene set.}
     \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set, allowing partial matching.}
   }
@@ -218,7 +217,7 @@
       which color is available. See \code{\linkS4class{GeneColorSet}}.}
     \item{mapIdentifiers}{Use the code in the examples to list available
       methods. These are used internally (by \code{geneIdType<-}) or by the
-      user to convert gene from one \code{GeneIdentifierType} to another. See
+      user to convert genes from one \code{GeneIdentifierType} to another. See
       \code{\link{mapIdentifiers}} and specific methods in
       \code{\linkS4class{GeneIdentifierType}} for additional detail.}
     \item{show}{\code{signature(object = "GeneSet")}: display the gene set.}

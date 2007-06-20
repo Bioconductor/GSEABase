@@ -27,4 +27,7 @@
       set from an uncolored gene set.}
   }
 }
-\keyword{methods} \keyword{ ~~ other possible keyword(s)}
+\seealso{
+  \code{\link{GeneColorSet-class}}
+}
+\keyword{methods}

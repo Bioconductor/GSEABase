@@ -23,47 +23,51 @@ GeneSet(type, ...)
 }
 \section{Methods}{
   \describe{
-    \item{\code{signature(type = "missing", setName =
-        "character", setIdentifier = "character", ...)}}{Construct an
-      empty gene set. The arguments \code{setName} and \code{setIdentifier} are
-      required. The gene set has \code{geneIdType=NullIdentifier},
+    \item{
+      \code{signature(type = "missing", setName = "character", setIdentifier = "character", ...)}}{
+      Construct an empty gene set. The arguments \code{setName} and
+      \code{setIdentifier} are required. The gene set has
+      \code{geneIdType=NullIdentifier},
       \code{collectionType=AdHocCollection}.}
 
-    \item{\code{signature(type = "character", setName =
-        "character", setIdentifier = "character", ...)}}{Construct an
-      empty gene set. The arguments \code{setName} and \code{setIdentifier} are
-      required. The gene set has \code{geneIdType} created from the
-      \code{GeneIdentifierType} named by \code{type}.}
+    \item{
+      \code{signature(type = "character", setName = "character", setIdentifier = "character", ...)}}{
+      Construct an empty gene set. The arguments \code{setName} and
+      \code{setIdentifier} are required. The gene set has \code{geneIdType}
+      created from the \code{GeneIdentifierType} named by \code{type}.}
 
-    \item{\code{signature=(type = "GeneIdentifierType", setName =
-        "character", setIdentifier = "character", ...)}}{Construct a
-      empty gene set. The arguments \code{setName} and \code{geneIdType} are
-      required. The gene set has \code{geneIdType} created from the
-      \code{GeneIdentifierType} named by \code{type}.}
+    \item{
+      \code{signature=(type = "GeneIdentifierType", setName = "character", setIdentifier = "character", ...)}}{
+      Construct an empty gene set. The arguments \code{setName} and
+      \code{geneIdType} are required. The gene set has \code{geneIdType}
+      created from the \code{GeneIdentifierType} named by \code{type}.}
 
-  \item{\code{signature=(type = "ExpressionSet", setName =
-        "character", setIdentifier = "character", ...)}}{Construct a
-      gene set from an
-      \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{geneIdType} is set to
-      \code{AnnotationIdentifier}; the annotation field and annotation package
-      of the \code{ExpressionSet} are consulted to determine \code{organism},
-      if possible.}
+    \item{
+      \code{signature=(type = "ExpressionSet", setName = "character", setIdentifier = "character", ...)}}{
+      Construct a gene set from an
+      \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{geneIdType}
+      is set to \code{AnnotationIdentifier}; the annotation field and
+      annotation package of the \code{ExpressionSet} are consulted to
+      determine \code{organism}, if possible.}
   }
 }
 \seealso{
-  \code{\linkS4class{GeneSet}}
-  \code{\link{GeneColorSet}}
+  \code{\link{GeneSet-class}}
+  \code{\link{GeneColorSet-class}}
 }
 \examples{
 ## Empty gene set
 GeneSet(setName="name", setIdentifier="100")
+
 ## Gene set from ExpressionSet
 data(sample.ExpressionSet)
 gs1 <- GeneSet(sample.ExpressionSet[100:109],
                setName="sample.GeneSet", setIdentifier="101")
+
 ## GeneSet from Broad XML; 'fl' could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gs2 <- getBroadSets(fl)[[1]] # actually, a list of two gene sets
+
 ## GeneSet from list of gene identifiers
 geneIds <- geneIds(gs2) # any character vector would do
 gs3 <- GeneSet(geneIds=geneIds, setName="another", setIdentifier="101")

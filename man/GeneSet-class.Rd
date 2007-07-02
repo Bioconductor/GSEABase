@@ -253,7 +253,7 @@ geneIdType(gs4) <- EntrezIdentifier()
 }
 
 ## logical (set) operations
-gs5 <- GeneSet(sample.ExpressionSet[100:109]) setName="subset1")
+gs5 <- GeneSet(sample.ExpressionSet[100:109], setName="subset1")
 gs6 <- GeneSet(sample.ExpressionSet[105:114], setName="subset2")
 ## intersection: 5 'genes'; note the set name '(subset1 & subset2)'
 gs5 & gs6

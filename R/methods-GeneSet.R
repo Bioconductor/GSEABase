@@ -1,5 +1,4 @@
-.constructors_GeneSet("GeneSet",
-                      required=c("setName", "setIdentifier"))
+.constructors_GeneSet("GeneSet", required=character(0))
 
 ## Rationale: 'initialize' is always called with .Object, constructed
 ## from the object prototype. The documentation for 'new' indicates
@@ -254,8 +253,8 @@ setMethod("show",
                   "urls: ", paste(selectSome(urls(object), maxToShow=3),
                                   collapse="\n      "), "\n",
                   "contributor: ", contributor(object), "\n",
-                  "setVersion: ",
+                  "setVersion: ", as(setVersion(object), "character"), "\n",
+                  "creationDate: ", creationDate(object), "\n",
                   sep="")
               show(setVersion(object))
-              cat("creationDate: ", creationDate(object), "\n", sep="")
           })

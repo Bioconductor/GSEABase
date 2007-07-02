@@ -53,8 +53,8 @@ test_GS_MakeNoType <- function() {
 }
 
 test_GS_MakeString <- function() {
-    gs <- GeneSet("EntrezIdentifier",
-                  geneIds=letters[1:5],
+    gs <- GeneSet(letters[1:5],
+                  geneIdType=EntrezIdentifier(),
                   setIdentifier="unique!",
                   setName="TestSet",
                   shortDescription="Test Gene Set No. 1",
@@ -89,19 +89,6 @@ test_GS_MakeType <- function() {
     do_GeneSet_setter_check(gs)
 }
 
-test_GS_RequiredArgsToNew <- function() {
-    checkException(GeneSet(new("EntrezIdentifier"),
-                           geneIds=letters[1:5],
-                           ## no setIdentifier
-                           setName="TestSet",
-                           shortDescription="Test Gene Set No. 1",
-                           organism="AlienX5.11",
-                           pubMedIds=c("1", "2"),
-                           urls=c("http://bioconductor.org"),
-                           contributor="A.U. Thor"),
-                   silent=TRUE)
-}
-
 test_GS_MakeFromExpressionSet <- function() {
     data(sample.ExpressionSet)
     gs <- GeneSet(sample.ExpressionSet, setName="123",
@@ -121,11 +108,6 @@ test_GS_MakeFromExpressionSet <- function() {
               experimentData(sample.ExpressionSet)@name)
     do_GeneSet_getter_check(gs)
     do_GeneSet_setter_check(gs)
-}
-
-test_GS_setdiffExport <- function() {
-    checkIdentical(environment(setdiff),
-                   environment(GSEABase::setdiff))
 }
 
 test_GS_LogicalNonOverlapping <- function() {

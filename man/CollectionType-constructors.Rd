@@ -1,6 +1,6 @@
 \name{CollectionType}
 \alias{CollectionType}
-\alias{AdHocCollection}
+\alias{NullCollection}
 \alias{ExpressionSetCollection}
 \alias{KEGGCollection}
 \alias{GOCollection}
@@ -13,7 +13,7 @@
   annotations).
 }
 \usage{
-AdHocCollection(...)
+NullCollection(...)
 ExpressionSetCollection(...)
 KEGGCollection(...)
 GOCollection(...)
@@ -37,13 +37,11 @@ BroadCollection(category, subCategory=NA, ...)
   \code{\linkS4class{CollectionType}}, 
 }
 \examples{
-AdHocCollection()
+NullCollection()
 
-## Ad hoc when no collection type specified
-collectionType(GeneSet(setName="empty", setIdentifier="0"))
-collectionType(GeneSet(collectionType=GOCollection(),
-                       setName="empty",
-                       setIdentifier="0"))
+## NullCollection when no collection type specified
+collectionType(GeneSet())
+collectionType(GeneSet(collectionType=GOCollection()))
 
 ## fl could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
@@ -54,6 +52,6 @@ collectionType(gs1) # BroadCollection
 bc <- BroadCollection(category=new("ScalarCharacter","c2"))
 ## change collectionType of gs2
 gs2 <- gs1
-collectionType(gs2) <- AdHocCollection()
+collectionType(gs2) <- NullCollection()
 }
 \keyword{manip}

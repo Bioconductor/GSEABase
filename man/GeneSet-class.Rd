@@ -70,7 +70,7 @@
 \title{Class "GeneSet"}
 \description{
   A \code{GeneSet} contains a set of gene identifiers. Each gene set has a
-  \code{geneIdType}, indicating how the gene names should be interpreted
+  \code{geneIdType}, indicating how the gene identifiers should be interpreted
   (e.g., as Entrez identifiers), and a \code{collectionType}, indicating
   the origin of the gene set (perhaps including additional information
   about the set, as in the \code{\linkS4class{BroadCollection}} type).
@@ -86,11 +86,6 @@
   from a character vector of gene names, or an
   \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}), or from gene sets stored as XML
   (locally or on the internet; see \code{getBroadSets})
-
-  A \code{GeneSet} requires a \code{setName} (best just to be a single
-  word) and a unique \code{setIdentifier}. Additional informational
-  elements can be added (see Slots, below, for an indication of this
-  information, and the Methods for how to set or retrieve it.).
 }
 \section{Slots}{
 	 \describe{
@@ -233,17 +228,16 @@
 }
 \examples{
 ## Empty gene set
-GeneSet(setName="name", setIdentifier="100")
+GeneSet()
 ## Gene set from ExpressionSet
 data(sample.ExpressionSet)
-gs1 <- GeneSet(sample.ExpressionSet[100:109],
-               setName="sample.GeneSet", setIdentifier="101")
+gs1 <- GeneSet(sample.ExpressionSet[100:109])
 ## GeneSet from Broad XML; 'fl' could be a url
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gs2 <- getBroadSets(fl)[[1]] # actually, a list of two gene sets
 ## GeneSet from list of geneIds
 geneIds <- geneIds(gs2) # any character vector would do
-gs3 <- GeneSet(geneIds=geneIds, setName="another", setIdentifier="101")
+gs3 <- GeneSet(geneIds=geneIds)
 ## unspecified set type, so...
 is(geneIdType(gs3), "NullIdentifier") == TRUE
 ## update set type to match encoding of identifiers
@@ -259,10 +253,8 @@ geneIdType(gs4) <- EntrezIdentifier()
 }
 
 ## logical (set) operations
-gs5 <- GeneSet(sample.ExpressionSet[100:109],
-               setName="subset1", setIdentifier="105")
-gs6 <- GeneSet(sample.ExpressionSet[105:114],
-               setName="subset2", setIdentifier="106")
+gs5 <- GeneSet(sample.ExpressionSet[100:109]) setName="subset1")
+gs6 <- GeneSet(sample.ExpressionSet[105:114], setName="subset2")
 ## intersection: 5 'genes'; note the set name '(subset1 & subset2)'
 gs5 & gs6
 ## union: 15 'genes'; note the set name

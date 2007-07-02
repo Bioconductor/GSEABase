@@ -136,12 +136,10 @@
 ## Create a GeneColorSet from an ExpressionSet
 data(sample.ExpressionSet)
 gcs1 <- GeneColorSet(sample.ExpressionSet[100:109],
-                     setName="color1", setIdentifier="200",
                      phenotype="imaginary")
 gcs1
 ## or with color...
 gcs2 <- GeneColorSet(sample.ExpressionSet[100:109],
-                     setName="color1", setIdentifier="200",
                      phenotype="imaginary",
                      geneColor=factor(
                        rep(c("up", "down", "unchanged"),

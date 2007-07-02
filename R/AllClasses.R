@@ -38,10 +38,10 @@ setClass("CollectionType",
          representation = representation(
            type = "ScalarCharacter"))
 
-setClass("AdHocCollection",
+setClass("NullCollection",
          contains = "CollectionType",
          prototype = prototype(
-           type = new("ScalarCharacter", "Ad hoc")))
+           type = new("ScalarCharacter", "NullCollection")))
 
 setClass("ExpressionSetCollection",
          contains = "CollectionType",
@@ -88,11 +88,11 @@ setClass("GeneSet",
            creationDate = "character",
            collectionType = "CollectionType"),
          prototype = prototype(
-           setName = new("ScalarCharacter", "<undefined>"),
-           setIdentifier = new("ScalarCharacter", "<undefined>"),
+           setName = new("ScalarCharacter", NA),
+           setIdentifier = new("ScalarCharacter", NA),
            geneIdType = new("NullIdentifier"),
            version = new("Versions", "0.0.1"),
-           collectionType = new("AdHocCollection")),
+           collectionType = new("NullCollection")),
          validity = function(object) {
              if (any(duplicated(geneIds(object))))
                  "gene symbols must be unique"

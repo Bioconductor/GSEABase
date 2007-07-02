@@ -4,8 +4,8 @@
 \alias{CollectionType-class}
 \alias{collectionType,CollectionType-method}
 \alias{show,CollectionType-method}
-% AdHocCollection-class
-\alias{AdHocCollection-class}
+% NullCollection-class
+\alias{NullCollection-class}
 % ExpressionSetCollection-class
 \alias{ExpressionSetCollection-class}
 % BroadCollection-class
@@ -33,7 +33,7 @@
 \section{Objects from the Class}{
   The following classes can tag gene sets:
   \describe{
-    \item{AdHocCollection}{No formal collection information available.}
+    \item{NullCollection}{No formal collection information available.}
     \item{BroadCollection}{Derived from, or destined to, Broad
       XML. Usually created and written \code{\link{getBroadSets}},
       \code{\link{toBroadXML}}.}

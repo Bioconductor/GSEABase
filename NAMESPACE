@@ -10,7 +10,7 @@ exportClasses(## GeneIdentifierType
               SymbolIdentifier, PfamIdentifier,
 
               ## CollectionType
-              CollectionType, AdHocCollection,
+              CollectionType, NullCollection,
               ExpressionSetCollection, KEGGCollection, GOCollection,
               BroadCollection,
 
@@ -59,7 +59,7 @@ export(## IdentifierType
 
        ## CollectionType
 
-       AdHocCollection, ExpressionSetCollection, KEGGCollection,
+       NullCollection, ExpressionSetCollection, KEGGCollection,
        GOCollection, BroadCollection,
 
        ## XML

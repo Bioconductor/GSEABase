@@ -43,14 +43,14 @@
         
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, geneIdType=NullIdentifier(), OARGS))
+            do.call("new", c(CLASS, OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "missing"), f)
 
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, geneIdType=new(type), OARGS))
+            do.call("new", c(CLASS, list(geneIds=type), OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "character"), f)
@@ -75,8 +75,6 @@
                         ""
                 }, error=function(err) "")
             new(CLASS,
-                setName = setName,
-                setIdentifier = setIdentifier,
                 geneIdType = new("AnnotationIdentifier",
                   annotation = annotation(type)),
                 geneIds = featureNames(type),

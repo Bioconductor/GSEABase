@@ -43,7 +43,7 @@ setMethod("initialize",
           function(.Object, .Template=.Object, ...,
                    ## additional args, manipulated by method
                    setIdentifier=.Template@setIdentifier,
-                   setName=.Template@setIdentifier,
+                   setName=.Template@setName,
                    shortDescription=.Template@shortDescription,
                    longDescription=.Template@longDescription,
                    organism=.Template@organism,

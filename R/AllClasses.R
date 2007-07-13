@@ -55,8 +55,13 @@ setClass("KEGGCollection",
 
 setClass("GOCollection",
          contains = "CollectionType",
+         representation=representation(
+           goIds="character",
+           evidenceCode="character"),
          prototype = prototype(
-           type = new("ScalarCharacter", "GO")))
+           type = new("ScalarCharacter", "GO"),
+           goIds = as.character(NA),
+           evidenceCode = as.character(NA)))
 
 setClass("BroadCollection",
          contains = "CollectionType",

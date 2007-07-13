@@ -29,6 +29,7 @@ exportMethods(show, initialize, intersect, union, setdiff,
 
               ## CollectionType
               bcCategory, bcSubCategory,
+              goIds, evidenceCode,
 
               ## GeneSet
               GeneSet,

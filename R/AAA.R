@@ -1,4 +1,3 @@
-
 .checkRequired <- function(required, provided) {
     idx <- which(!(required %in% provided))
     if (length(idx) > 0)
@@ -33,14 +32,16 @@
 .constructors_GeneSet<- function(klass, required) {
     ## construct the arg list of symbols with no defaults
     ## constructor input arguments: type, name, ...
-    args <- .nameAll(c("type", required, "..."))
+    args <- .nameAll(c("type", required, "setIdentifier", "..."))
     iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
+    iargs[["setIdentifier"]] <- quote(.uniqueIdentifier())
     oargs <- sapply(args[-1], as.symbol) # output args
     eval(substitute({
         if (!isGeneric(CLASS))
             setGeneric(CLASS,
                        function(type, ...) standardGeneric(CLASS))
-        
+
+        ## missing
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
             do.call("new", c(CLASS, OARGS))
@@ -48,6 +49,7 @@
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "missing"), f)
 
+        ## character
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
             do.call("new", c(CLASS, list(geneIds=type), OARGS))
@@ -55,6 +57,7 @@
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "character"), f)
 
+        ## GeneIdentifierType
         f <- function(){
             .checkRequired(REQUIRED, names(match.call()))
             do.call("new", c(CLASS, geneIdType=type, OARGS))
@@ -63,7 +66,34 @@
         setMethod(CLASS,
                   signature=signature(type="GeneIdentifierType"), f)
 
-        f <- function(type, ...) {
+        ## GOCollection
+        f <- function() {
+            .checkRequired(REQUIRED, names(match.call()))
+            if (!.requireQ("GO"))
+                stop("library(GO) required but not available")
+            ## look for geneIdType; default is EntrezId
+            idType <- geneIdType(geneIdType)
+            lookup <- get(paste("GO", toupper(idType),sep=""))
+            ids <- mget(goIds(type), lookup, ifnotfound=as.character(NA))
+            ids <- lapply(ids,
+                          function(x, codes) x[names(x) %in% codes],
+                          evidenceCode(type))
+            geneIds <- unique(unlist(ids, use.names=FALSE))
+            do.call("new",
+                    c(CLASS,
+                      geneIdType=geneIdType,
+                      collectionType=type,
+                      list(geneIds=geneIds),
+                      OARGS))
+        }
+        formals(f) <- c(IARGS[-length(IARGS)],
+                        geneIdType=quote(EntrezIdentifier()),
+                        IARGS[length(IARGS)])
+        setMethod(CLASS,
+                  signature=signature(type="GOCollection"), f)
+
+        ## ExpressionSet
+        f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
             organism <- 
                 tryCatch({
@@ -75,8 +105,8 @@
                         ""
                 }, error=function(err) "")
             new(CLASS,
-                geneIdType = new("AnnotationIdentifier",
-                  annotation = annotation(type)),
+                setIdentifier=.uniqueIdentifier(),
+                geneIdType = AnnotationIdentifier(annotation(type)),
                 geneIds = featureNames(type),
                 shortDescription = experimentData(type)@title,
                 longDescription = abstract(type),
@@ -114,7 +144,6 @@
     slots <- .nameAll(slots)
     for (i in seq(along=slots)) {
         eval(substitute({
-
             if (!isGeneric(SETTER))
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER))

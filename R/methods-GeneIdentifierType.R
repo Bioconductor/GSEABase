@@ -77,12 +77,15 @@ setMethod("mapIdentifiers",
 }
 
 .getMappedGenes <- function(geneIds, mapEnv, map, pkg) {
-    ngenes <- mget(geneIds, mapEnv)
+    ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
     if (any(length(ngenes) != 1) || any(is.na(ngenes)))
         .warningf("annotation map '%s' is not 1:1 in '%s'",
                   map, pkg)
     ugenes <- unique(unlist(ngenes))
-    as.character(ugenes[!is.na(ugenes)])
+    if (is.null(ugenes))
+        character(0)
+    else
+        as.character(ugenes[!is.na(ugenes)])
 }
 
 ## tag: e.g., ENTREZID
@@ -90,7 +93,9 @@ setMethod("mapIdentifiers",
     pkg <- annotation(from)
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
-    mapEnv <- get(map, envir=getNamespace(pkg))
+    mapEnv <-
+        get(map, envir=as.environment(paste("package", pkg, sep=":")),
+            inherits=FALSE)
     .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 
@@ -140,7 +145,10 @@ setMethod("mapIdentifiers",
     pkg <- annotation(to)
     map <- paste(pkg, tag, "2PROBE",sep="")
     .checkPackageAndMap(pkg, map)
-    mapEnv <- get(map, envir=getNamespace(pkg))
+    mapEnv <-
+        get(map,
+            envir=as.environment(paste("package", pkg, sep=":")),
+            inherits=FALSE)
     .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 
@@ -148,7 +156,10 @@ setMethod("mapIdentifiers",
     pkg <- annotation(to)
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
-    revMap <- revmap(get(map))
+    revMap <-
+        revmap(get(map,
+                   envir=as.environment(paste("package", pkg, sep=":")),
+                   inherits=FALSE))
     geneIds <- geneIds(what)
     ogenes <- geneIds[sapply(geneIds, exists, envir=revMap)]
     .getMappedGenes(ogenes, revMap,
@@ -160,7 +171,7 @@ setMethod("mapIdentifiers",
     map <- paste(gsub("db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- getNamespace(pkg)
-    mapEnv <- revmap(get(map, envir=mapEnv))
+    mapEnv <- revmap(get(map, envir=mapEnv, inherits=FALSE))
     .getMappedGenes(geneIds(what), mapEnv, map, pkg)
 }
 

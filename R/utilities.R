@@ -1,3 +1,9 @@
+## Placeholder 'till something appropriate decided
+.uniqueIdentifier <- function()
+    if (.requireQ("Ruuid")) {
+        as.character(getuuid())
+    } else as.character(NA)
+
 ## simplified unique for vectors, preserving attributes
 .unique <- function(x, y) c(x, y[!(y %in% x)])
 

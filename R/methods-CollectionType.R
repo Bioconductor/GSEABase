@@ -51,8 +51,8 @@ GOCollection <- function(goIds=as.character(NA),
                "NAS", "ND", "IC", "ANY", NA)
     codeOk <- evidenceCode %in% codes
     if (!all(codeOk))
-        stopf("evidenceCode invalid: '%s'",
-              paste(evidenceCode[!codeOk], collapse="', '"))
+        .stopf("evidenceCode invalid: '%s'",
+               paste(evidenceCode[!codeOk], collapse="', '"))
     if ("ANY" %in% evidenceCode)
         evidenceCode <- codes[!codes %in% c("ANY", NA)]
     new("GOCollection",

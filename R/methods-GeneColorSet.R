@@ -1,30 +1,43 @@
 .constructors_GeneSet("GeneColorSet", required=c("phenotype"))
 
 ## See methods-GeneSet for rationale about 'initialize'
+.colorConstructor <- function(color, len) {
+    if (length(color)==0 && len !=0)
+        factor(character(len))
+    else
+        color
+}
+
 setMethod("initialize",
           signature=signature(.Object="GeneColorSet"),
           function(.Object, .Template=.Object, ...,
                    ## additional args
                    geneIds=.Template@geneIds,
                    phenotype=.Template@phenotype,
-                   geneColor=factor(character(length(geneIds))),
-                   phenotypeColor=factor(character(length(geneIds)))) {
+                   geneColor=.Template@geneColor,
+                   phenotypeColor=.Template@phenotypeColor) {
               callNextMethod(.Object, .Template, ...,
                              geneIds=geneIds,
                              phenotype=mkScalar(phenotype),
-                             geneColor=geneColor,
-                             phenotypeColor=phenotypeColor)
+                             geneColor=.colorConstructor(
+                               geneColor,
+                               length(geneIds)),
+                             phenotypeColor=.colorConstructor(
+                               phenotypeColor,
+                               length(geneIds)))
           })
 
 setMethod("GeneColorSet",
           signature=signature(type="GeneSet"),
           function(type,
                    phenotype,
-                   setName=GSEABase::setName(type),
-                   setIdentifier=GSEABase::setIdentifier(type), ...) {
-              new("GeneColorSet", type,
-                  setName = setName, setIdentifier=setIdentifier,
-                  phenotype=phenotype, ...)
+                   geneColor=factor(character(length(geneIds(type)))),
+                   phenotypeColor=factor(character(length(geneIds(type)))),
+                   ...) {
+              new("GeneColorSet", as(type, "GeneColorSet"),
+                  phenotype=phenotype,
+                  geneColor=geneColor, phenotypeColor=phenotypeColor,
+                  ...)
           })
 
 .GETTERS_GeneColorSet <- c("phenotype", "geneColor", "phenotypeColor")

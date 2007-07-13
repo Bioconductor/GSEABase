@@ -256,5 +256,4 @@ setMethod("show",
                   "setVersion: ", as(setVersion(object), "character"), "\n",
                   "creationDate: ", creationDate(object), "\n",
                   sep="")
-              show(setVersion(object))
           })

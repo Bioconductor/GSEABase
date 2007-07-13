@@ -77,8 +77,8 @@
                 collapse=.BROAD_SEPARATOR),
               CATEGORY_CODE={
                   ct <- collectionType(geneSet)
-                  category <- ct@category
-                  subcategory <- ct@subCategory
+                  category <- bcCategory(ct)
+                  subcategory <- bcSubCategory(ct)
                   paste(if (is.na(category)) NULL else category,
                         if (is.na(subcategory)) NULL else subcategory,
                         collapse=.BROAD_SEPARATOR, sep="")
@@ -105,17 +105,15 @@ getBroadSets <- function(file, ...) {
     })
 }
 
-toBroadXML <- function(geneSet, con, ...) {
+toBroadXML <- function(geneSet, con = stdout(), ...) {
+    if (!is(collectionType(geneSet), "BroadCollection"))
+        .stopf("toBroadXML requires 'BroadCollection', got '%s'",
+               class(collectionType(geneSet)))
     tryCatch({
-        xml <- NULL
-        if (missing(con))
-            con <- textConnection("xml", open="w", local=TRUE)
         .toXML(geneSet, .GeneSetToBroadXMLNode, con=con, ...)
-        if (missing(con))
-            xml
     }, error=function(err) {
-        stop("'toBroadXML' failed to create XML:",
-             "\n  ", conditionMessage(err),
-             call.=FALSE)
+        .stopf("toBroadXML failed to create XML: %s\n",
+               conditionMessage(err))
     })
 }
+

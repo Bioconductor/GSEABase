@@ -1,0 +1,164 @@
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+%\VignetteIndexEntry{Using GeneSet and GeneColorSet classes}
+%\VignetteDepends{}
+%\VignetteKeywords{Gene Set Enrichment Analysis}
+%\VignettePackage{GSEABase}
+\documentclass[]{article}
+
+\usepackage{times}
+\usepackage{hyperref}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\R}{\textsf{R}}
+\newcommand{\GeneSet}{\Robject{GeneSet}}
+\newcommand{\GeneSetCollection}{\Robject{GeneSetCollection}}
+\newcommand{\GeneColorSet}{\Robject{GeneColorSet}}
+\newcommand{\GSEABase}{\Rpackage{GSEABase}}
+
+\newcommand{\term}[1]{\emph{#1}}
+\newcommand{\mref}[2]{\htmladdnormallinkfoot{#2}{#1}}
+
+\begin{document}
+
+<<preliminaries>>=
+## FIXME: <adjMat> adjacency matrix -- color w. +/- 1
+## FIXME: DBI: .db
+## FIXME: limma topTable --> GeneColorSet
+## FIXME: collectionType == flatten hierarcy? other info in collection
+## slots, e.g., origin
+## FIXME: operations need to work w/out warnings: mapIdentifiers
+## w. verbose=TRUE
+library(GSEABase)
+library(hgu95av2)
+library(hgu95av2db)
+library(GO)
+@ 
+
+\section{\GeneSet{} and \GeneSetCollection{}}
+
+<<GeneSet>>=
+## FIXME: collectionType;
+## FIXME: redundant setName, setIdentifier, setValidity, creationDate
+GeneSet()
+@ 
+
+<<GeneIdentifierTypes>>=
+names(getSubclasses(getClass("GeneIdentifierType")))
+@ 
+
+<<CollectionType>>=
+names(getSubclasses(getClass("CollectionType")))
+@ 
+
+<<GeneSetCollection>>=
+fl <- system.file("extdata", "Broad.xml", package="GSEABase")
+gss <- getBroadSets(fl)
+class(gss)
+names(gss)
+@ 
+
+<<GeneSet-accessors>>=
+## FIXME: GeneSetCollection show
+gs <- gss[[1]]
+geneIds(gs)
+@ 
+
+<<example-constructors>>=
+## retain evidenceCode?
+## exclude, rather than include, evidence code
+GeneSet(GOCollection("GO:0005488"), setName="A set")
+GeneSet(GOCollection("GO:0005488", evidenceCode="ANY"))
+GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
+                     evidenceCode="IDA"))
+## FIXME: setName, setIdentifier after computation
+data(sample.ExpressionSet)
+gs5 <- GeneSet(sample.ExpressionSet[100:109], setName="subset1")
+gs6 <- GeneSet(sample.ExpressionSet[105:114], setName="subset2")
+@ 
+<<logical-operations>>=
+gs5 & gs6
+gs5 | gs6
+setdiff(gs5, gs6)
+@ 
+
+<<mapIds>>=
+## creates reverse map, since none found.
+## FIXME: mapIds
+mapIdentifiers(gs5, EntrezIdentifier())
+mapIdentifiers(gs, AnnotationIdentifier("hgu95av2"))
+
+## using AnnotationDbi, reverse map already present
+mapIdentifiers(gs, AnnotationIdentifier("hgu95av2db"))
+@ 
+
+<<interoperatbility>>=
+## coerces EntrezIdentifier to AnnotationIdentifier, using annotation
+## slot of ExpressionSet. No probes correspondnig to selected genes
+data(sample.ExpressionSet)
+sample.ExpressionSet[gs,]
+
+## FIXME: should accept GeneSetCollection
+toBroadXML(gss[[1]], stdout())
+@
+
+\section{\GeneColorSet{}}
+
+<<GeneColorSet-constructors>>=
+## GeneColorSet
+## FIXME: better show method; 'description' method?
+GeneColorSet(phenotype="Phenotype")     # required arg
+
+## Color data
+conn <- textConnection("
+Entrez ID, Gene Symbol, Direction, Effect on cisplatin trt
+##used to be MRP2
+1244, ABCC2, INCREASE, Resistant
+538, ATP7A, INCREASE, Resistant
+540, ATP7B, INCREASE, Resistant
+9961, MVP, INCREASE, Resistant
+##the LRP below must be MVP
+##LRP, INCREASE, Resistant - need to know which one
+7507,XPA, INCREASE, Resistant
+2067, ERCC1, INCREASE, Resistant
+##TOP, INCREASE, Resistant  - need to know which one, notes say II
+672, BRCA1, INCREASE, Resistant
+3725, JUN, INCREASE, Resistant
+#GCS, INCREASE, Resistant  - my notes say alpha-GCS - so which one?
+##I only found gamma at PubMed as being related
+2730, GCLM, INCREASE, Resistant")
+tbl <- read.csv(conn, strip.white=TRUE,comment.char="#")
+close(conn); unlink(conn)
+tbl
+
+(gsc <- GeneColorSet(EntrezIdentifier(),
+                     setName="color set",
+                     geneIds=as.character(tbl$Entrez.ID),
+                     phenotype="cisplatin resistance",
+                     geneColor=tbl$Direction,
+                     phenotypeColor=tbl$Effect.on.cisplatin.trt))
+@ 
+
+<<GeneColorSet-accessors>>=
+geneIds(gsc)
+coloring(gsc)
+geneColor(gsc)
+phenotypeColor(gsc)
+@ 
+
+\end{document}

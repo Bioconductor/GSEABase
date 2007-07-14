@@ -17,6 +17,9 @@
 \alias{bcSubCategory}
 % GOCollection-class
 \alias{GOCollection-class}
+\alias{evidenceCode,GOCollection-method}
+\alias{goIds,GOCollection-method}
+\alias{show,GOCollection-method}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
 
@@ -47,7 +50,7 @@
   }
 
   Objects are instantiated with calls to \code{\link{CollectionType}}
-  constructors.
+  constructors, with slot names as possible arguments.
 }
 
 \section{Slots}{
@@ -64,6 +67,14 @@
       containing terms from the Broad list of categories, or \code{NA}}
     \item{\code{subCategory}:}{Object of class \code{"ScalarCharacter"}
       containing Broad sub-categories, or \code{NA}}
+  }
+
+  \code{GOCollection} has slots:
+  \describe{
+    \item{\code{goIds}:}{Object of class \code{"character"} containing a
+      vector of GO identifiers.}
+    \item{\code{evidenceCode}:}{Object of class \code{"character"},
+      containing GO evidence codes used to construct the gene set.}
   }
 }
 
@@ -85,6 +96,14 @@
     \item{bcSubCategory}{Retrieve the sub-category of the Broad
       collection.}
   }
+
+  \code{GOCollection} has methods:
+  \describe{
+    \item{goIds}{Retrieve the GO identifiers of the GO collection.}
+    \item{evidenceCode}{Retrieve the evidence codes of the GO
+      collection. Evidence codes are summarize in, e.g.,
+      \code{\link[GO]{GOENTREZID}}.}
+    }
 }
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
@@ -98,7 +117,6 @@ getSubclasses(getClass("CollectionType"))
 collectionType(ExpressionSetCollection())
 
 \dontrun{
-
 ## Read two GeneSets from a Broad XML file into a list, verify that
 ## they are both BroadCollection's. Category / subcategory information
 ## is unique to Broad collections.
@@ -113,5 +131,13 @@ data(sample.ExpressionSet)
 gs <- GeneSet(sample.ExpressionSet[100:109],
               setName="sample.GeneSet", setIdentifier="123")
 collectionType(gs)
+
+## GOCollections are created by reference to GO terms and evidenceCodes
+GOCollection("GO:0005488")
+## requires library(GO); EntrezIdentifers automatically created
+\dontrun{
+GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
+                     evidenceCode="IDA"))
+}
 }
 \keyword{classes}

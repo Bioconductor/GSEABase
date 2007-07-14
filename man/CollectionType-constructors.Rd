@@ -16,7 +16,7 @@
 NullCollection(...)
 ExpressionSetCollection(...)
 KEGGCollection(...)
-GOCollection(...)
+GOCollection(goIds=as.character(NA), evidenceCode="ANY", ...)
 BroadCollection(category, subCategory=NA, ...)
 }
 
@@ -24,6 +24,9 @@ BroadCollection(category, subCategory=NA, ...)
   \item{category}{(Required) Broad category, one of "c1" (postitional), "c2"
     (curated), "c3" (motif), "c4" (computational).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
+  \item{goIds}{(Optional) Character vector of GO identifiers.}
+  \item{evidenceCode}{(Optional) Character vector of GO evidence codes
+    to be included, or "ANY" (any identifier; the default).}
   \item{\dots}{Additional arguments, usually none but see specific
     \code{linkS4class{CollectionType}} classes  for possibilities.}
 }

@@ -67,19 +67,21 @@
       Create a new \code{\link{GeneColorSet}} using identifiers of
       \code{GeneIdentifierType}.}
 
-    \item{geneIdType<-}{\code{signature(object = "GeneSet", value =
+    \item{geneIdType<-}{\code{signature(object = "GeneSet", verbose=FALSE, value =
         "GeneIdentifierType")}: Changes the \code{GeneIdentifierType} of
       \code{object} to \code{value}, attempting to convert symbols in
       the process. This method calls \code{mapIdentifiers(what=object,
-        to=value, from=geneIdType(what))}.}
+        to=value, from=geneIdType(what), verbose=verbose)}.}
 
     \item{geneIdType}{\code{signature(object = "GeneIdentifierType")}:
       return a character string representation of the type of this
       \code{object}.}
 
     \item{mapIdentifiers}{
-      \code{signature(what="GeneSet", to="GeneIdentifierType" from="missing")},
-      \code{signature(what="GeneSet", to="GeneIdentifierType" from="NullIdentifier")}
+      \code{signature(what="GeneSet", to="GeneIdentifierType"
+        from="missing", verbose=FALSE)},
+      \code{signature(what="GeneSet", to="GeneIdentifierType"
+        from="NullIdentifier", verbose=FALSE)}
       : See \code{\link{mapIdentifiers}}.}
 
     \item{show}{\code{signature(object = "GeneIdentifierType")}: display
@@ -100,8 +102,10 @@
       extract the name of the annotation package as a character string.}
 
     \item{mapIdentifiers}{
-      \code{signature(what = "GeneSet", to = "GeneIdentifierType", from = "AnnotationIdentifier")},
-      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from = "GeneIdentifierType")}:
+      \code{signature(what = "GeneSet", to = "GeneIdentifierType", from
+        = "AnnotationIdentifier", verbose=FALSE)},
+      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from
+        = "GeneIdentifierType", verbose=FALSE)}:
       see \code{\link{mapIdentifiers}}.}
 
     \item{show}{\code{signature(object = "AnnotationIdentifier")}:

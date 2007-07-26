@@ -157,8 +157,8 @@
     \item{setName<-}{\code{signature(object = "GeneSet", value = "character")}}
     \item{setName}{\code{signature(object = "GeneSet")}}
     \item{geneIdType<-}{
-      \code{signature(object = "GeneSet", value = "character")},
-      \code{signature(object = "GeneSet", value = "GeneIdentifierType")}:
+      \code{signature(object = "GeneSet", verbose=FALSE, value = "character")},
+      \code{signature(object = "GeneSet", verbose=FALSE, value = "GeneIdentifierType")}:
       These method attempt to coerce geneIds from
       the current type to the type named by \code{value}. Successful
       coercion requires an appropriate method for \code{\link{mapIdentifiers}}.}

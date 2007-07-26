@@ -6,17 +6,22 @@
 \alias{GeneSet,character-method}
 \alias{GeneSet,GeneIdentifierType-method}
 \alias{GeneSet,ExpressionSet-method}
+\alias{GeneSet,GOCollection-method}
 \title{Methods to construct GeneSet instances}
 \description{
   Use \code{GeneSet} to construct gene sets from \code{ExpressionSet},
   character vector, or other objects.
 }
 \usage{
-GeneSet(type, ...)
+GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
 }
 \arguments{
   \item{type}{An argument determining how the gene set will be created,
     as described in the Methods section.}
+  \item{setIdentifier}{A \code{ScalarCharacter} or length-1 character
+    vector uniquely identifying the set. The default attempts to use
+    \code{Ruuid} to generate a unique identifier, or if \code{Ruuid} is
+    not avaiable assigns \code{NA}.}
   \item{...}{Additional arguments for gene set construction. 
     Methods have required arguments, as outlined below; additional
     arguments correspond to slot names \code{\linkS4class{GeneSet}}.}
@@ -24,20 +29,24 @@ GeneSet(type, ...)
 \section{Methods}{
   \describe{
     \item{
-      \code{signature(type = "missing", ...)}}{
+      \code{signature(type = "missing", ...,
+        setIdentifier=.uniqueIdentifier())}}{
       Construct an empty gene set.}
 
     \item{
-      \code{signature(type = "character", ...)}}{
+      \code{signature(type = "character", ..., 
+        setIdentifier=.uniqueIdentifier())}}{
       Construct a gene set using identifiers \code{type}.}
 
     \item{
-      \code{signature=(type = "GeneIdentifierType", ...)}}{
+      \code{signature(type = "GeneIdentifierType", ...,
+        setIdentifier=.uniqueIdentifier())}}{
       Construct an empty gene set. The gene set has \code{geneIdType}
       created from the \code{GeneIdentifierType} of \code{type}.}
 
     \item{
-      \code{signature=(type = "ExpressionSet", ...)}}{
+      \code{signature(type = "ExpressionSet", ...,
+        setIdentifier=.uniqueIdentifier())}}{
       Construct a gene set from an
       \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{geneIdType}
       is set to \code{AnnotationIdentifier}; the annotation field and
@@ -46,6 +55,13 @@ GeneSet(type, ...)
       descriptions from the \code{ExpressionSet} \code{experimentData}
       title and abstract; pub med ids, urls, and contributor are also
       derived from \code{experimentData}.}
+
+    \item{
+      \code{signature(type = "GOCollection", ...,
+        geneIdType = EntrezIdentifier(),
+        setIdentifier=.uniqueIdentifier())}}{Use genes contained in \code{type} to
+        create a \code{GeneSet }. The default \code{geneIdType} assumes
+        that the identifiers are Entrez ids.}
   }
 }
 \seealso{

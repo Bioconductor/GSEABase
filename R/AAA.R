@@ -32,14 +32,18 @@
 .constructors_GeneSet<- function(klass, required) {
     ## construct the arg list of symbols with no defaults
     ## constructor input arguments: type, name, ...
-    args <- .nameAll(c("type", required, "setIdentifier", "..."))
+    args <- .nameAll(c("type", required, "...", "setIdentifier"))
     iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
     iargs[["setIdentifier"]] <- quote(.uniqueIdentifier())
     oargs <- sapply(args[-1], as.symbol) # output args
     eval(substitute({
         if (!isGeneric(CLASS))
             setGeneric(CLASS,
-                       function(type, ...) standardGeneric(CLASS))
+                       function(type, ...,
+                                setIdentifier=.uniqueIdentifier()) {
+                           standardGeneric(CLASS)
+                       },
+                       signature=c("type"))
 
         ## missing
         f <- function() {
@@ -105,7 +109,7 @@
                         ""
                 }, error=function(err) "")
             new(CLASS,
-                setIdentifier=.uniqueIdentifier(),
+                setIdentifier=setIdentifier,
                 geneIdType = AnnotationIdentifier(annotation(type)),
                 geneIds = featureNames(type),
                 shortDescription = experimentData(type)@title,

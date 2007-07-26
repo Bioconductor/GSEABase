@@ -20,6 +20,8 @@
 \alias{evidenceCode,GOCollection-method}
 \alias{goIds,GOCollection-method}
 \alias{show,GOCollection-method}
+\alias{evidenceCode}
+\alias{goIds}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
 

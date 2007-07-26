@@ -76,22 +76,22 @@ setReplaceMethod("geneIdType",
                  signature=signature(
                    object="GeneSet",
                    value="character"),
-                 function(object, value) {
+                 function(object, verbose=FALSE, value) {
                      tag <- tryCatch({
                          do.call(value, list())
                      }, error=function(err) {
                          stop(sprintf("could not create geneIdType tag of '%s'",
                                       value))
                      })
-                     mapIdentifiers(object, tag, geneIdType(object))
+                     mapIdentifiers(object, tag, geneIdType(object), verbose=verbose)
                  })
 
 setReplaceMethod("geneIdType",
                  signature=signature(
                    object="GeneSet",
                    value="GeneIdentifierType"),
-                 function(object, value) {
-                     mapIdentifiers(object, value, geneIdType(object))
+                 function(object, verbose=FALSE, value) {
+                     mapIdentifiers(object, value, geneIdType(object), verbose=verbose)
                  })
 
 ## subset

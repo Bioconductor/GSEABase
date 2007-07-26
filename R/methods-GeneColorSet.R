@@ -33,8 +33,9 @@ setMethod("GeneColorSet",
                    phenotype,
                    geneColor=factor(character(length(geneIds(type)))),
                    phenotypeColor=factor(character(length(geneIds(type)))),
-                   ...) {
+                   ..., setIdentifier=.uniqueIdentifier()) {
               new("GeneColorSet", as(type, "GeneColorSet"),
+                  setIdentifier=setIdentifier,
                   phenotype=phenotype,
                   geneColor=geneColor, phenotypeColor=phenotypeColor,
                   ...)

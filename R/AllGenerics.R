@@ -3,9 +3,10 @@
 ## GeneIdentifierType
 
 setGeneric("mapIdentifiers",
-           function(what, to, from, ...)
+           function(what, to, from, ..., verbose=FALSE)
            standardGeneric("mapIdentifiers"),
-           useAsDefault=function(what, to, from, ...) {
+           signature=c("what", "to", "from"),
+           useAsDefault=function(what, to, from, ..., verbose=FALSE) {
                if (geneIdType(from) == geneIdType(to)) {
                    warning(sprintf("map from '%s' to '%s': identical types",
                                    geneIdType(from), geneIdType(to)))
@@ -20,7 +21,9 @@ setGeneric("mapIdentifiers",
 ## GeneSet
 
 setGeneric("geneIdType<-",
-           function(object, value) standardGeneric("geneIdType<-"))
+           function(object, verbose=FALSE, value)
+           standardGeneric("geneIdType<-"),
+           signature=c("object", "value"))
 
 setGeneric("intersect",
            function(x, y) standardGeneric("intersect"))

@@ -46,7 +46,7 @@ setMethod("show",
 ## GOCollection
 
 GOCollection <- function(goIds=as.character(NA),
-                         evidenceCode="ANY") {
+                         evidenceCode="ANY", ...) {
     codes <- c("IMP", "IGI", "IPI", "ISS", "IDA", "IEP", "IEA", "TAS",
                "NAS", "ND", "IC", "ANY", NA)
     codeOk <- evidenceCode %in% codes

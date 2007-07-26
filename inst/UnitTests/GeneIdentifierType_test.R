@@ -38,7 +38,7 @@ test_GeneIdentifierType_geneIdType <- function() {
                   setName="123", setIdentifier="456")
     opt <- options(warn=2)
     on.exit(options(opt))
-    checkException(geneIdType(gs) <- EntrezIdentifier(), silent=TRUE)
+    checkException(geneIdType(gs, verbose=TRUE) <- EntrezIdentifier(), silent=TRUE)
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
@@ -66,9 +66,18 @@ test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
 test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
     gss <- getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
     suppressMessages(suppressWarnings({
-        res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2db"))
+        res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2.db"))
     }))
-    detach("package:hgu95av2db")
+    detach("package:hgu95av2.db")
     checkTrue(validObject(res))
     checkEquals(41, length(geneIds(res)))
+}
+
+test_GeneIdentifierType_mapIdentifiers_verbose_warnings <- function() {
+    ## duplicate gene names exception
+    gs <- GeneSet(sample.ExpressionSet[100:200],
+                  setName="123", setIdentifier="456")
+    opt <- options(warn=2)
+    on.exit(options(opt))
+    checkException(mapIdentifiers(gs,  EntrezIdentifier(), verbose=TRUE), silent=TRUE)
 }

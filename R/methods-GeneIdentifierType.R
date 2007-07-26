@@ -50,8 +50,8 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="GeneIdentifierType",
             from="missing"),
-          function(what, to, from, ...) {
-              callGeneric(what, to, from=geneIdType(what), ...)
+          function(what, to, from, ..., verbose=FALSE) {
+              callGeneric(what, to, from=geneIdType(what), ..., verbose=verbose)
           })
 
 ## Null --> X
@@ -61,7 +61,7 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="GeneIdentifierType",
             from="NullIdentifier"),
-          function(what, to, from, ...) {
+          function(what, to, from, ..., verbose=FALSE) {
               new(class(what), what, geneIdType=to)
           })
           
@@ -76,9 +76,9 @@ setMethod("mapIdentifiers",
                map, pkg)
 }
 
-.getMappedGenes <- function(geneIds, mapEnv, map, pkg) {
+.getMappedGenes <- function(geneIds, mapEnv, map, pkg, verbose=FALSE) {
     ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
-    if (any(length(ngenes) != 1) || any(is.na(ngenes)))
+    if (verbose && (any(length(ngenes) != 1) || any(is.na(ngenes))))
         .warningf("annotation map '%s' is not 1:1 in '%s'",
                   map, pkg)
     ugenes <- unique(unlist(ngenes))
@@ -89,14 +89,14 @@ setMethod("mapIdentifiers",
 }
 
 ## tag: e.g., ENTREZID
-.fromAnnotation <- function(from, tag, what) {
+.fromAnnotation <- function(from, tag, what, verbose=FALSE) {
     pkg <- annotation(from)
-    map <- paste(gsub("db$", "", pkg), tag, sep="")
+    map <- paste(gsub(".db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <-
         get(map, envir=as.environment(paste("package", pkg, sep=":")),
             inherits=FALSE)
-    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 
 setMethod("mapIdentifiers",
@@ -104,36 +104,38 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="GeneIdentifierType",
             from="AnnotationIdentifier"),
-          function(what, to, from, ...) {
+          function(what, to, from, ..., verbose=FALSE) {
               tag <- toupper(geneIdType(to))
               new(class(what), what,
-                  geneIds=.fromAnnotation(from, tag, what),
+                  geneIds=.fromAnnotation(from, tag, what, verbose=verbose),
                   geneIdType=to)
           })
 
 ## X --> AnnotationIdentifier
 
 ## tag: e.g., SYMBOL
-.toAnnotation <- function(tag, to, what) {
+.toAnnotation <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
     ok <- FALSE
     if (length(grep(".*db$", pkg))==1) {
-        geneIds <- .toAnnotationDbi(tag, to, what)
+        geneIds <- .toAnnotationDbi(tag, to, what, verbose=verbose)
         ok <- TRUE
     } else {
         if (!ok)
             tryCatch({
-                geneIds <- .toAnnotationDirect(tag, to, what)
+                geneIds <- .toAnnotationDirect(tag, to, what, verbose=verbose)
                 ok <- TRUE
             }, error=function(err) {
-                warning("direct map failed: ",  conditionMessage(err))
+                if (verbose)
+                    warning("direct map failed: ",  conditionMessage(err))
             })
         if (!ok)
             tryCatch({
-                geneIds <- .toAnnotationRevmap(tag, to, what)
+                geneIds <- .toAnnotationRevmap(tag, to, what, verbose=verbose)
                 ok <- TRUE
             }, error=function(err) {
-                warning("reverse map failed: ", conditionMessage(err))
+                if (verbose)
+                    warning("reverse map failed: ", conditionMessage(err))
             })
     }
     if (!ok)
@@ -141,7 +143,7 @@ setMethod("mapIdentifiers",
     geneIds
 }
 
-.toAnnotationDirect <- function(tag, to, what) {
+.toAnnotationDirect <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
     map <- paste(pkg, tag, "2PROBE",sep="")
     .checkPackageAndMap(pkg, map)
@@ -149,12 +151,12 @@ setMethod("mapIdentifiers",
         get(map,
             envir=as.environment(paste("package", pkg, sep=":")),
             inherits=FALSE)
-    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 
-.toAnnotationRevmap <- function(tag, to, what) {
+.toAnnotationRevmap <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
-    map <- paste(gsub("db$", "", pkg), tag, sep="")
+    map <- paste(gsub(".db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     revMap <-
         revmap(get(map,
@@ -163,16 +165,16 @@ setMethod("mapIdentifiers",
     geneIds <- geneIds(what)
     ogenes <- geneIds[sapply(geneIds, exists, envir=revMap)]
     .getMappedGenes(ogenes, revMap,
-                    paste("revmap(", map, ")", sep=""), pkg)
+                    paste("revmap(", map, ")", sep=""), pkg, verbose=verbose)
 }
 
-.toAnnotationDbi <- function(tag, to, what) {
+.toAnnotationDbi <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
-    map <- paste(gsub("db$", "", pkg), tag, sep="")
+    map <- paste(gsub(".db$", "", pkg), tag, sep="")
     .checkPackageAndMap(pkg, map)
     mapEnv <- getNamespace(pkg)
     mapEnv <- revmap(get(map, envir=mapEnv, inherits=FALSE))
-    .getMappedGenes(geneIds(what), mapEnv, map, pkg)
+    .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 
 setMethod("mapIdentifiers",
@@ -185,7 +187,7 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="AnnotationIdentifier",
             from="NullIdentifier"),
-          function(what, to, from, ...) {
+          function(what, to, from, ..., verbose=FALSE) {
               new(class(what), what, geneIdType=to)
           })
 
@@ -194,9 +196,9 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="AnnotationIdentifier",
             from="GeneIdentifierType"), 
-          function(what, from, to, ...) {
+          function(what, from, to, ..., verbose=FALSE) {
               tag <- toupper(geneIdType(from))
               new(class(what), what,
-                  geneIds=.toAnnotation(tag, to, what),
+                  geneIds=.toAnnotation(tag, to, what, verbose=verbose),
                   geneIdType=to)
           })

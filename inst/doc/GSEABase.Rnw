@@ -101,10 +101,14 @@ setdiff(gs5, gs6)
 ## creates reverse map, since none found.
 ## FIXME: mapIds
 mapIdentifiers(gs5, EntrezIdentifier())
+## silently 'flattens' map
+res <- mapIdentifiers(gs5, EntrezIdentifier(), verbose=TRUE)
 mapIdentifiers(gs, AnnotationIdentifier("hgu95av2"))
+## uses AnnotationDbi when direct map not available; flattens map
+res <- mapIdentifiers(gs, AnnotationIdentifier("hgu95av2"), verbose=TRUE)
 
 ## using AnnotationDbi, reverse map already present
-mapIdentifiers(gs, AnnotationIdentifier("hgu95av2db"))
+mapIdentifiers(gs, AnnotationIdentifier("hgu95av2.db"))
 @ 
 
 <<interoperatbility>>=

@@ -38,15 +38,13 @@
 
 <<preliminaries>>=
 ## FIXME: <adjMat> adjacency matrix -- color w. +/- 1
-## FIXME: DBI: .db
 ## FIXME: limma topTable --> GeneColorSet
 ## FIXME: collectionType == flatten hierarcy? other info in collection
 ## slots, e.g., origin
-## FIXME: operations need to work w/out warnings: mapIdentifiers
 ## w. verbose=TRUE
 library(GSEABase)
 library(hgu95av2)
-library(hgu95av2db)
+library(hgu95av2.db)
 library(GO)
 @ 
 

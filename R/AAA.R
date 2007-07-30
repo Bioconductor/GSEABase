@@ -108,49 +108,51 @@
                     else
                         ""
                 }, error=function(err) "")
-            new(CLASS,
-                setIdentifier=setIdentifier,
-                geneIdType = AnnotationIdentifier(annotation(type)),
-                geneIds = featureNames(type),
-                shortDescription = experimentData(type)@title,
-                longDescription = abstract(type),
-                organism = organism,
-                pubMedIds = pubMedIds(experimentData(type)),
-                urls = experimentData(type)@url,
-                contributor = experimentData(type)@name,
-                collectionType = ExpressionSetCollection(),
-                ...)
+            do.call("new",
+                    c(CLASS,
+                      geneIdType = AnnotationIdentifier(annotation(type)),
+                      list(geneIds = featureNames(type)),
+                      shortDescription = experimentData(type)@title,
+                      longDescription = abstract(type),
+                      organism = organism,
+                      pubMedIds = pubMedIds(experimentData(type)),
+                      urls = experimentData(type)@url,
+                      contributor = experimentData(type)@name,
+                      collectionType = ExpressionSetCollection(),
+                      OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type="ExpressionSet"), f)
     }, list(CLASS = klass, REQUIRED=required, IARGS=iargs, OARGS=oargs)))
 }
 
-.getters <- function(klass, slots) {
+.getters <- function(klass, slots, where=topenv(parent.frame()), ...) {
     slots <- .nameAll(slots)
-    ## standard getters. 'where' default is topenv(parent.frame())
-    ## which on package load is the package name space
-    for (i in seq(along=slots)) {
+    for (i in seq_along(slots)) {
         eval(substitute({
-            if (!isGeneric(GENERIC))
+            if (!isGeneric(GENERIC, where=where))
                 setGeneric(GENERIC,
-                           function(object) standardGeneric(GENERIC))
+                           function(object) standardGeneric(GENERIC),
+                           where=WHERE)
             setMethod(GENERIC,
                       signature=signature(object=CLASS),
-                      function(object) slot(object, SLOT))
+                      function(object) slot(object, SLOT),
+                      where=WHERE)
         }, list(CLASS = klass,
                 GENERIC = names(slots)[[i]],
-                SLOT = slots[[i]])))
+                SLOT = slots[[i]],
+                WHERE = where)))
     }
 }
 
-.setters <- function(klass, slots) {
+.setters <- function(klass, slots, where=topenv(parent.frame()), ...) {
     slots <- .nameAll(slots)
     for (i in seq(along=slots)) {
         eval(substitute({
-            if (!isGeneric(SETTER))
+            if (!isGeneric(SETTER, where=where))
                 setGeneric(SETTER, function(object, value)
-                           standardGeneric(SETTER))
+                           standardGeneric(SETTER),
+                           where = WHERE)
             if (getSlots(CLASS)[[SLOT]] == "ScalarCharacter")
                 setReplaceMethod(GENERIC,
                                  signature=signature(
@@ -159,7 +161,8 @@
                                  function(object, value) {
                                      slot(object, SLOT) <- mkScalar(value)
                                      object
-                                 })
+                                 },
+                                 where = WHERE)
             else
                 setReplaceMethod(GENERIC,
                                  signature=signature(
@@ -168,10 +171,12 @@
                                  function(object, value) {
                                      slot(object, SLOT) <- value
                                      object
-                                 })
+                                 },
+                                 where = WHERE)
         }, list(CLASS=klass,
                 GENERIC=names(slots)[[i]],
                 SETTER=paste(names(slots)[[i]], "<-", sep=""),
-                SLOT=slots[[i]])))
+                SLOT=slots[[i]],
+                WHERE=where)))
     }
 }

@@ -34,6 +34,7 @@ test_GCS_ConstructorDefaultArgs <- function() {
                        phenotype="A phenotype")
     checkTrue(validObject(gs, complete=TRUE))
     checkTrue(length(geneIds(gs))==0)
+    checkTrue(phenotype(gs)=="A phenotype")
     checkTrue(length(geneColor(gs))==0)
     checkTrue(length(phenotypeColor(gs))==0)
 }
@@ -46,6 +47,7 @@ test_GCS_ConstructorAllColorArgs <- function() {
                        geneIds=LETTERS[1:24])
     checkTrue(validObject(gs, complete=TRUE))
     checkIdentical(geneIds(gs), LETTERS[1:24])
+    checkTrue(phenotype(gs)=="A phenotype")
     checkTrue(length(geneColor(gs))==24)
     checkTrue(length(phenotypeColor(gs))==24)
 
@@ -59,6 +61,7 @@ test_GCS_ConstructorAllColorArgs <- function() {
                        geneColor=gfactor,
                        phenotypeColor=pfactor)
     checkTrue(validObject(gs, complete=TRUE))
+    checkTrue(phenotype(gs)=="A phenotype")
     checkIdentical(geneColor(gs), gfactor)
     checkIdentical(phenotypeColor(gs), pfactor)
 }

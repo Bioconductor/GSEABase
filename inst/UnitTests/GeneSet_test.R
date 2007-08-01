@@ -165,3 +165,13 @@ test_GS_subset2 <- function() {
 
     checkTrue(geneIds == do.call("$",list(gs, geneIds)))
 }
+
+test_GS_incidence <- function() {
+    gss <- .broadSets()
+    res <- incidence(gss[[1]])
+    checkTrue(all(dim(res)==c(1, 86)))
+    checkTrue(sum(res)== 86)
+    res <- incidence(gss[[1]], gss[[2]])
+    checkTrue(all(dim(res)==c(2, 215)))
+    checkTrue(sum(res)== 215)
+}

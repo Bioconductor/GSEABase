@@ -160,6 +160,7 @@
                                    value="character"),
                                  function(object, value) {
                                      slot(object, SLOT) <- mkScalar(value)
+                                     validObject(object)
                                      object
                                  },
                                  where = WHERE)
@@ -170,6 +171,7 @@
                                    value=getSlots(CLASS)[[SLOT]]),
                                  function(object, value) {
                                      slot(object, SLOT) <- value
+                                     validObject(object)
                                      object
                                  },
                                  where = WHERE)

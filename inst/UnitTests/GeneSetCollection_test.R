@@ -1,3 +1,6 @@
+.broadSets <- function()
+    getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
+
 .gsc <- function() {
     gs1 <- GeneSet(setName="set1", setIdentifier="id1",
                    geneIds=LETTERS[1:5])
@@ -114,3 +117,13 @@ test_GSC_subset2 <- function() {
 ## test_GSC_subset2_assign <- function() {
 ##     checkTrue(FALSE)
 ## }
+
+test_GSC_incidence <- function() {
+    gss <- .broadSets()
+    res <- incidence(gss)
+    checkTrue(all(dim(res)==c(2, 215)))
+    checkTrue(sum(res)== 215)
+    res <- incidence(gss, gss)
+    checkTrue(all(dim(res)==c(4, 215)))
+    checkTrue(sum(res)== 430)
+}

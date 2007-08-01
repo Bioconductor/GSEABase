@@ -34,7 +34,8 @@ setGeneric("union",
 setGeneric("setdiff",
            function(x, y) standardGeneric("setdiff"))
 
-setGeneric("Logic")
+setGeneric("incidence",
+           function(x, ...) standardGeneric("incidence"))
 
 ## GeneColorSet
 

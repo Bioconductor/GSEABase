@@ -211,10 +211,11 @@
       \code{phenotype}, a character string describing the phenotype for
       which color is available. See \code{\linkS4class{GeneColorSet}}.}
     \item{mapIdentifiers}{Use the code in the examples to list available
-      methods. These are used internally (by \code{geneIdType<-}) or by the
-      user to convert genes from one \code{GeneIdentifierType} to another. See
+      methods. These convert genes from one \code{GeneIdentifierType} to another. See
       \code{\link{mapIdentifiers}} and specific methods in
       \code{\linkS4class{GeneIdentifierType}} for additional detail.}
+    \item{incidence}{Summarize shared membership in genes across gene
+      sets. See \code{\link{incidence-methods}}.}
     \item{show}{\code{signature(object = "GeneSet")}: display the gene set.}
     \item{initialize}{\code{signature(.Object = "GeneSet")}: Used
       internally during gene set construction.}

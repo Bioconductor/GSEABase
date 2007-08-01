@@ -22,7 +22,7 @@ exportClasses(## GeneIdentifierType
               )
 
 exportMethods(show, initialize, intersect, union, setdiff,
-              "&", "|",
+              "&", "|", incidence,
 
               ## IdentifierType
               mapIdentifiers, annotation,

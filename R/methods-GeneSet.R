@@ -91,7 +91,8 @@ setReplaceMethod("geneIdType",
                    object="GeneSet",
                    value="GeneIdentifierType"),
                  function(object, verbose=FALSE, value) {
-                     mapIdentifiers(object, value, geneIdType(object), verbose=verbose)
+                     mapIdentifiers(object, value, geneIdType(object),
+                                    verbose=verbose)
                  })
 
 ## subset
@@ -229,6 +230,23 @@ setMethod("setdiff",
                   creationDate=date())
           })
 
+## incidence
+
+setMethod("incidence",
+          signature=signature(
+            x="GeneSet"),
+          definition=function(x, ...) {
+              args <- c(x, ...)
+              gids <- lapply(args, geneIds)
+              uids <- unique(unlist(gids))
+              isIn <- sapply(gids,
+                             function(g, u) u %in% g,
+                             uids)
+              t(matrix(as.integer(isIn),
+                       ncol=nargs(),
+                       dimnames=list(uids, sapply(args, setName))))
+          })
+
 ## show
 
 setMethod("show",
@@ -237,7 +255,8 @@ setMethod("show",
               cat("setName: ", setName(object), "\n",
                   "setIdentifier: ", setIdentifier(object), "\n", sep="")
               cat("geneIds:",
-                  paste(selectSome(geneIds(object), maxToShow=4), collapse=", "),
+                  paste(selectSome(geneIds(object), maxToShow=4),
+                        collapse=", "),
                   paste("(total: ", length(geneIds(object)), ")\n",
                         sep=""),
                   sep=" ")

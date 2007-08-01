@@ -134,3 +134,20 @@ setReplaceMethod("[[",
                          .stopf("only replacement of existing setNames supported")
                      .subsetReplace(x, idx, value)
                  })
+
+## incidence
+
+setMethod("incidence",
+          signature=signature(
+            x="GeneSetCollection"),
+          function(x, ...) {
+              args <- c(x, ...)
+              gids <- lapply(args, geneIds)
+              uids <- unique(unlist(gids))
+              isIn <- sapply(gids,
+                             function(g, u) u %in% g,
+                             uids)
+              t(matrix(as.integer(isIn),
+                       ncol=length(args),
+                       dimnames=list(uids, sapply(args, setName))))
+          })

@@ -178,7 +178,8 @@ setMethod("$",
     color <- function(x, y, lbl) {
         if (!phenotypesIdentical ||
             any(levels(x) != levels(y)) ||
-            any(as.character(x) != as.character(y)))
+            any(as.character(x) != as.character(y), na.rm=TRUE) ||
+            any(is.na(x) != is.na(y)))
             factor(.glue(as.character(x), as.character(y), ", "))
         else x
     }
@@ -290,9 +291,6 @@ setMethod("setdiff",
           signature=signature(
             x="GeneColorSet", y="GeneColorSet"),
           .geneColorSetSetdiff)
-
-
-
         
 ## other methods
 

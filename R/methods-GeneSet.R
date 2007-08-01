@@ -232,19 +232,23 @@ setMethod("setdiff",
 
 ## incidence
 
+.incidence <- function(gidList, gnmList) {
+    uids <- unique(unlist(gidList))
+    isIn <- lapply(gidList,
+                   function(g, u) match(u, g, nomatch=0),
+                   uids)
+    t(matrix(as.integer(unlist(isIn) > 0),
+             ncol=length(gidList),
+             dimnames=list(uids, unlist(gnmList))))
+}
+
 setMethod("incidence",
           signature=signature(
             x="GeneSet"),
-          definition=function(x, ...) {
+          function(x, ...) {
               args <- c(x, ...)
-              gids <- lapply(args, geneIds)
-              uids <- unique(unlist(gids))
-              isIn <- sapply(gids,
-                             function(g, u) u %in% g,
-                             uids)
-              t(matrix(as.integer(isIn),
-                       ncol=nargs(),
-                       dimnames=list(uids, sapply(args, setName))))
+              .incidence(lapply(args, geneIds),
+                         lapply(args, setName))
           })
 
 ## show

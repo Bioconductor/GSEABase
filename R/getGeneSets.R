@@ -17,7 +17,10 @@
 
 .BroadXMLNodeToGeneSet_factory <- function(file) {
     ## state
-    .mkSplit <- function(x) unlist(strsplit(x, .BROAD_SEPARATOR))
+    .mkSplit <- function(x) {
+        if (is.null(x)) character(0)
+        else unlist(strsplit(x, .BROAD_SEPARATOR))
+    }
     url <- NULL
     if (length(file)==1) {
         isUri <- grep("^(http|ftp|file)://", file)

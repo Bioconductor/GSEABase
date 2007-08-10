@@ -8,6 +8,44 @@ setMethod("GeneSetCollection",
             object="list"),
           function(object, ...) new("GeneSetCollection", object))
 
+## setMethod("GeneSetCollection",
+##           signature=signature(
+##             object="ExpressionSet"),
+##           function(object,
+##                    geneIdType=NullIdentifier(),
+##                    collectionType=NullCollection(), ...) {
+##               if (is(collectionType, "NullCollection")) {
+##                   GeneSetCollection(GeneSet(object, ...))
+##               } else if (is(collectionType, "KEGGCollection")) {
+##                   probe2path <- mget(featureNames(object),
+##                                      revmap(hgu95av2PATH2PROBE),
+##                                      ifnotfound=list(NULL))
+##                   probe2path <- probe2path[!sapply(probe2path, is.null)]
+
+##                   hasPath <- sapply(featureNames(object), exists, revmap(hgu95av2PATH2PROBE))
+##                   hasPath <- hasPath[hasPath]
+
+##                   browser()
+##               } else {
+##                   stop("not yet implemented")
+##               }
+##           })
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="KEGGCollection"),
+          function(object, annotation, ...) {
+              if (missing(annotation))
+                  stop("'annotation' package required")
+              require(annotation, character.only=TRUE)
+              annEnv <- paste(annotation, "PATH2PROBE", sep="")
+              gss <- eapply(get(annEnv), GeneSet,
+                            collectionType=KEGGCollection(),
+                            geneIdType=AnnotationIdentifier(annotation))
+              gss <- mapply("setName<-", gss, names(gss), USE.NAMES=FALSE)
+              GeneSetCollection(gss)
+          })
+
 setMethod("names",
           signature=signature(
             x="GeneSetCollection"),

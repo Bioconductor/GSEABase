@@ -24,13 +24,14 @@ setMethod("GeneSetCollection",
           function(object, ..., idType, setType) {
               annotation <- annotation(idType)
               require(annotation, character.only=TRUE)
-              annEnv <- get(paste(annotation, "PATH2PROBE", sep=""))
+              annEnv <- get(paste(annotation, "PATH2PROBE", sep=""),
+                            paste("package", annotation, sep=":"))
 
               genes <- eapply(annEnv, force)
               setNames <- ls(annEnv)
               gss <- mapply(function(genes, setName, ...) {
                   GeneSet(genes, setName=setName, ...)
-              }, genes, set_names, MoreArgs=list(
+              }, genes, setNames, MoreArgs=list(
                                      collectionType=setType,
                                      geneIdType=idType))
               

@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 0.2.16
+Version: 0.2.17
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Biocore Team <biocpkgs@lists.fhcrc.org>
 Description: This package provides classes and methods to support

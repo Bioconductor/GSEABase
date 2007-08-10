@@ -16,26 +16,46 @@ setMethod("GeneSetCollection",
               new("GeneSetCollection", object)
           })
 
+.GSC_helper <- function(annotationPkg, annotationMap, idType, setType)
+{
+    require(annotationPkg, character.only=TRUE)
+    annEnv <- get(annotationMap,
+                  paste("package", annotationPkg, sep=":"))
+
+    genes <- as.list(annEnv)
+    setNames <- names(genes)
+    gss <- mapply(function(genes, setName, ...) {
+        GeneSet(genes, setName=setName, ...)
+    }, genes, setNames, MoreArgs=list(
+                          collectionType=setType,
+                          geneIdType=idType))
+
+    GeneSetCollection(gss)
+}
+
 setMethod("GeneSetCollection",
           signature=signature(
             object="missing",
-            idType="AnnotationIdentifier",
+            idType="AnnotationEnvIdentifier",
             setType="KEGGCollection"),
           function(object, ..., idType, setType) {
               annotation <- annotation(idType)
-              require(annotation, character.only=TRUE)
-              annEnv <- get(paste(annotation, "PATH2PROBE", sep=""),
-                            paste("package", annotation, sep=":"))
+              .GSC_helper(annotation,
+                          paste(annotation, "PATH2PROBE", sep=""),
+                          idType, setType)
+          })
 
-              genes <- eapply(annEnv, force)
-              setNames <- ls(annEnv)
-              gss <- mapply(function(genes, setName, ...) {
-                  GeneSet(genes, setName=setName, ...)
-              }, genes, setNames, MoreArgs=list(
-                                     collectionType=setType,
-                                     geneIdType=idType))
-              
-              GeneSetCollection(gss)
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="missing",
+            idType="AnnotationDbiIdentifier",
+            setType="KEGGCollection"),
+          function(object, ..., idType, setType) {
+              annotation <- annotation(idType)
+              .GSC_helper(annotation,
+                          paste(gsub(".db$", "", annotation),
+                                "PATH2PROBE", sep=""),
+                          idType, setType)
           })
 
 setMethod("names",

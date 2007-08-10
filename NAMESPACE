@@ -1,13 +1,14 @@
 import(methods)
 
-importMethodsFrom(AnnotationDbi, revmap, mget)
+importMethodsFrom(AnnotationDbi, revmap, mget, as.list)
 
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType
               GeneIdentifierType, NullIdentifier,
-              AnnotationIdentifier, EntrezIdentifier,
-              SymbolIdentifier, PfamIdentifier,
+              AnnotationIdentifier, AnnotationEnvIdentifier,
+              AnnotationDbiIdentifier,
+              EntrezIdentifier, SymbolIdentifier, PfamIdentifier,
 
               ## CollectionType
               CollectionType, NullCollection,

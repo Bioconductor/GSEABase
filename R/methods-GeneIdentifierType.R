@@ -1,15 +1,11 @@
 ## GeneIdentifierType
 
-.CONSTRUCTORS_GeneIdentifierType <- 
-    names(getSubclasses(getClass("GeneIdentifierType")))
-
-.CONSTRUCTORS_GeneIdentifierType <-
-    .CONSTRUCTORS_GeneIdentifierType[!(.CONSTRUCTORS_GeneIdentifierType %in%
-                                       c("AnnotationIdentifier"))]
+.CONSTRUCTORS_GeneIdentifierType <- local({
+    nms <- names(getSubclasses(getClass("GeneIdentifierType")))
+    nms[-grep("^Annotation.*Identifier", nms)]
+})
 
 .constructors_Simple(.CONSTRUCTORS_GeneIdentifierType[.CONSTRUCTORS_GeneIdentifierType!="AnnotationIdentifier"])
-
-.constructors_Simple("AnnotationIdentifier", required="annotation")
 
 .getters("GeneIdentifierType", c(geneIdType="type"))
 
@@ -18,6 +14,14 @@ setMethod("show",
           function(object) cat("geneIdType:", geneIdType(object), "\n"))
 
 ## AnnotationIdentifier
+
+AnnotationIdentifier <- function(annotation, ...) {
+    .checkRequired("annotation", names(match.call()))
+    cls <-
+        if (length(grep(".*.db$", annotation))!=0) "AnnotationDbiIdentifier"
+        else "AnnotationEnvIdentifier"
+    new(cls, annotation=annotation, ...)
+}
 
 setMethod("initialize",
           signature=signature(.Object="AnnotationIdentifier"),

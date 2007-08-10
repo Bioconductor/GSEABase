@@ -36,6 +36,19 @@ test_GSC_docs_constructor <- function() {
     checkIdentical(gs2, gsc[[2]])
 }
 
+test_GSC_idAndSetType_constructor <- function() {
+    gsc1 <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2"),
+                              setType=KEGGCollection())
+    checkEquals(189, length(gsc1))
+    i1 <- incidence(gsc1)
+    i1 <- i1[sort(rownames(i1)), sort(colnames(i1))]
+    gsc2 <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2.db"),
+                              setType=KEGGCollection())
+    i2 <- incidence(gsc2)
+    i2 <- i2[sort(rownames(i2)), sort(colnames(i2))]
+    checkIdentical(i1, i2)
+}
+
 test_GSC_validity <- function() {
     gsc <- .gsc()
     gsc@.Data <- append(gsc@.Data, 1)

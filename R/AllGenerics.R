@@ -48,4 +48,5 @@ setGeneric("coloring<-",
 ## GeneSetCollection
 
 setGeneric("GeneSetCollection",
-           function(object, ...) standardGeneric("GeneSetCollection"))
+           function(object, ..., idType, setType)
+           standardGeneric("GeneSetCollection"))

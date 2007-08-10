@@ -1,48 +1,39 @@
 setMethod("GeneSetCollection",
           signature=signature(
-            object="GeneSet"),
-          function(object, ...) new("GeneSetCollection", list(object, ...)))
+            object="GeneSet",
+            idType="missing",
+            setType="missing"),
+          function(object, ..., idType, setType) {
+              new("GeneSetCollection", list(object, ...))
+          })
 
 setMethod("GeneSetCollection",
           signature=signature(
-            object="list"),
-          function(object, ...) new("GeneSetCollection", object))
-
-## setMethod("GeneSetCollection",
-##           signature=signature(
-##             object="ExpressionSet"),
-##           function(object,
-##                    geneIdType=NullIdentifier(),
-##                    collectionType=NullCollection(), ...) {
-##               if (is(collectionType, "NullCollection")) {
-##                   GeneSetCollection(GeneSet(object, ...))
-##               } else if (is(collectionType, "KEGGCollection")) {
-##                   probe2path <- mget(featureNames(object),
-##                                      revmap(hgu95av2PATH2PROBE),
-##                                      ifnotfound=list(NULL))
-##                   probe2path <- probe2path[!sapply(probe2path, is.null)]
-
-##                   hasPath <- sapply(featureNames(object), exists, revmap(hgu95av2PATH2PROBE))
-##                   hasPath <- hasPath[hasPath]
-
-##                   browser()
-##               } else {
-##                   stop("not yet implemented")
-##               }
-##           })
+            object="list",
+            idType="missing",
+            setType="missing"),
+          function(object, ..., idType, setType) {
+              new("GeneSetCollection", object)
+          })
 
 setMethod("GeneSetCollection",
           signature=signature(
-            object="KEGGCollection"),
-          function(object, annotation, ...) {
-              if (missing(annotation))
-                  stop("'annotation' package required")
+            object="missing",
+            idType="AnnotationIdentifier",
+            setType="KEGGCollection"),
+          function(object, ..., idType, setType) {
+              annotation <- annotation(idType)
               require(annotation, character.only=TRUE)
-              annEnv <- paste(annotation, "PATH2PROBE", sep="")
-              gss <- eapply(get(annEnv), GeneSet,
-                            collectionType=KEGGCollection(),
-                            geneIdType=AnnotationIdentifier(annotation))
-              gss <- mapply("setName<-", gss, names(gss), USE.NAMES=FALSE)
+              annEnv <- get(paste(annotation, "PATH2PROBE", sep=""))
+
+              genes <- eapply(annEnv, force)
+              setNames <- ls(annEnv)
+              gss <- mapply(function(genes, setName, ...) {
+                  GeneSet(genes, setName=setName, ...)
+              }, genes, set_names, MoreArgs=list(
+                                     collectionType=setType,
+                                     geneIdType=idType))
+              
               GeneSetCollection(gss)
           })
 

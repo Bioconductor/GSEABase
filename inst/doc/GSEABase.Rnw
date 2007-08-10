@@ -1,4 +1,3 @@
-%
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
 %
@@ -161,6 +160,11 @@ geneIds(gsc)
 coloring(gsc)
 geneColor(gsc)
 phenotypeColor(gsc)
+@ 
+
+<<GeneSetCollection-constuctors>>=
+gsc <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2"), 
+                         setType=KEGGCollection())
 @ 
 
 \end{document}

@@ -6,9 +6,8 @@ importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType
               GeneIdentifierType, NullIdentifier,
-              AnnotationIdentifier, AnnotationEnvIdentifier,
-              AnnotationDbiIdentifier,
-              EntrezIdentifier, SymbolIdentifier, PfamIdentifier,
+              AnnotationIdentifier, EntrezIdentifier,
+              SymbolIdentifier, PfamIdentifier,
 
               ## CollectionType
               CollectionType, NullCollection,

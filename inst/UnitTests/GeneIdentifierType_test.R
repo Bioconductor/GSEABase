@@ -15,10 +15,6 @@ test_GeneIdentifierType_Constructors <- function() {
     checkTrue(is(res, "AnnotationIdentifier"))
     checkException(AnnotationIdentifier(), silent=TRUE) # required arg missing
     checkTrue("hgu95av2"==annotation(AnnotationIdentifier("hgu95av2")))
-
-    ## Subclass
-    checkTrue(is(AnnotationIdentifier("hgu95av2"), "AnnotationEnvIdentifier"))
-    checkTrue(is(AnnotationIdentifier("hgu95av2.db"), "AnnotationDbiIdentifier"))
 }
 
 test_GeneIdentifierType_geneIdType <- function() {

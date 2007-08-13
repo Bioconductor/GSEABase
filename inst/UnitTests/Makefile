@@ -15,7 +15,7 @@ install:
 
 build:
 	cd ${TOP}; \
-	R CMD build ${PKG_PAHT} && \
+	R CMD build ${PKG_PATH} && \
 	cd ${RUNIT_DIR}
 
 test:

@@ -2,10 +2,12 @@
 
 .CONSTRUCTORS_GeneIdentifierType <- local({
     nms <- names(getSubclasses(getClass("GeneIdentifierType")))
-    nms[-grep("^Annotation.*Identifier", nms)]
+    nms[-grep("^AnnotationIdentifier", nms)]
 })
 
-.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType[.CONSTRUCTORS_GeneIdentifierType!="AnnotationIdentifier"])
+.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType)
+
+.constructors_Simple("AnnotationIdentifier", required="annotation")
 
 .getters("GeneIdentifierType", c(geneIdType="type"))
 
@@ -14,14 +16,6 @@ setMethod("show",
           function(object) cat("geneIdType:", geneIdType(object), "\n"))
 
 ## AnnotationIdentifier
-
-AnnotationIdentifier <- function(annotation, ...) {
-    .checkRequired("annotation", names(match.call()))
-    cls <-
-        if (length(grep(".*.db$", annotation))!=0) "AnnotationDbiIdentifier"
-        else "AnnotationEnvIdentifier"
-    new(cls, annotation=annotation, ...)
-}
 
 setMethod("initialize",
           signature=signature(.Object="AnnotationIdentifier"),
@@ -37,6 +31,19 @@ setMethod("initialize",
 .getters("AnnotationIdentifier", .GETTERS_AnnotationIdentifier)
 
 .setters("AnnotationIdentifier", .SETTERS_AnnotationIdentifier)
+
+.getAnnMap <- function(object, symbol) {
+    pkgName <- annotation(object)
+    pkg <- sub(".db$", "", pkgName)
+    symbol <- paste(pkg, symbol, sep="")
+    if (!.requireQ(pkgName))
+        .stopf("cannot load annotation package '%s'", pkgName)
+    pkgPos <- match(paste("package", pkgName, sep=":"), search())
+    if (!exists(symbol, pkgPos, inherits=FALSE))
+        .stopf("no symbol '%s' in annotation package '%s'",
+               symbol, pkgName)
+    get(symbol, pkgPos, inherits=FALSE)
+}
 
 setMethod("show",
           signature=signature(object="AnnotationIdentifier"),
@@ -72,14 +79,6 @@ setMethod("mapIdentifiers",
 
 ## AnnotationIdentifier --> X
 
-.checkPackageAndMap <- function(pkg, map) {
-    if (!.requireQ(pkg))
-        .stopf("cannot load annotation package '%s'", pkg)
-    if (!exists(map, where=getNamespace(pkg)))
-        .stopf("map '%s' not found in annotation package '%s'",
-               map, pkg)
-}
-
 .getMappedGenes <- function(geneIds, mapEnv, map, pkg, verbose=FALSE) {
     ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
     if (verbose && (any(length(ngenes) != 1) || any(is.na(ngenes))))
@@ -96,10 +95,7 @@ setMethod("mapIdentifiers",
 .fromAnnotation <- function(from, tag, what, verbose=FALSE) {
     pkg <- annotation(from)
     map <- paste(gsub(".db$", "", pkg), tag, sep="")
-    .checkPackageAndMap(pkg, map)
-    mapEnv <-
-        get(map, envir=as.environment(paste("package", pkg, sep=":")),
-            inherits=FALSE)
+    mapEnv <- .getAnnMap(from, tag)
     .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 
@@ -150,22 +146,14 @@ setMethod("mapIdentifiers",
 .toAnnotationDirect <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
     map <- paste(pkg, tag, "2PROBE",sep="")
-    .checkPackageAndMap(pkg, map)
-    mapEnv <-
-        get(map,
-            envir=as.environment(paste("package", pkg, sep=":")),
-            inherits=FALSE)
+    mapEnv <- .getAnnMap(to, paste(tag, "2PROBE", sep=""))
     .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 
 .toAnnotationRevmap <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
     map <- paste(gsub(".db$", "", pkg), tag, sep="")
-    .checkPackageAndMap(pkg, map)
-    revMap <-
-        revmap(get(map,
-                   envir=as.environment(paste("package", pkg, sep=":")),
-                   inherits=FALSE))
+    revMap <- revmap(.getAnnMap(to, tag))
     geneIds <- geneIds(what)
     ogenes <- geneIds[sapply(geneIds, exists, envir=revMap)]
     .getMappedGenes(ogenes, revMap,
@@ -175,9 +163,7 @@ setMethod("mapIdentifiers",
 .toAnnotationDbi <- function(tag, to, what, verbose=FALSE) {
     pkg <- annotation(to)
     map <- paste(gsub(".db$", "", pkg), tag, sep="")
-    .checkPackageAndMap(pkg, map)
-    mapEnv <- getNamespace(pkg)
-    mapEnv <- revmap(get(map, envir=mapEnv, inherits=FALSE))
+    mapEnv <- revmap(.getAnnMap(to, tag))
     .getMappedGenes(geneIds(what), mapEnv, map, pkg, verbose=verbose)
 }
 

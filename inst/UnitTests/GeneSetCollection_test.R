@@ -49,6 +49,23 @@ test_GSC_idAndSetType_constructor <- function() {
     checkIdentical(i1, i2)
 }
 
+test_GSC_ExpressionSet_constructor <- function() {
+    data(sample.ExpressionSet)
+    gss <- GeneSetCollection(sample.ExpressionSet[200:220], setType=KEGGCollection())
+    checkTrue(is(collectionType(gss[[1]]), "KEGGCollection"))
+    checkTrue(is(geneIdType(gss[[1]]), "AnnotationIdentifier"))
+    checkEquals(12, length(gss))
+    checkEquals(as.integer(c(11,1)),
+                as.vector(table(sapply(lapply(gss, geneIds), length))))
+
+    gss <- GeneSetCollection(sample.ExpressionSet[200:220], setType=GOCollection())
+    checkTrue(is(collectionType(gss[[1]]), "GOCollection"))
+    checkTrue(is(geneIdType(gss[[1]]), "AnnotationIdentifier"))
+    checkEquals(80, length(gss))
+    checkEquals(as.integer(c(61, 11, 4, 2, 2)),
+                as.vector(table(sapply(lapply(gss, geneIds), length))))
+}
+
 test_GSC_validity <- function() {
     gsc <- .gsc()
     gsc@.Data <- append(gsc@.Data, 1)

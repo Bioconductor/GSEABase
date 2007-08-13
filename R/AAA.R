@@ -104,7 +104,7 @@
                     pkg <- annotation(type)
                     if (length(pkg) == 1 && nchar(pkg) > 0 &&
                         .requireQ(pkg))
-                        get(paste(pkg, "ORGANISM", sep=""))
+                        .getAnnMap(type, "ORGANISM")
                     else
                         ""
                 }, error=function(err) "")

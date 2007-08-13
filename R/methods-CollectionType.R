@@ -48,7 +48,7 @@ setMethod("show",
 GOCollection <- function(goIds=as.character(NA),
                          evidenceCode="ANY", ...) {
     codes <- c("IMP", "IGI", "IPI", "ISS", "IDA", "IEP", "IEA", "TAS",
-               "NAS", "ND", "IC", "ANY", NA)
+               "NAS", "ND", "IC", "NR", "ANY", NA)
     codeOk <- evidenceCode %in% codes
     if (!all(codeOk))
         .stopf("evidenceCode invalid: '%s'",

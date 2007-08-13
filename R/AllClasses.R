@@ -10,17 +10,11 @@ setClass("NullIdentifier",
            type = new("ScalarCharacter", "NullIdentifier")))
 
 setClass("AnnotationIdentifier",
-         contains = c("GeneIdentifierType", "VIRTUAL"),
+         contains = c("GeneIdentifierType"),
          representation = representation(
            annotation = "ScalarCharacter"), # Bioconductor annotation package
          prototype = prototype(
            type = new("ScalarCharacter", "Annotation")))
-
-setClass("AnnotationDbiIdentifier",
-         contains="AnnotationIdentifier")
-         
-setClass("AnnotationEnvIdentifier",
-         contains="AnnotationIdentifier")
 
 setClass("EntrezIdentifier",
          contains = "GeneIdentifierType",

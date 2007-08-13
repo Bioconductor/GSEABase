@@ -16,46 +16,91 @@ setMethod("GeneSetCollection",
               new("GeneSetCollection", object)
           })
 
-.GSC_helper <- function(annotationPkg, annotationMap, idType, setType)
+.GSC_KEGG_helper <- function(genes, idType, setType, ...)
 {
-    require(annotationPkg, character.only=TRUE)
-    annEnv <- get(annotationMap,
-                  paste("package", annotationPkg, sep=":"))
-
-    genes <- as.list(annEnv)
-    setNames <- names(genes)
+    organism <- .getAnnMap(idType, "ORGANISM")
     gss <- mapply(function(genes, setName, ...) {
         GeneSet(genes, setName=setName, ...)
-    }, genes, setNames, MoreArgs=list(
-                          collectionType=setType,
-                          geneIdType=idType))
+    }, genes, names(genes), MoreArgs=list(
+                              collectionType=setType,
+                              geneIdType=idType,
+                              organism=organism))
 
+    GeneSetCollection(gss)
+}
+
+.GSC_filter_by_probe <- function(genes, probes) {
+    probesOk <- lapply(genes, "%in%", probes)
+    genes <- mapply("[", genes, probesOk)
+    genes[sapply(genes, length) != 0]
+}
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="missing",
+            idType="AnnotationIdentifier",
+            setType="KEGGCollection"),
+          function(object, ..., idType, setType) {
+              genes <- as.list(.getAnnMap(idType, "PATH2PROBE"))
+              .GSC_KEGG_helper(genes, idType, setType, ...)
+          })
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="ExpressionSet",
+            idType="missing",
+            setType="KEGGCollection"),
+          function(object, ..., idType, setType) {
+              idType <- AnnotationIdentifier(annotation(object))
+              genes <- as.list(.getAnnMap(idType, "PATH2PROBE"))
+              genes <- .GSC_filter_by_probe(genes, featureNames(object))
+              .GSC_KEGG_helper(genes, idType, setType, ...)
+          })
+
+.GSC_GO_helper <- function(genes, idType, setType, ...) {
+    ## filter on evidence codes
+    evidenceCode = evidenceCode(setType)
+    eviOk <- lapply(lapply(genes, names),
+                    "%in%", evidenceCode)
+    genes <- mapply("[", genes, eviOk)
+    ugenes <- lapply(genes, unique)
+    ugenes <- ugenes[sapply(ugenes, length) != 0]
+
+    organism <- .getAnnMap(idType, "ORGANISM")
+    gss <- mapply(function(ids, setName, collectionType, ...) {
+        GeneSet(ids,
+                setName=setName,
+                collectionType=GOCollection(
+                  goIds=setName,
+                  evidenceCode=evidenceCode(collectionType)),
+                ...)
+    }, ugenes, names(ugenes), MoreArgs=list(
+                                collectionType=setType,
+                                geneIdType=idType,
+                                organism=organism, ...))
     GeneSetCollection(gss)
 }
 
 setMethod("GeneSetCollection",
           signature=signature(
             object="missing",
-            idType="AnnotationEnvIdentifier",
-            setType="KEGGCollection"),
+            idType="AnnotationIdentifier",
+            setType="GOCollection"),
           function(object, ..., idType, setType) {
-              annotation <- annotation(idType)
-              .GSC_helper(annotation,
-                          paste(annotation, "PATH2PROBE", sep=""),
-                          idType, setType)
+              genes <- as.list(.getAnnMap(idType, "GO2PROBE"))
+              .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
 setMethod("GeneSetCollection",
           signature=signature(
-            object="missing",
-            idType="AnnotationDbiIdentifier",
-            setType="KEGGCollection"),
+            object="ExpressionSet",
+            idType="missing",
+            setType="GOCollection"),
           function(object, ..., idType, setType) {
-              annotation <- annotation(idType)
-              .GSC_helper(annotation,
-                          paste(gsub(".db$", "", annotation),
-                                "PATH2PROBE", sep=""),
-                          idType, setType)
+              idType <- AnnotationIdentifier(annotation(object))
+              genes <- as.list(.getAnnMap(idType, "GO2PROBE"))
+              genes <- .GSC_filter_by_probe(genes, featureNames(object))
+              .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
 setMethod("names",

@@ -1,3 +1,5 @@
+## Constructors
+
 setMethod("GeneSetCollection",
           signature=signature(
             object="GeneSet",
@@ -100,6 +102,24 @@ setMethod("GeneSetCollection",
               genes <- as.list(.getAnnMap(idType, "GO2PROBE"))
               genes <- .GSC_filter_by_probe(genes, featureNames(object))
               .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
+          })
+
+## accessors
+
+setMethod("geneIds<-",
+          signature=signature(
+            object="GeneSetCollection",
+            value="list"),
+          function(object, value) {
+              object@.Data <- value
+              object
+          })
+
+setMethod("geneIds",
+          signature=signature(
+            object="GeneSetCollection"),
+          function(object) {
+              lapply(object, geneIds)
           })
 
 setMethod("names",
@@ -228,6 +248,110 @@ setReplaceMethod("[[",
                          .stopf("only replacement of existing setNames supported")
                      .subsetReplace(x, idx, value)
                  })
+
+## logic
+
+setMethod("&",
+          signature=signature(
+            e1="GeneSetCollection",
+            e2="ANY"),
+          function(e1, e2) {
+              geneIds(e1) <- lapply(e1, `&`, e2)
+              e1
+          })
+
+setMethod("&",
+          signature=signature(
+            e1="ANY",
+            e2="GeneSetCollection"),
+          ## FIXME: Should be able to define the complement on Logic,
+          ## but this does not work 2007-08-14 r42505
+          function(e1, e2) e2 & e1)
+
+setMethod("&",
+          signature=signature(
+            e1="GeneSetCollection",
+            e2="GeneSetCollection"),
+          function(e1, e2) {
+              .stopf("'%s' & '%s' not yet implemented",
+                     class(e1), class(e2))
+          })
+
+setMethod("intersect",
+          signature=signature(
+            x="GeneSetCollection",
+            y="ANY"),
+          function(x, y) x & y)
+
+setMethod("intersect",
+          signature=signature(
+            x="ANY",
+            y="GeneSetCollection"),
+          function(x, y) y & x)
+
+setMethod("|",
+          signature=signature(
+            e1="GeneSetCollection",
+            e2="ANY"),
+          function(e1, e2) {
+              geneIds(e1) <- lapply(e1, `|`, e2)
+              e1
+          })
+
+setMethod("|",
+          signature=signature(
+            e1="ANY",
+            e2="GeneSetCollection"),
+          ## FIXME: Should be able to define the complement on Logic,
+          ## but this does not work 2007-08-14 r42505
+          function(e1, e2) e2 | e1)
+
+setMethod("|",
+          signature=signature(
+            e1="GeneSetCollection",
+            e2="GeneSetCollection"),
+          function(e1, e2) {
+              .stopf("'%s' | '%s' not yet implemented",
+                     class(e1), class(e2))
+          })
+
+setMethod("union",
+          signature=signature(
+            x="GeneSetCollection",
+            y="ANY"),
+          function(x, y) x | y)
+
+setMethod("union",
+          signature=signature(
+            x="ANY",
+            y="GeneSetCollection"),
+          function(x, y) y | x)
+
+setMethod("setdiff",
+          signature=signature(
+            x="GeneSetCollection",
+            y="ANY"),
+          function(x, y) {
+              geneIds(x) <- lapply(x, setdiff, y)
+              x
+          })
+
+setMethod("setdiff",
+          signature=signature(
+            x="GeneSetCollection",
+            y="GeneSetCollection"),
+          function(x, y) {
+              .stopf("'setdiff(%s, %s)' not yet implemented",
+                     class(x), class(y))
+          })
+
+setMethod("Logic",
+          signature=signature(e1="character", e2="GeneSetCollection"),
+          function(e1, e2) callGeneric(e2, e1))
+
+setMethod("Logic",
+          signature=signature(e1="GeneSet", e2="GeneSetCollection"),
+          function(e1, e2) callGeneric(e2, e1))
 
 ## incidence
 

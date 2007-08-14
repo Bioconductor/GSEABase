@@ -157,3 +157,30 @@ test_GSC_incidence <- function() {
     checkTrue(all(dim(res)==c(4, 215)))
     checkTrue(sum(res)== 430)
 }
+
+test_GSC_logic <- function() {
+    .checkGSCAnd <- function(gsc, gsc1) {
+        checkTrue(is(gsc1, "GeneSetCollection"))
+        checkTrue(length(gsc1)==length(gsc))
+        gids <- unlist(geneIds(gsc1))
+        checkEquals(19, length(gids))
+        checkTrue(all(gids %in% geneIds(gsc[[1]])))
+    }
+    .checkGSCOr <- function(gsc, gsc1) {
+        checkTrue(is(gsc1, "GeneSetCollection"))
+        checkTrue(length(gsc1)==length(gsc))
+        gids <- unlist(geneIds(gsc1))
+        checkEquals(118, length(gids))
+        checkEquals(length(unique(unlist(geneIds(gsc)))), length(unique(gids)))
+    }
+    data(sample.ExpressionSet)
+    gsc <- GeneSetCollection(sample.ExpressionSet[200:210],
+                             setType=GOCollection())
+    .checkGSCAnd(gsc, gsc & geneIds(gsc[[1]]))
+    .checkGSCAnd(gsc, gsc & gsc[[1]])
+    .checkGSCAnd(gsc, gsc[[1]] & gsc)
+
+    .checkGSCOr(gsc, gsc | geneIds(gsc[[1]]))
+    .checkGSCOr(gsc, gsc | gsc[[1]])
+    .checkGSCOr(gsc, gsc[[1]] | gsc)
+}

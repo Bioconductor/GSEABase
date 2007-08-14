@@ -240,3 +240,15 @@ setMethod("incidence",
               .incidence(lapply(args, geneIds),
                          lapply(args, setName))
           })
+
+## show
+
+setMethod("show",
+          signature=signature(
+            object="GeneSetCollection"),
+          function(object) {
+              cat("GeneSetCollection\n",
+                  "  setNames:",
+                  paste(Biobase::selectSome(sapply(gss, setName), 4), collapse=", "),
+                  " (", length(object), " total)\n", sep="")
+          })

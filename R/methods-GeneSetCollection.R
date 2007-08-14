@@ -60,8 +60,7 @@ setMethod("GeneSetCollection",
 .GSC_GO_helper <- function(genes, idType, setType, ...) {
     ## filter on evidence codes
     evidenceCode = evidenceCode(setType)
-    eviOk <- lapply(lapply(genes, names),
-                    "%in%", evidenceCode)
+    eviOk <- lapply(lapply(genes, names), "%in%", evidenceCode)
     genes <- mapply("[", genes, eviOk)
     ugenes <- lapply(genes, unique)
     ugenes <- ugenes[sapply(ugenes, length) != 0]
@@ -248,7 +247,7 @@ setMethod("show",
             object="GeneSetCollection"),
           function(object) {
               cat("GeneSetCollection\n",
-                  "  setNames:",
-                  paste(Biobase::selectSome(sapply(gss, setName), 4), collapse=", "),
+                  "  names: ",
+                  paste(Biobase::selectSome(names(object), 4), collapse=", "),
                   " (", length(object), " total)\n", sep="")
           })

@@ -165,6 +165,8 @@ phenotypeColor(gsc)
 <<GeneSetCollection-constuctors>>=
 gsc <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2"), 
                          setType=KEGGCollection())
+gsc <- GeneSetCollection(sample.ExpressionSet[200:300,],
+                         setType=GOCollection(evidenceCode="IMP"))
 @ 
 
 \end{document}

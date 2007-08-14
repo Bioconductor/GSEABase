@@ -1,6 +1,24 @@
 \name{GeneSetCollection-class}
 \docType{class}
 \alias{GeneSetCollection-class}
+
+\alias{names,GeneSetCollection-method}
+\alias{geneIds,GeneSetCollection-method}
+\alias{geneIds<-,GeneSetCollection,list-method}
+
+\alias{|,GeneSetCollection,GeneSetCollection-method}
+\alias{|,GeneSetCollection,ANY-method}
+\alias{|,ANY,GeneSetCollection-method}
+\alias{&,GeneSetCollection,GeneSetCollection-method}
+\alias{&,GeneSetCollection,ANY-method}
+\alias{&,ANY,GeneSetCollection-method}
+\alias{intersect,ANY,GeneSetCollection-method}
+\alias{intersect,GeneSetCollection,ANY-method}
+\alias{setdiff,ANY,GeneSetCollection-method}
+\alias{setdiff,GeneSetCollection,ANY-method}
+\alias{union,ANY,GeneSetCollection-method}
+\alias{union,GeneSetCollection,ANY-method}
+
 \alias{[<-,GeneSetCollection,ANY,ANY,ANY-method}
 \alias{[<-,GeneSetCollection,ANY,ANY,GeneSet-method}
 \alias{[<-,GeneSetCollection,character,ANY,GeneSet-method}
@@ -10,7 +28,8 @@
 \alias{[[<-,GeneSetCollection,ANY,ANY,ANY-method}
 \alias{[[<-,GeneSetCollection,character,ANY,GeneSet-method}
 \alias{[[,GeneSetCollection,character-method}
-\alias{names,GeneSetCollection-method}
+
+\alias{show,GeneSetCollection-method}
 
 \title{Class "GeneSetCollection"}
 \description{
@@ -44,12 +63,46 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
       and \code{getBroadSets} for convenient construction methods.}
   }
 
-  Collection access and subsetting (operations on lists, such as
-  \code{length}, also work on \code{GeneSetCollection}).
-
+  Collection access (operations on lists, such as \code{length}, ,
+  \code{lapply} also work on \code{GeneSetCollection}).
   \describe{
+    \item{geneIds}{\code{signature(object = "GeneSetCollection")}:
+      return a list, with each member a character vector of gene
+      identifiers from the gene set collection.}
+    \item{geneIds<-}{\code{signature(object="GeneSetCollection",
+        value="list")}: assign character vectors in \code{value} to
+      corresponding \code{geneIds} of \code{object}.}
     \item{names}{\code{signature(x = "GeneSetCollection")}: return the
       \code{setName} of each gene set in the colloection.}
+  }
+
+  Logical and subsetting operations
+  \describe{
+    \item{union}{
+      \code{signature(x = "GeneSetCollection", y = "ANY")},
+      \code{signature(x = "ANY", y = "GeneSetCollection")}: ...}
+    \item{|}{
+      \code{signature(e1 = "GeneSetCollection", e2 = "ANY")},
+      \code{signature(e1 = "ANY", e2 = "GeneSetCollection")}:
+      calculate the logical `or` (union) of all gene identifiers
+      the other object, over all members of the gene
+      set collection.} 
+
+    \item{intersect}{
+      \code{signature(x = "GeneSetCollection", y = "ANY")},
+      \code{signature(x = "ANY", y = "GeneSetCollection")}: ...}
+    \item{&}{
+      \code{signature(e1 = "GeneSetCollection", e2 = "ANY")},
+      \code{signature(e1 = "ANY", e2 = "GeneSetCollection")}:
+      calculate the logical `and' (intersection) of all gene identifiers
+      in a gene set or character vector, over all members of the gene
+      set collection.} 
+    \item{setdiff}{
+      \code{signature(x = "GeneSetCollection", y = "ANY")}:
+      calculate the logical set difference betwen all gene sets in a
+      collection and the gene identifiers of of a gene set or character
+      vector.}
+
     \item{[<-}{
       \code{signature(x = "GeneSetCollection", i = "ANY", j = "ANY",
         value = "ANY")},
@@ -75,6 +128,21 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
       \code{signature(x = "GeneSetCollection", i = "character")}: Select
       a single gene set from the collection.
     }
+  }
+
+  Additional useful methods.
+
+  \describe{
+    \item{mapIdentifiers}{
+      Convert genes from one \code{GeneIdentifierType} to another. See
+      \code{\link{mapIdentifiers}} and specific methods in
+      \code{\linkS4class{GeneIdentifierType}} for additional detail.}
+
+    \item{incidence}{Summarize shared membership in genes across gene
+      sets. See \code{\link{incidence-methods}}.}
+
+    \item{show}{\code{signature(object="GeneSetCollection")}: provide a
+      compact representation of \code{object}.}
   }
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}

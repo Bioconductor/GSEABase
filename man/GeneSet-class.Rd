@@ -175,16 +175,26 @@
     \item{|}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
       the logical `or' (union) of two gene sets. The sets must contain elements of
       the same \code{geneIdType}.}
-    \item{|}{\code{signature(e1 = "GeneSet", e2 = "character")}:
+    \item{|}{
+      \code{signature(e1 = "GeneSet", e2 = "character")},
+      \code{signature(e1 = "character", e2 = "GeneSet")}:
       calculate the logical `or' (union) of a gene set and a character vector,
       i.e., add the geneIds named in the character vector to the gene set.}
-    \item{intersect}{\code{signature(x = "GeneSet", y = "GeneSet")}:{}}
+    \item{intersect}{\code{signature(x = "GeneSet", y = "GeneSet")}:}
     \item{&}{\code{signature(e1 = "GeneSet", e2 = "GeneSet")}: calculate
-    the logical `and' (intersection) of two gene sets.}
-    \item{&}{\code{signature(e1 = "GeneSet", e2 = "character")}:
+      the logical `and' (intersection) of two gene sets.}
+    \item{&}{
+      \code{signature(e1 = "GeneSet", e2 = "character")},
+      \code{signature(e1 = "character", e2 = "GeneSet")}:
       calculate the logical `and' (intersection) of a gene set and a
       character vector, creating a new gene set containing only those
       genes named in the character vector.}
+    \item{setdiff}{
+      \code{signature(x = "GeneSet", y = "GeneSet")},
+      \code{signature(x = "GeneSet", y = "character")},
+      \code{signature(x = "character", y = "GeneSet")}:
+      calculate the logical set difference betwen two gene sets, or
+      betwen a gene set and a character vector.}
 
     \item{[}{
       \code{signature(x = "GeneSet", i="character")}

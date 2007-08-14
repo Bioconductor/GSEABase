@@ -8,6 +8,7 @@
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
+\alias{mapIdentifiers,GeneSetCollection,GeneIdentifierType,missing-method}
 \title{Methods for Function mapIdentifiers in Package `GSEABase'}
 \description{
   These methods convert the genes identifiers of a gene set from one
@@ -58,6 +59,10 @@
       DBI-based chip annotations to find the reverse mapping. If that fails,
       the method then tries to use the \code{annotation} package and
       environment-based mappings to find a reverse map.}
+
+    \item{what = "GeneSetCollection", to = "GeneIdentifierType", from = "missing", verbose = FALSE}{
+      Map each gene set in \code{what} to gene identifier type
+      \code{to}, using methods described above.}
 }}
 \keyword{methods}
 

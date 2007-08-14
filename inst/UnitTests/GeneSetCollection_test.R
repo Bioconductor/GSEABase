@@ -184,3 +184,13 @@ test_GSC_logic <- function() {
     .checkGSCOr(gsc, gsc | gsc[[1]])
     .checkGSCOr(gsc, gsc[[1]] | gsc)
 }
+
+test_GSC_mapIdentifiers <- function() {
+    data(sample.ExpressionSet)
+    gsc <- GeneSetCollection(sample.ExpressionSet[200:205], setType=GOCollection())
+    gsc1 <- mapIdentifiers(gsc, EntrezIdentifier())
+    checkTrue(is(gsc1, "GeneSetCollection"))
+    checkEquals(length(gsc), length(gsc1))
+    checkTrue(all(sapply(gsc1, function(x) is(geneIdType(x), "EntrezIdentifier"))))
+    checkEquals(length(unlist(geneIds(gsc))), length(unlist(geneIds(gsc1))))
+}

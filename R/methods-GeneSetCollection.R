@@ -111,7 +111,7 @@ setMethod("geneIds<-",
             object="GeneSetCollection",
             value="list"),
           function(object, value) {
-              object@.Data <- value
+              lapply(object, "geneIds<-", value)
               object
           })
 
@@ -256,8 +256,7 @@ setMethod("&",
             e1="GeneSetCollection",
             e2="ANY"),
           function(e1, e2) {
-              geneIds(e1) <- lapply(e1, `&`, e2)
-              e1
+              GeneSetCollection(lapply(e1, `&`, e2))
           })
 
 setMethod("&",
@@ -294,8 +293,7 @@ setMethod("|",
             e1="GeneSetCollection",
             e2="ANY"),
           function(e1, e2) {
-              geneIds(e1) <- lapply(e1, `|`, e2)
-              e1
+              GeneSetCollection(lapply(e1, `|`, e2))
           })
 
 setMethod("|",
@@ -332,8 +330,7 @@ setMethod("setdiff",
             x="GeneSetCollection",
             y="ANY"),
           function(x, y) {
-              geneIds(x) <- lapply(x, setdiff, y)
-              x
+              GeneSetCollection(lapply(x, setdiff, y))
           })
 
 setMethod("setdiff",
@@ -352,6 +349,18 @@ setMethod("Logic",
 setMethod("Logic",
           signature=signature(e1="GeneSet", e2="GeneSetCollection"),
           function(e1, e2) callGeneric(e2, e1))
+
+## mapIdentifiers
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSetCollection",
+            to="GeneIdentifierType",
+            from="missing"),
+          function(what, to, from, ..., verbose=FALSE) {
+              GeneSetCollection(lapply(what, mapIdentifiers, to, ...,
+                                       verbose=verbose))
+          })
 
 ## incidence
 

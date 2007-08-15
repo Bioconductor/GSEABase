@@ -64,4 +64,4 @@ export(## IdentifierType
        GOCollection, BroadCollection,
 
        ## XML
-       getBroadSets, toBroadXML)
+       asBroadUri, getBroadSets, toBroadXML)

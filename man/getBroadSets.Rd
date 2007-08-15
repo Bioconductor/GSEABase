@@ -1,6 +1,7 @@
 \name{xal}
 \alias{xml}
 \alias{getBroadSets}
+\alias{asBroadUri}
 \alias{toBroadXML}
 
 \title{Read and Write XML Gene Sets}
@@ -15,6 +16,8 @@
 \usage{
 getBroadSets(file, ...)
 toBroadXML(geneSet, con, ...)
+asBroadUri(name,
+           base="http://www.broad.mit.edu/gsea/msigdb/card")
 }
 \arguments{
   \item{file}{A file name or URL containing gene sets encoded following
@@ -24,6 +27,9 @@ toBroadXML(geneSet, con, ...)
     \code{collectionType} \code{BroadCollection} (to ensure that
     required information is available).}
   \item{con}{An optional file name or connection to receive output.}
+  \item{name}{A character vector of Broad gene set names, e.g.,
+    \code{c('chr16q', 'GNF2_TNFSF10')}.}
+  \item{base}{Base uri for finding Broad gene sets.}
   \item{\dots}{Further arguments passed to the underlying XML parser,
     particularly \code{file} used to specify an output \code{connection}
     for \code{toBroadXML}.}
@@ -34,6 +40,9 @@ toBroadXML(geneSet, con, ...)
   \code{toBroadXML} returns a character vector of a single
   \code{GeneSet} or, if \code{file} is provided, writes the XML to a
   file.
+
+  \code{asBroadUri} can be used to create URI names (to be used by
+  \code{getBroadSets} of Broad files.
 }
 
 \references{
@@ -50,11 +59,16 @@ toBroadXML(geneSet, con, ...)
   \code{\linkS4class{GeneSet}}
 }
 \examples{
-## could be a url
+## 'fl' could also be a URI
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gss <- getBroadSets(fl) # GeneSetCollection of 2 sets
 names(gss)
 gss[[1]]
+
+\dontrun{
+## Download from the Broad
+getBroadSets(asBroadUri(c('chr16q', 'GNF2_ZAP70')))
+}
 
 fl <- tempfile()
 toBroadXML(gss[[1]], con=fl)

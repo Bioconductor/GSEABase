@@ -5,7 +5,7 @@
     res <- xmlTreeParse(file, useInternalNodes=TRUE, ...)
     geneSets <- getNodeSet(res, node, fun=handler)
     free(res)
-    GeneSetCollection(geneSets)
+    geneSets
 }
 
 .toXML <- function(geneSet, handler, con, ...) {
@@ -33,9 +33,10 @@
         }
     }
     ## handler: XMLNode -> GeneSet
+    symbolId <- SymbolIdentifier()
     function(node) {
         attrs <- as.list(xmlAttrs(node))
-        args <- list(new("SymbolIdentifier"),
+        args <- list(symbolId,
                      setName=attrs[["STANDARD_NAME"]],
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
                      geneIds=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
@@ -60,10 +61,7 @@
                      pubMedIds=attrs[["PMID"]],
                      shortDescription=attrs[["DESCRIPTION_BRIEF"]],
                      longDescription=attrs[["DESCRIPTION_FULL"]],
-                     TAGS=NULL,
-                     MESH=NULL,
-                     CHIP=NULL,
-                     MEMBERS=NULL)
+                     TAGS=NULL, MESH=NULL, CHIP=NULL, MEMBERS=NULL)
         args <- args[!sapply(args, is.null)]
         do.call("GeneSet", args)
     }
@@ -98,14 +96,22 @@
               ))
 }
 
-getBroadSets <- function(file, ...) {
+asBroadUri <- function(name,
+                       base="http://www.broad.mit.edu/gsea/msigdb/cards") {
+    paste(base, "/", name, ".xml", sep="")
+}
+
+getBroadSets <- function(uri, ...) {
+    factories <- sapply(uri, .BroadXMLNodeToGeneSet_factory)
     tryCatch({
-        .fromXML(file, "//GENESET", .BroadXMLNodeToGeneSet_factory(file), ...)
+        geneSets <- unlist(mapply(.fromXML, uri, "//GENESET", factories,
+                                  SIMPLIFY=FALSE, USE.NAMES=FALSE))
     }, error=function(err) {
-        stop("'getBroadSets' failed to create gene set:",
-             "\n  ", conditionMessage(err),
+        stop("'getBroadSets' failed to create gene sets:\n  ",
+             conditionMessage(err),
              call.=FALSE)
     })
+    GeneSetCollection(geneSets)
 }
 
 toBroadXML <- function(geneSet, con = stdout(), ...) {

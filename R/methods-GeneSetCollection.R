@@ -21,13 +21,12 @@ setMethod("GeneSetCollection",
 .GSC_KEGG_helper <- function(genes, idType, setType, ...)
 {
     organism <- .getAnnMap(idType, "ORGANISM")
-    gss <- mapply(function(genes, setName, ...) {
-        GeneSet(genes, setName=setName, ...)
-    }, genes, names(genes), MoreArgs=list(
-                              collectionType=setType,
-                              geneIdType=idType,
-                              organism=organism))
-
+    setType <- lapply(names(genes), KEGGCollection)
+    gss <- mapply(GeneSet,
+                  genes, setName=names(genes), collectionType=setType,
+                  MoreArgs=list(
+                    geneIdType=idType,
+                    organism=organism))
     GeneSetCollection(gss)
 }
 
@@ -75,7 +74,7 @@ setMethod("GeneSetCollection",
                   goIds=setName,
                   evidenceCode=evidenceCode(collectionType)),
                 ...)
-    }, ugenes, names(ugenes), MoreArgs=list(
+    }, ugenes, setName=names(ugenes), MoreArgs=list(
                                 collectionType=setType,
                                 geneIdType=idType,
                                 organism=organism, ...))
@@ -232,6 +231,14 @@ setReplaceMethod("[[",
                  function(x, i, j ,..., value) {
                      .stopf("cannot assign object of class '%s' to '%s'",
                             class(value), class(x))
+                 })
+
+setReplaceMethod("[[",
+                 signature=signature(
+                   x="GeneSetCollection",
+                   value="GeneSet"),
+                 function(x, i, j ,..., value) {
+                     .subsetReplace(x, i, value)
                  })
 
 setReplaceMethod("[[",

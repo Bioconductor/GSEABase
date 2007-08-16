@@ -60,9 +60,10 @@ GOCollection <- function(goIds=as.character(NA),
         evidenceCode=evidenceCode)
 }
 
-.GETTERS_GOCollection <- c("goIds", "evidenceCode")
-
+.SETTERS_GOCollection <- .GETTERS_GOCollection <-
+    c("goIds", "evidenceCode")
 .getters("GOCollection", .GETTERS_GOCollection)
+.setters("GOCollection", .SETTERS_GOCollection)
 
 setMethod("show",
           signature=signature(object="GOCollection"),
@@ -70,4 +71,22 @@ setMethod("show",
               cat("collectionType:", collectionType(object), "\n",
                   "  goIds:", goIds(object), "\n",
                   "  evidenceCode:", evidenceCode(object), "\n")
+          })
+
+## KEGGCollection
+
+KEGGCollection <- function(keggIds=as.character(NA)) {
+    new("KEGGCollection", keggIds = keggIds)
+}
+
+.SETTERS_KEGGCollection <- .GETTERS_KEGGCollection <-
+    "keggIds"
+.getters("KEGGCollection", .GETTERS_KEGGCollection)
+.setters("KEGGCollection", .GETTERS_KEGGCollection)
+
+setMethod("show",
+          signature=signature(object="KEGGCollection"),
+          function(object) {
+              cat("collectionType:", collectionType(object), "\n",
+                  "  keggIds:", keggIds(object), "\n")
           })

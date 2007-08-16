@@ -82,9 +82,12 @@ setMethod("mapIdentifiers",
 .getMappedGenes <- function(geneIds, mapEnv, map, pkg, verbose=FALSE) {
     ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
     if (verbose && (any(length(ngenes) != 1) || any(is.na(ngenes))))
-        .warningf("annotation map '%s' is not 1:1 in '%s'",
-                  map, pkg)
+        .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
+                  map, length(geneIds), length(ngenes), pkg)
     ugenes <- unique(unlist(ngenes))
+    if (verbose && (length(ugenes) != length(geneIds)))
+        .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
+                  map, length(geneIds), length(ugenes), pkg)
     if (is.null(ugenes))
         character(0)
     else

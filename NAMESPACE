@@ -29,7 +29,8 @@ exportMethods(show, initialize, intersect, union, setdiff,
 
               ## CollectionType
               bcCategory, bcSubCategory,
-              goIds, evidenceCode,
+              goIds, evidenceCode, "goIds<-", "evidenceCode<-",
+              keggIds, "keggIds<-",
 
               ## GeneSet
               GeneSet,
@@ -59,7 +60,6 @@ export(## IdentifierType
        SymbolIdentifier, PfamIdentifier,
 
        ## CollectionType
-
        NullCollection, ExpressionSetCollection, KEGGCollection,
        GOCollection, BroadCollection,
 

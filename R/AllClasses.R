@@ -50,6 +50,8 @@ setClass("ExpressionSetCollection",
 
 setClass("KEGGCollection",
          contains = "CollectionType",
+         representation=representation(
+           keggIds="character"),
          prototype = prototype(
            type = new("ScalarCharacter", "KEGG")))
 

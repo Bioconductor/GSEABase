@@ -169,8 +169,10 @@ setMethod("mapIdentifiers",
             from="AnnotationIdentifier"),
           function(what, to, from, ..., verbose=FALSE) {
               tag <- toupper(geneIdType(to))
+              geneIds <- .fromAnnotation(from, tag, what,
+                                         verbose=verbose)
               new(class(what), what,
-                  geneIds=.fromAnnotation(from, tag, what, verbose=verbose),
+                  geneIds=geneIds,
                   geneIdType=to)
           })
 

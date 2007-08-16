@@ -1,3 +1,27 @@
+IdFactory <- function(classPrefix,
+                      type=classPrefix,
+                      where=topenv(parent.frame()), ...) {
+    class <- paste(classPrefix, "Identifier", sep="")
+    eval(substitute({
+        setClass(CLASS,
+                 contains = "GeneIdentifierType",
+                 prototype = prototype(type=TYPE),
+                 where=WHERE)
+        .constructors_Simple(CLASS, where=WHERE)
+        if (existsMethod("initialize",
+                         signature=CLASS, where=WHERE))
+            removeMethod("initialize",
+                         signature=CLASS, where=WHERE)
+        if (existsMethod("show",
+                         signature=CLASS, where=WHERE))
+            removeMethod("show",
+                         signature=CLASS, where=WHERE)
+    }, list(CLASS=class,
+            TYPE=mkScalar(type),
+            WHERE=where)))
+    invisible(get(class, envir=where))
+}
+
 ## GeneIdentifierType
 
 .CONSTRUCTORS_GeneIdentifierType <- local({
@@ -7,8 +31,6 @@
 
 .constructors_Simple(.CONSTRUCTORS_GeneIdentifierType)
 
-.constructors_Simple("AnnotationIdentifier", required="annotation")
-
 .getters("GeneIdentifierType", c(geneIdType="type"))
 
 setMethod("show",
@@ -16,6 +38,40 @@ setMethod("show",
           function(object) cat("geneIdType:", geneIdType(object), "\n"))
 
 ## AnnotationIdentifier
+
+AnnotationIdFactory <- function(classPrefix,
+                                type=classPrefix,
+                                where=topenv(parent.frame()), ...) {
+    class <- paste(classPrefix, "Identifier", sep="")
+    eval(substitute({
+        setClass(CLASS,
+                 contains = "AnnotationIdentifier",
+                 prototype = prototype(type=TYPE),
+                 where = WHERE)
+        GSEABase:::.constructors_Simple(CLASS,
+                                        required="annotation", where=WHERE)
+        setMethod("initialize",
+                  signature=signature(.Object=CLASS),
+                  function(.Object, .Template=.Object, ...,
+                           annotation = .Template@annotation) {
+                      callNextMethod(.Object, .Template, ...,
+                                     annotation=mkScalar(annotation))
+                  }, where=WHERE)
+        setMethod("show",
+                  signature=signature(object=CLASS),
+                  function(object) {
+                      cat("geneIdType:", geneIdType(object),
+                          if (nzchar(annotation(object))) {
+                              paste("(", annotation(object), ")", sep="")
+                          }, "\n")
+                  }, where=WHERE)
+    }, list(CLASS=class,
+            TYPE=mkScalar(type),
+            WHERE=where)))
+    invisible(get(class, envir=where))
+}
+
+.constructors_Simple("AnnotationIdentifier", required="annotation")
 
 setMethod("initialize",
           signature=signature(.Object="AnnotationIdentifier"),
@@ -81,9 +137,13 @@ setMethod("mapIdentifiers",
 
 .getMappedGenes <- function(geneIds, mapEnv, map, pkg, verbose=FALSE) {
     ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
-    if (verbose && (any(length(ngenes) != 1) || any(is.na(ngenes))))
-        .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
-                  map, length(geneIds), length(ngenes), pkg)
+    if (verbose)
+        if (any(sapply(ngenes, length) != 1))
+            .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
+                      map, length(geneIds), length(ngenes), pkg)
+        else if (any(is.na(ngenes)))
+            .warningf("annotation map '%s' had %d 'NA' values in '%s'",
+                      map, sum(is.na(ngenes)), pkg)
     ugenes <- unique(unlist(ngenes))
     if (verbose && (length(ugenes) != length(geneIds)))
         .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",

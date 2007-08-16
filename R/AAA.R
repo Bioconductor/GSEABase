@@ -8,7 +8,7 @@
 ## for a vector c(CONSTRUCTOR=CLASS, ...) create a
 ## functionCONSTRUCTOR(...) calling new(CLASS, ...). Missing
 ## CONSTRUCTOR are filled with CLASS
-.constructors_Simple <- function(klasses, required=NULL) {
+.constructors_Simple <- function(klasses, required=NULL, where=topenv()) {
     klassnames <- names(.nameAll(klasses))
     args <- .nameAll(c(required, "...")) # convenience of automatic matching
     iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
@@ -16,16 +16,17 @@
     for (cl in seq_along(klasses))
         eval(substitute({
             f <- function() {
-                .checkRequired(REQUIRED, names(match.call()))
+                GSEABase:::.checkRequired(REQUIRED, names(match.call()))
                 do.call("new", c(CLASS, OARGS))
             }
             formals(f) <- IARGS
-            assign(CONSTRUCTOR, f, envir=topenv())
+            assign(CONSTRUCTOR, f, envir=WHERE)
         }, list(CONSTRUCTOR = klassnames[[cl]],
                 CLASS = klasses[[cl]],
                 IARGS=iargs,
                 OARGS=oargs,
-                REQUIRED=required)))
+                REQUIRED=required,
+                WHERE=where)))
 }
 
 ## constructors for GeneSet and derived classes, with required fields.

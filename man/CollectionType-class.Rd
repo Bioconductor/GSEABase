@@ -4,6 +4,10 @@
 \alias{CollectionType-class}
 \alias{collectionType,CollectionType-method}
 \alias{show,CollectionType-method}
+\alias{CollectionIdType-class}
+\alias{show,CollectionIdType-method}
+\alias{ids}
+\alias{ids,CollectionIdType-method}
 % NullCollection-class
 \alias{NullCollection-class}
 % ExpressionSetCollection-class
@@ -24,6 +28,11 @@
 \alias{goIds}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
+% additional classes
+\alias{ChrCollection-class}
+\alias{ChrlocCollection-class}
+\alias{OMIMCollection-class}
+\alias{PMIDCollection-class} 
 
 \title{Class "CollectionType"}
 
@@ -36,10 +45,13 @@
 }
 
 \section{Objects from the Class}{
-  The following classes can tag gene sets:
+  The following classes can tag gene sets; \code{GO, KEGG, Chr, Chrloc,
+    OMIM, and PMID} collections can be derived from chip or organism
+  \sQuote{annotation} packages.
+
   \describe{
     \item{NullCollection}{No formal collection information available.}
-    \item{BroadCollection}{Derived from, or destined to, Broad
+    \item{BroadCollection}{Derived from, or destined to be, Broad
       XML. Usually created and written \code{\link{getBroadSets}},
       \code{\link{toBroadXML}}.}
     \item{ExpressionSetCollection}{Derived from
@@ -49,6 +61,13 @@
     \item{GOCollection}{Collection derived using Gene Ontology (GO)
       terms.}
     \item{KEGGCollection}{Collection derived using KEGG terms.}
+    \item{ChrCollection}{Collection derived using chromsome locations}
+    \item{ChrlocCollection}{Collection derived using chromosome starting
+      posistions}
+    \item{MapCollection}{Collection derived from cytogenic bands.}
+    \item{OMIMCollection}{Collection derived from identifiers in the
+      Online Inheritance in Man.}
+    \item{PMIDCollection}{Collection derived from PMID identifiers.}
   }
 
   Objects are instantiated with calls to \code{\link{CollectionType}}
@@ -56,11 +75,27 @@
 }
 
 \section{Slots}{
-  \code{CollectionType} classes have the slot:
+  \code{CollectionType} classes (\code{Null, ExpressionSet}) have the slot:
   \describe{
     \item{\code{type}:}{Object of class \code{"ScalarCharacter"}
       containing the character string representation of this
       \code{CollectionType}.}
+  }
+
+  \code{CollectionIdType} classes (\code{KEGG, OMIM, PMID, Chr, Chrloc,
+    Map, GO}) extend the \code{CollectionType} and have the additional
+  slot:
+  \describe{
+    \item{\code{ids}:}{Object of class \code{"character"} containing a
+      vector of character string representations of corresponding
+      identifiers, e.g., \sQuote{KEGG} or \sQuote{GO} terms.}
+  }
+
+  \code{GOCollection} extends \code{CollectionIdType} and has the
+  additional slot:
+  \describe{
+    \item{\code{evidenceCode}:}{Object of class \code{"character"},
+      containing GO evidence codes used to construct the gene set.}
   }
 
   \code{BroadCollection} has slots:
@@ -69,14 +104,6 @@
       containing terms from the Broad list of categories, or \code{NA}}
     \item{\code{subCategory}:}{Object of class \code{"ScalarCharacter"}
       containing Broad sub-categories, or \code{NA}}
-  }
-
-  \code{GOCollection} has slots:
-  \describe{
-    \item{\code{goIds}:}{Object of class \code{"character"} containing a
-      vector of GO identifiers.}
-    \item{\code{evidenceCode}:}{Object of class \code{"character"},
-      containing GO evidence codes used to construct the gene set.}
   }
 }
 
@@ -91,6 +118,21 @@
       collection type.}
   }
 
+  \code{CollectionIdType} classes inherit \code{CollectionType} methods,
+  and have in addition:
+  \describe{
+    \item{ids}{\code{signature(object="CollectionIdType")}: Retrieve the
+      identifiers of the collection type.}
+  }
+
+  \code{GOCollection} inherits \code{CollectionIdType} methods, and has
+  in addition:
+  \describe{
+    \item{evidenceCode}{Retrieve the evidence codes of the GO
+      collection. Evidence codes are summarize in, e.g.,
+      \code{\link[GO]{GOENTREZID}}.}
+    }
+
   \code{BroadCollection} has methods:
   \describe{
     \item{bcCategory}{Retrieve the \code{category} of the Broad
@@ -98,14 +140,6 @@
     \item{bcSubCategory}{Retrieve the sub-category of the Broad
       collection.}
   }
-
-  \code{GOCollection} has methods:
-  \describe{
-    \item{goIds}{Retrieve the GO identifiers of the GO collection.}
-    \item{evidenceCode}{Retrieve the evidence codes of the GO
-      collection. Evidence codes are summarize in, e.g.,
-      \code{\link[GO]{GOENTREZID}}.}
-    }
 }
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}

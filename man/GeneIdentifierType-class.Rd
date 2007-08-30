@@ -11,9 +11,14 @@
 \alias{show,AnnotationIdentifier-method}
 % additional classes
 \alias{NullIdentifier-class}
-\alias{EntrezIdentifier-class}
+\alias{EnzymeIdentifier-class}
+\alias{GenenameIdentifier-class}
 \alias{PfamIdentifier-class}
+\alias{PrositeIdentifier-class}
+\alias{RefseqIdentifier-class}
 \alias{SymbolIdentifier-class}
+\alias{UnigeneIdentifier-class}
+\alias{EntrezIdentifier-class}
 
 \title{Class "GeneIdentifierType"}
 
@@ -26,15 +31,21 @@
 }
 
 \section{Objects from the Class}{
-  The following classes are available:
+  The following classes are available, and derive from tables in 
+  \sQuote{annotation} packages
   \describe{
     \item{NullIdentifier}{No formal information about what gene identifiers represent.}
     \item{AnnotationIdentifier}{Gene identifiers are Affymetrix
       chip-specific probe identifier, as represented in Bioconductor
       annotation packages.}
-    \item{EntrezIdentifier}{Gene identifiers \sQuote{Entrez} identifiers.}
-    \item{PfamIdentifier}{Gene identifiers are \sQuote{Pfam} identifiers.}
-    \item{SymbolIdentifier}{Genes identifiers are \sQuote{Symbol} identifiers.}
+    \item{EntrezIdentifier}{\sQuote{Entrez} identifiers.}
+    \item{EnzymeIdentifier}{\sQuote{EC} identifiers.}
+    \item{GenenameIdentifier}{Curated and ad hoc descriptive gene names.}
+    \item{PfamIdentifier}{\sQuote{Pfam} identifiers.}
+    \item{PrositeIdentifier}{\sQuote{Prosite} identifiers.}
+    \item{RefseqIdentifier}{\sQuote{Prosite} identifiers.}
+    \item{SymbolIdentifier}{\sQuote{Symbol} identifiers.}
+    \item{UnigeneIdentifier}{\sQuote{Unigene} identifiers.}
     \item{GeneIdentifierType}{A virtual Class: No objects may be created
       from it; all classes listed above are subclasses of
       \code{GeneIdentifierType}.}

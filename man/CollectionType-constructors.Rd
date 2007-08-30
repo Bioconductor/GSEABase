@@ -1,22 +1,35 @@
 \name{CollectionType}
 \alias{CollectionType}
+
 \alias{NullCollection}
 \alias{ExpressionSetCollection}
 \alias{KEGGCollection}
+\alias{OMIMCollection}
+\alias{PMIDCollection}
+\alias{ChrCollection}
+\alias{ChrlocCollection}
+\alias{MapCollection}
 \alias{GOCollection}
 \alias{BroadCollection}
+
 \title{Collection Type Class Constructors}
 \description{
-  These functions construct gene identifiers. A gene identifier is used
-  by \code{\linkS4class{GeneSet}} classes to indicate what the list of
-  genes represents (e.g., Entrez gene identifiers, Bioconductor
-  annotations).
+     These functions construct collection types.
+     Collection types can be used in manipulating (e.g., selecting)
+     sets, and can contain information specific to particular sets
+     (e.g., 'category' and 'subcategory' classifications of
+     'BroadCollection'.)
 }
 \usage{
 NullCollection(...)
 ExpressionSetCollection(...)
-KEGGCollection(...)
-GOCollection(goIds=as.character(NA), evidenceCode="ANY", ...)
+KEGGCollection(ids,...)
+OMIMCollection(ids,...)
+PMIDCollection(ids,...)
+ChrCollection(ids,...)
+ChrlocCollection(ids,...)
+MapCollection(ids,...)
+GOCollection(ids, evidenceCode="ANY", ...)
 BroadCollection(category, subCategory=NA, ...)
 }
 
@@ -24,10 +37,11 @@ BroadCollection(category, subCategory=NA, ...)
   \item{category}{(Required) Broad category, one of "c1" (postitional), "c2"
     (curated), "c3" (motif), "c4" (computational).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
-  \item{goIds}{(Optional) Character vector of GO identifiers.}
+  \item{ids}{(Optional) Character vector of identifiers (e.g., GO, KEGG,
+    or PMID terms).}
   \item{evidenceCode}{(Optional) Character vector of GO evidence codes
     to be included, or "ANY" (any identifier; the default).}
-  \item{\dots}{Additional arguments, usually none but see specific
+  \item{...}{Additional arguments, usually none but see specific
     \code{linkS4class{CollectionType}} classes  for possibilities.}
 }
 

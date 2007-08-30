@@ -14,13 +14,13 @@
   sets.
 }
 \usage{
-getBroadSets(file, ...)
+getBroadSets(uri, ...)
 toBroadXML(geneSet, con, ...)
 asBroadUri(name,
-           base="http://www.broad.mit.edu/gsea/msigdb/card")
+           base="http://www.broad.mit.edu/gsea/msigdb/cards")
 }
 \arguments{
-  \item{file}{A file name or URL containing gene sets encoded following
+  \item{uri}{A file name or URL containing gene sets encoded following
     the Broad specification. Gene sets can be embedded in other
     elements, such as those for Broad's MSIGDB.}
   \item{geneSet}{A \code{\linkS4class{GeneSet}} with

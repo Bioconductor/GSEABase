@@ -1,79 +1,139 @@
+
+## Information; hgu95av2ORGANISM, hgu95av2CHRLENGTHS        
+## 
+## Primary identifier: hgu95av2ACCNUM
+## 
+## Gene identifiers: hgu95av2ENTREZID hgu95av2ENZYME hgu95av2GENENAME
+## hgu95av2PFAM hgu95av2PROSITE hgu95av2REFSEQ hgu95av2SYMBOL
+## hgu95av2UNIGENE
+## 
+## Collections: hgu95av2OMIM hgu95av2PMID hgu95av2GO hgu95av2CHR
+## hgu95av2CHRLOC hgu95av2MAP hgu95av2PATH
+## 
+## Reverse maps: hgu95av2ENZYME2PROBE hgu95av2GO2ALLPROBES
+## hgu95av2GO2PROBE hgu95av2PATH2PROBE hgu95av2PMID2PROBE
+## 
+## Quality control: hgu95av2QC hgu95av2MAPCOUNTS
+## Deprecated: hgu95av2LOCUSID
+
 ## GeneIdentifierType
+.IdentifierClasses <- function(where) {
+    setSimpleClass <- function(class) {
+        classId <- paste(class, "Identifier", sep="")
+        setClass(classId,
+                 contains = c("GeneIdentifierType"),
+                 prototype = prototype(
+                   type = new("ScalarCharacter", class)),
+                 where = where)
+    }
 
-setClass("GeneIdentifierType", contains="VIRTUAL",
-         representation=representation(
-           type = "ScalarCharacter"))
+    setClass("GeneIdentifierType",
+             contains="VIRTUAL",
+             representation=representation(
+               type = "ScalarCharacter"),
+             where=where)
 
-setClass("NullIdentifier",
-         contains = "GeneIdentifierType",
-         prototype = prototype(
-           type = new("ScalarCharacter", "NullIdentifier")))
+    ## gene-level classes
+    geneIdentifiers <- c("Null", "Enzyme", "Genename", "Pfam",
+                         "Prosite", "Refseq", "Symbol", "Unigene")
+    for (class in geneIdentifiers) setSimpleClass(class)
+    
+    setClass("EntrezIdentifier",        # special 'type'
+             contains = "GeneIdentifierType",
+             prototype = prototype(
+               type = new("ScalarCharacter", "EntrezId")),
+             where = where)
 
-setClass("AnnotationIdentifier",
-         contains = c("GeneIdentifierType"),
-         representation = representation(
-           annotation = "ScalarCharacter"), # Bioconductor annotation package
-         prototype = prototype(
-           type = new("ScalarCharacter", "Annotation")))
+    setClass("AnnotationIdentifier",    # 'annotation' slot
+             contains = c("GeneIdentifierType"),
+             representation = representation(
+               annotation = "ScalarCharacter"), # annotation package
+             prototype = prototype(
+               type = new("ScalarCharacter", "Annotation")),
+             where = where)
 
-setClass("EntrezIdentifier",
-         contains = "GeneIdentifierType",
-         prototype = prototype(
-           type = new("ScalarCharacter", "EntrezId")))
+    ## constructors / getters / setters
+    idTypes <- names(getSubclasses(getClass("GeneIdentifierType")))
+    idTypes <- idTypes[idTypes != "AnnotationIdentifier"]
+    .constructors_Simple(idTypes, where=where)
+    .getters("GeneIdentifierType", c(geneIdType="type"), where=where)
 
-setClass("SymbolIdentifier",
-         contains = "GeneIdentifierType",
-         prototype = prototype(
-           type=new("ScalarCharacter", "Symbol")))
+    .constructors_Simple("AnnotationIdentifier",
+                         required="annotation", where=where)
+    .getters("AnnotationIdentifier", "annotation", where=where)
+    .setters("AnnotationIdentifier", "annotation", where=where)
+ }
 
-setClass("PfamIdentifier",
-         contains = "GeneIdentifierType",
-         prototype = prototype(
-           type = new("ScalarCharacter", "Pfam")))
+.IdentifierClasses(topenv())
 
 ## CollectionType
+.CollectionClasses <- function(where) {
+    setSimpleCollection <- function(class, contains) {
+        classCollection <- paste(class, "Collection", sep="")
+        setClass(classCollection,
+                 contains = contains,
+                 prototype = prototype(
+                   type = new("ScalarCharacter", class)),
+                 where = where)
+    }
 
-setClass("CollectionType",
-         contains = "VIRTUAL",
-         representation = representation(
-           type = "ScalarCharacter"))
+    ## simple collections
+    setClass("CollectionType",
+             contains = "VIRTUAL",
+             representation = representation(
+               type = "ScalarCharacter"),
+             where = where)
 
-setClass("NullCollection",
-         contains = "CollectionType",
-         prototype = prototype(
-           type = new("ScalarCharacter", "NullCollection")))
+    simpleCollections <- c("Null", "ExpressionSet")
+    for (class in simpleCollections)
+        setSimpleCollection(class, "CollectionType")
 
-setClass("ExpressionSetCollection",
-         contains = "CollectionType",
-         prototype = prototype(
-           type = new("ScalarCharacter", "ExpressionSet")))
+    ## collections with ids
+    setClass("CollectionIdType",
+             contains=c("CollectionType", "VIRTUAL"),
+             representation = representation(
+               ids = "character"),
+             where = where)
+    
+    idCollections <- c("KEGG", "OMIM", "PMID", "Chr", "Chrloc",
+                       "Map")
+    for (class in idCollections)
+        setSimpleCollection(class, "CollectionIdType")
 
-setClass("KEGGCollection",
-         contains = "CollectionType",
-         representation=representation(
-           keggIds="character"),
-         prototype = prototype(
-           type = new("ScalarCharacter", "KEGG")))
+    ## other collections
+    setClass("GOCollection",
+             contains = "CollectionIdType",
+             representation=representation(
+               evidenceCode="character"),
+             prototype = prototype(
+               type = new("ScalarCharacter", "GO"),
+               evidenceCode = as.character(NA)),
+             where = where)
 
-setClass("GOCollection",
-         contains = "CollectionType",
-         representation=representation(
-           goIds="character",
-           evidenceCode="character"),
-         prototype = prototype(
-           type = new("ScalarCharacter", "GO"),
-           goIds = as.character(NA),
-           evidenceCode = as.character(NA)))
+    setClass("BroadCollection",
+             contains = "CollectionType",
+             representation = representation(
+               category = "ScalarCharacter",
+               subCategory = "ScalarCharacter"),
+             prototype = prototype(
+               type = new("ScalarCharacter", "Broad"),
+               category = new("ScalarCharacter", "c1"),
+               subCategory = new("ScalarCharacter", as.character(NA))),
+             where = where)
 
-setClass("BroadCollection",
-         contains = "CollectionType",
-         representation = representation(
-           category = "ScalarCharacter",
-           subCategory = "ScalarCharacter"),
-         prototype = prototype(
-           type = new("ScalarCharacter", "Broad"),
-           category = new("ScalarCharacter", "c1"),
-           subCategory = new("ScalarCharacter", as.character(NA))))
+    ## constructors / getters / setters
+    ## (GOCollection and BroadCollection in methods-CollectionType.R)
+    simpleCollections <- paste(simpleCollections, "Collection", sep="")
+    .constructors_Simple(simpleCollections, where=where)
+    .getters("CollectionType", c(collectionType="type"), where=where)
+
+    idCollections <- paste(idCollections, "Collection", sep="")
+    .constructors_Simple(idCollections, optional="ids", where=where)
+    .getters("CollectionIdType", c("ids"), where=where)
+    .setters("CollectionIdType", c("ids"), where=where)
+}
+
+.CollectionClasses(topenv())
 
 ## GeneSet
 

@@ -71,7 +71,7 @@ setMethod("GeneSetCollection",
         GeneSet(ids,
                 setName=setName,
                 collectionType=GOCollection(
-                  goIds=setName,
+                  ids=setName,
                   evidenceCode=evidenceCode(collectionType)),
                 ...)
     }, ugenes, setName=names(ugenes), MoreArgs=list(

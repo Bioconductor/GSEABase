@@ -1,3 +1,4 @@
+cat("NAMESPACE:", search(), "\n")
 import(methods)
 
 importMethodsFrom(AnnotationDbi, revmap, mget, as.list)
@@ -5,13 +6,17 @@ importMethodsFrom(AnnotationDbi, revmap, mget, as.list)
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType
-              GeneIdentifierType, NullIdentifier,
-              AnnotationIdentifier, EntrezIdentifier,
-              SymbolIdentifier, PfamIdentifier,
+              GeneIdentifierType,
+              NullIdentifier, AnnotationIdentifier,
+              EntrezIdentifier, EnzymeIdentifier, GenenameIdentifier,
+              PfamIdentifier, PrositeIdentifier, RefseqIdentifier, 
+              SymbolIdentifier, EntrezIdentifier, UnigeneIdentifier,
 
               ## CollectionType
-              CollectionType, NullCollection,
-              ExpressionSetCollection, KEGGCollection, GOCollection,
+              CollectionType, NullCollection, ExpressionSetCollection,
+              CollectionIdType, KEGGCollection, OMIMCollection, PMIDCollection,
+              ChrCollection, ChrlocCollection,
+              GOCollection,
               BroadCollection,
 
               ## GeneSet
@@ -28,9 +33,9 @@ exportMethods(show, initialize, intersect, union, setdiff,
               mapIdentifiers, annotation,
 
               ## CollectionType
+              ids,
               bcCategory, bcSubCategory,
-              goIds, evidenceCode, "goIds<-", "evidenceCode<-",
-              keggIds, "keggIds<-",
+              evidenceCode,
 
               ## GeneSet
               GeneSet,
@@ -56,12 +61,15 @@ exportMethods(show, initialize, intersect, union, setdiff,
               GeneSetCollection, names, "[", "[[")
 
 export(## IdentifierType
-       NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
-       SymbolIdentifier, PfamIdentifier,
+       NullIdentifier, EnzymeIdentifier, GenenameIdentifier,
+       PfamIdentifier, PrositeIdentifier, RefseqIdentifier,
+       SymbolIdentifier, UnigeneIdentifier, EntrezIdentifier,
+       AnnotationIdentifier,
 
        ## CollectionType
        NullCollection, ExpressionSetCollection, KEGGCollection,
-       GOCollection, BroadCollection,
+       OMIMCollection, PMIDCollection, ChrCollection,
+       ChrlocCollection, MapCollection, GOCollection, BroadCollection,
 
        ## XML
        asBroadUri, getBroadSets, toBroadXML)

@@ -8,16 +8,21 @@
 ## for a vector c(CONSTRUCTOR=CLASS, ...) create a
 ## functionCONSTRUCTOR(...) calling new(CLASS, ...). Missing
 ## CONSTRUCTOR are filled with CLASS
-.constructors_Simple <- function(klasses, required=NULL, where=topenv()) {
+.constructors_Simple <- function(klasses,
+                                 required=NULL, optional=NULL,
+                                 where=topenv()) {
     klassnames <- names(.nameAll(klasses))
-    args <- .nameAll(c(required, "...")) # convenience of automatic matching
+    args <- .nameAll(c(required, optional, "...")) # convenience of automatic matching
     iargs <- sapply(args, function(y) alist(y=)$y) # input args as pairlist
     oargs <- sapply(args, as.symbol)    # output args
     for (cl in seq_along(klasses))
         eval(substitute({
             f <- function() {
-                GSEABase:::.checkRequired(REQUIRED, names(match.call()))
-                do.call("new", c(CLASS, OARGS))
+                args <- names(match.call())[-1]
+                GSEABase:::.checkRequired(REQUIRED, args)
+                miss <- OPTIONAL[!OPTIONAL %in% args]
+                oargs <- OARGS[!names(OARGS) %in% miss]
+                do.call("new", c(CLASS, oargs))
             }
             formals(f) <- IARGS
             assign(CONSTRUCTOR, f, envir=WHERE)
@@ -26,6 +31,7 @@
                 IARGS=iargs,
                 OARGS=oargs,
                 REQUIRED=required,
+                OPTIONAL=optional,
                 WHERE=where)))
 }
 
@@ -79,7 +85,7 @@
             ## look for geneIdType; default is EntrezId
             idType <- geneIdType(geneIdType)
             lookup <- get(paste("GO", toupper(idType),sep=""))
-            ids <- mget(goIds(type), lookup, ifnotfound=as.character(NA))
+            ids <- mget(ids(type), lookup, ifnotfound=as.character(NA))
             ids <- lapply(ids,
                           function(x, codes) x[names(x) %in% codes],
                           evidenceCode(type))

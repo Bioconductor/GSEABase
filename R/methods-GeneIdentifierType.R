@@ -1,3 +1,5 @@
+## constructors / getters / setters in AllClasses.R
+
 IdFactory <- function(classPrefix,
                       type=classPrefix,
                       where=topenv(parent.frame()), ...) {
@@ -23,15 +25,6 @@ IdFactory <- function(classPrefix,
 }
 
 ## GeneIdentifierType
-
-.CONSTRUCTORS_GeneIdentifierType <- local({
-    nms <- names(getSubclasses(getClass("GeneIdentifierType")))
-    nms[-grep("^AnnotationIdentifier", nms)]
-})
-
-.constructors_Simple(.CONSTRUCTORS_GeneIdentifierType)
-
-.getters("GeneIdentifierType", c(geneIdType="type"))
 
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),
@@ -71,8 +64,6 @@ AnnotationIdFactory <- function(classPrefix,
     invisible(get(class, envir=where))
 }
 
-.constructors_Simple("AnnotationIdentifier", required="annotation")
-
 setMethod("initialize",
           signature=signature(.Object="AnnotationIdentifier"),
           function(.Object, .Template=.Object, ...,
@@ -80,13 +71,6 @@ setMethod("initialize",
               callNextMethod(.Object, .Template, ...,
                              annotation = mkScalar(annotation))
           })
-
-.SETTERS_AnnotationIdentifier <-
-    .GETTERS_AnnotationIdentifier <- c("annotation")
-
-.getters("AnnotationIdentifier", .GETTERS_AnnotationIdentifier)
-
-.setters("AnnotationIdentifier", .SETTERS_AnnotationIdentifier)
 
 .getAnnMap <- function(object, symbol) {
     pkgName <- annotation(object)
@@ -136,14 +120,18 @@ setMethod("mapIdentifiers",
 ## AnnotationIdentifier --> X
 
 .getMappedGenes <- function(geneIds, mapEnv, map, pkg, verbose=FALSE) {
+    anNA <- function(x) length(x) ==1 && is.na(x)
     ngenes <- mget(geneIds, mapEnv, ifnotfound=as.character(NA))
-    if (verbose)
+    if (verbose) {
         if (any(sapply(ngenes, length) != 1))
-            .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
-                      map, length(geneIds), length(ngenes), pkg)
-        else if (any(is.na(ngenes)))
+            .warningf("annotation map '%s' not 1:1 in '%s'\n  ids: '%s'",
+                      map, pkg,
+                      paste(names(ngenes)[sapply(ngenes, length) != 1],
+                            collapse="', '"))
+        if (any(sapply(ngenes, anNA)))
             .warningf("annotation map '%s' had %d 'NA' values in '%s'",
-                      map, sum(is.na(ngenes)), pkg)
+                      map, sum(sapply(ngenes, anNA)), pkg)
+    }
     ugenes <- unique(unlist(ngenes))
     if (verbose && (length(ugenes) != length(geneIds)))
         .warningf("annotation map '%s' is %d:%d (not 1:1) in '%s'",
@@ -251,9 +239,25 @@ setMethod("mapIdentifiers",
             what="GeneSet",
             to="AnnotationIdentifier",
             from="GeneIdentifierType"), 
-          function(what, from, to, ..., verbose=FALSE) {
+          function(what, to, from, ..., verbose=FALSE) {
               tag <- toupper(geneIdType(from))
               new(class(what), what,
                   geneIds=.toAnnotation(tag, to, what, verbose=verbose),
                   geneIdType=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="environment"),
+          function(what, to, from, ..., verbose=FALSE) {
+              geneIds <- .getMappedGenes(geneIds(what),
+                                       from,
+                                       "environment",
+                                       "user-supplied environment",
+                                         verbose=verbose)
+              new(class(what), what,
+                  geneIds = geneIds,
+                  geneIdType = to)
           })

@@ -1,11 +1,4 @@
-.CONSTRUCTORS_CollectionType <- 
-    names(getSubclasses(getClass("CollectionType")))
-
-.constructors_Simple(.CONSTRUCTORS_CollectionType[.CONSTRUCTORS_CollectionType != "BroadCollection"])
-
-.GETTERS_CollectionType <- c(collectionType="type")
-
-.getters("CollectionType", .GETTERS_CollectionType)
+## constructors / getters / setters in AllClasses.R
 
 setMethod("show",
           signature=signature(object="CollectionType"),
@@ -43,9 +36,19 @@ setMethod("show",
                   "  bcSubCategory:  ", bcSubCategory(object), "\n", sep="")
           })
 
+## CollectionIdType
+
+setMethod("show",
+          signature = signature(
+            object = "CollectionIdType"),
+          function(object) {
+              callNextMethod()
+              cat("  ids:", selectSome(ids(object)), "\n")
+          })
+
 ## GOCollection
 
-GOCollection <- function(goIds=as.character(NA),
+GOCollection <- function(ids=character(0),
                          evidenceCode="ANY", ...) {
     codes <- c("IMP", "IGI", "IPI", "ISS", "IDA", "IEP", "IEA", "TAS",
                "NAS", "ND", "IC", "NR", "ANY", NA)
@@ -55,38 +58,16 @@ GOCollection <- function(goIds=as.character(NA),
                paste(evidenceCode[!codeOk], collapse="', '"))
     if ("ANY" %in% evidenceCode)
         evidenceCode <- codes[!codes %in% c("ANY", NA)]
-    new("GOCollection",
-        goIds=goIds,
-        evidenceCode=evidenceCode)
+    new("GOCollection", ids=ids, evidenceCode=evidenceCode)
 }
 
 .SETTERS_GOCollection <- .GETTERS_GOCollection <-
-    c("goIds", "evidenceCode")
+    c("evidenceCode")
 .getters("GOCollection", .GETTERS_GOCollection)
-.setters("GOCollection", .SETTERS_GOCollection)
 
 setMethod("show",
           signature=signature(object="GOCollection"),
           function(object) {
-              cat("collectionType:", collectionType(object), "\n",
-                  "  goIds:", goIds(object), "\n",
-                  "  evidenceCode:", evidenceCode(object), "\n")
-          })
-
-## KEGGCollection
-
-KEGGCollection <- function(keggIds=as.character(NA)) {
-    new("KEGGCollection", keggIds = keggIds)
-}
-
-.SETTERS_KEGGCollection <- .GETTERS_KEGGCollection <-
-    "keggIds"
-.getters("KEGGCollection", .GETTERS_KEGGCollection)
-.setters("KEGGCollection", .GETTERS_KEGGCollection)
-
-setMethod("show",
-          signature=signature(object="KEGGCollection"),
-          function(object) {
-              cat("collectionType:", collectionType(object), "\n",
-                  "  keggIds:", keggIds(object), "\n")
+              callNextMethod()
+              cat("  evidenceCode:", evidenceCode(object), "\n")
           })

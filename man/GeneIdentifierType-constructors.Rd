@@ -1,10 +1,17 @@
 \name{GeneIdentifierType}
 \alias{GeneIdentifierType}
+
 \alias{NullIdentifier}
-\alias{AnnotationIdentifier}
-\alias{EntrezIdentifier}
-\alias{SymbolIdentifier}
+\alias{EnzymeIdentifier}
+\alias{GenenameIdentifier}
 \alias{PfamIdentifier}
+\alias{PrositeIdentifier}
+\alias{RefseqIdentifier}
+\alias{SymbolIdentifier}
+\alias{UnigeneIdentifier}
+\alias{EntrezIdentifier}
+\alias{AnnotationIdentifier}
+
 \title{Gene Identifier Class Constructors}
 \description{
   Gene identifier classes and functions are used to indicate what the
@@ -14,10 +21,15 @@
 }
 \usage{
 NullIdentifier(...)
-AnnotationIdentifier(annotation,...)
-EntrezIdentifier(...)
-SymbolIdentifier(...)
+EnzymeIdentifier(...)
+GenenameIdentifier(...)
 PfamIdentifier(...)
+PrositeIdentifier(...)
+RefseqIdentifier(...)
+SymbolIdentifier(...)
+UnigeneIdentifier(...)
+EntrezIdentifier(...)
+AnnotationIdentifier(annotation, ...)
 }
 \arguments{
   \item{annotation}{(required) A single character string identifying  the

@@ -13,8 +13,6 @@
 \alias{NullIdentifier-class}
 \alias{EnzymeIdentifier-class}
 \alias{GenenameIdentifier-class}
-\alias{PfamIdentifier-class}
-\alias{PrositeIdentifier-class}
 \alias{RefseqIdentifier-class}
 \alias{SymbolIdentifier-class}
 \alias{UnigeneIdentifier-class}
@@ -41,8 +39,6 @@
     \item{EntrezIdentifier}{\sQuote{Entrez} identifiers.}
     \item{EnzymeIdentifier}{\sQuote{EC} identifiers.}
     \item{GenenameIdentifier}{Curated and ad hoc descriptive gene names.}
-    \item{PfamIdentifier}{\sQuote{Pfam} identifiers.}
-    \item{PrositeIdentifier}{\sQuote{Prosite} identifiers.}
     \item{RefseqIdentifier}{\sQuote{Prosite} identifiers.}
     \item{SymbolIdentifier}{\sQuote{Symbol} identifiers.}
     \item{UnigeneIdentifier}{\sQuote{Unigene} identifiers.}

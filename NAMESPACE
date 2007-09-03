@@ -7,15 +7,14 @@ importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 exportClasses(## GeneIdentifierType
               GeneIdentifierType,
-              NullIdentifier, AnnotationIdentifier,
-              EntrezIdentifier, EnzymeIdentifier, GenenameIdentifier,
-              PfamIdentifier, PrositeIdentifier, RefseqIdentifier, 
+              NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
+              EnzymeIdentifier, GenenameIdentifier, RefseqIdentifier,
               SymbolIdentifier, EntrezIdentifier, UnigeneIdentifier,
 
               ## CollectionType
               CollectionType, NullCollection, ExpressionSetCollection,
               CollectionIdType, KEGGCollection, OMIMCollection, PMIDCollection,
-              ChrCollection, ChrlocCollection,
+              ChrCollection, ChrlocCollection, PfamCollection, PrositeCollection,
               GOCollection,
               BroadCollection,
 
@@ -62,14 +61,14 @@ exportMethods(show, initialize, intersect, union, setdiff,
 
 export(## IdentifierType
        NullIdentifier, EnzymeIdentifier, GenenameIdentifier,
-       PfamIdentifier, PrositeIdentifier, RefseqIdentifier,
-       SymbolIdentifier, UnigeneIdentifier, EntrezIdentifier,
-       AnnotationIdentifier,
+       RefseqIdentifier, SymbolIdentifier, UnigeneIdentifier,
+       EntrezIdentifier, AnnotationIdentifier,
 
        ## CollectionType
        NullCollection, ExpressionSetCollection, KEGGCollection,
        OMIMCollection, PMIDCollection, ChrCollection,
-       ChrlocCollection, MapCollection, GOCollection, BroadCollection,
+       ChrlocCollection, MapCollection, PfamCollection,
+       PrositeCollection, GOCollection, BroadCollection,
 
        ## XML
        asBroadUri, getBroadSets, toBroadXML)

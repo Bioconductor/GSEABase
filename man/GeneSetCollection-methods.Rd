@@ -4,6 +4,10 @@
 \alias{GeneSetCollection-methods}
 \alias{GeneSetCollection,GeneSet,missing,missing-method}
 \alias{GeneSetCollection,list,missing,missing-method}
+\alias{GeneSetCollection,ExpressionSet,missing,CollectionType-method}
+\alias{GeneSetCollection,ExpressionSet,missing,CollectionIdType-method}
+\alias{GeneSetCollection,missing,AnnotationIdentifier,CollectionType-method}
+\alias{GeneSetCollection,missing,AnnotationIdentifier,CollectionIdType-method}
 \alias{GeneSetCollection,ExpressionSet,missing,KEGGCollection-method}
 \alias{GeneSetCollection,ExpressionSet,missing,GOCollection-method}
 \alias{GeneSetCollection,missing,AnnotationIdentifier,KEGGCollection-method}
@@ -45,21 +49,47 @@ GeneSetCollection(object, ..., idType, setType)
     }
 
     \item{
-      \code{signature(object = "ExpressionSet", idType = "missing", setType = "KEGGCollection")},
+      \code{signature(object = "missing", idType = "AnnotationIdentifier", setType = "CollectionType")},
+      \code{signature(object="missing", idType="AnnotationIdentifier", setType="CollectionIdType")}
+    }{
+      Construct a gene set collection of \code{CollectionType} entities (e.g., pathways for
+      \code{KEGGCollection}, protein families for \code{PfamCollection})
+      implied by the map found in \code{annotation(idType)}. If \code{setType} is a
+      \code{CollectionIdType} and \code{length(ids(setType))>0}, the
+      gene set collection is filtered to contain only those sets implied
+      by the ids.
+    }
+
+    \item{
+      \code{signature(object = "ExpressionSet", idType = "missing", setType = "CollectionType")},
+      \code{signature(object="ExpressionSet", idType="missing", setType="CollectionIdType")}
+    }{
+      Construct a gene set collection using the \code{annotation} and
+      \code{featureNames} of \code{object} to identify elements for 
+      \code{CollectionType} gene sets (e.g., pathways for
+      \code{KEGGCollection}, protein families for \code{PfamCollection})
+      implied by \code{object}. The gene set
+      collection contains only those \code{AnnotationIdentifiers} found
+      in \code{featureNames(object)}; if \code{setType} is a
+      \code{CollectionIdType} and \code{length(ids(setType))>0}, the
+      gene set collection is further filtered to contain only those sets
+      implied by the ids.
+    }
+
+    \item{
       \code{signature(object="ExpressionSet", idType="missing", setType="GOCollection")}
     }{
       Construct a gene set collection using the \code{annotation} and
-      \code{featureNames} of \code{object} to identify \code{KEGG} or
+      \code{featureNames} of \code{object} to identify 
       \code{GO} pathways implied by \code{object}. The gene set
       collection contains only those \code{AnnotationIdentifiers} found
       in \code{featurNames(object)}.
     }
 
     \item{
-      \code{signature(object="missing", idType="AnnotationIdentifier", setType="KEGGCollection")},
       \code{signature(object="missing", idType="AnnotationIdentifier", setType="GoCollection")}
     }{
-      Construct a gene set collection containing all GO or KEGG pathways
+      Construct a gene set collection containing all GO pathways
       referenced in the annotation of \code{idType}. The
       \code{evidenceCode} of \code{GOCollection} can be used to restrict
       the pathways seleted to those with matching evidence codes.

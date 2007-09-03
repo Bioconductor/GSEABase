@@ -5,6 +5,8 @@
 \alias{ExpressionSetCollection}
 \alias{KEGGCollection}
 \alias{OMIMCollection}
+\alias{PfamCollection}
+\alias{PrositeCollection}
 \alias{PMIDCollection}
 \alias{ChrCollection}
 \alias{ChrlocCollection}
@@ -23,12 +25,14 @@
 \usage{
 NullCollection(...)
 ExpressionSetCollection(...)
-KEGGCollection(ids,...)
-OMIMCollection(ids,...)
-PMIDCollection(ids,...)
 ChrCollection(ids,...)
 ChrlocCollection(ids,...)
+KEGGCollection(ids,...)
 MapCollection(ids,...)
+OMIMCollection(ids,...)
+PMIDCollection(ids,...)
+PfamCollection(ids, ...)
+PrositeCollection(ids, ...)
 GOCollection(ids, evidenceCode="ANY", ...)
 BroadCollection(category, subCategory=NA, ...)
 }

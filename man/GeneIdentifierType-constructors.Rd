@@ -4,8 +4,6 @@
 \alias{NullIdentifier}
 \alias{EnzymeIdentifier}
 \alias{GenenameIdentifier}
-\alias{PfamIdentifier}
-\alias{PrositeIdentifier}
 \alias{RefseqIdentifier}
 \alias{SymbolIdentifier}
 \alias{UnigeneIdentifier}
@@ -23,8 +21,6 @@
 NullIdentifier(...)
 EnzymeIdentifier(...)
 GenenameIdentifier(...)
-PfamIdentifier(...)
-PrositeIdentifier(...)
 RefseqIdentifier(...)
 SymbolIdentifier(...)
 UnigeneIdentifier(...)

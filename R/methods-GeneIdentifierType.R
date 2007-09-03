@@ -253,9 +253,9 @@ setMethod("mapIdentifiers",
             from="environment"),
           function(what, to, from, ..., verbose=FALSE) {
               geneIds <- .getMappedGenes(geneIds(what),
-                                       from,
-                                       "environment",
-                                       "user-supplied environment",
+                                         from,
+                                         "environment",
+                                         "user-supplied environment",
                                          verbose=verbose)
               new(class(what), what,
                   geneIds = geneIds,

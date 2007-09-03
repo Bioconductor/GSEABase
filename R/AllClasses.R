@@ -34,8 +34,8 @@
              where=where)
 
     ## gene-level classes
-    geneIdentifiers <- c("Null", "Enzyme", "Genename", "Pfam",
-                         "Prosite", "Refseq", "Symbol", "Unigene")
+    geneIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq",
+                         "Symbol", "Unigene")
     for (class in geneIdentifiers) setSimpleClass(class)
     
     setClass("EntrezIdentifier",        # special 'type'
@@ -96,7 +96,7 @@
              where = where)
     
     idCollections <- c("KEGG", "OMIM", "PMID", "Chr", "Chrloc",
-                       "Map")
+                       "Map", "Pfam", "Prosite")
     for (class in idCollections)
         setSimpleCollection(class, "CollectionIdType")
 

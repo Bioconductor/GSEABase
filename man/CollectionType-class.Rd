@@ -33,6 +33,8 @@
 \alias{ChrlocCollection-class}
 \alias{OMIMCollection-class}
 \alias{PMIDCollection-class} 
+\alias{PfamCollection-class}
+\alias{PrositeCollection-class}
 
 \title{Class "CollectionType"}
 
@@ -68,6 +70,8 @@
     \item{OMIMCollection}{Collection derived from identifiers in the
       Online Inheritance in Man.}
     \item{PMIDCollection}{Collection derived from PMID identifiers.}
+    \item{PfamCollection}{Collection derived from Pfam identifiers.}
+    \item{PrositeCollection}{Collection derived from Prosite identifiers.}
   }
 
   Objects are instantiated with calls to \code{\link{CollectionType}}

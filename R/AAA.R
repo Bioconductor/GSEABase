@@ -130,6 +130,19 @@
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type="ExpressionSet"), f)
+        ## BroadCollection
+        f <- function() {
+            .checkRequired(c("urls", REQUIRED), names(match.call()))
+            gss <- getBroadSets(urls)
+            if (length(gss) != 1)
+              .stopf("'BroadCollection' at url '%s'\n  must have 1 gene set, but has %d",
+                     urls, length(gss))
+            gss[[1]]
+        }
+        formals(f) <- c(IARGS[-length(IARGS)],
+                        urls=quote(character(0)),
+                        IARGS[length(IARGS)])
+        setMethod(CLASS, signature=signature(type="BroadCollection"), f)
     }, list(CLASS = klass, REQUIRED=required, IARGS=iargs, OARGS=oargs)))
 }
 

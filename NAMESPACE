@@ -25,7 +25,7 @@ exportClasses(## GeneIdentifierType
               GeneSetCollection
               )
 
-exportMethods(show, initialize, intersect, union, setdiff,
+exportMethods(show, details, initialize, intersect, union, setdiff,
               "&", "|", incidence,
 
               ## IdentifierType

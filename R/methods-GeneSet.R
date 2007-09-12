@@ -251,21 +251,32 @@ setMethod("incidence",
                          lapply(args, setName))
           })
 
-## show
+## show / description
+
+.showGeneSet <- function(object) {
+    cat("setName: ", setName(object), "\n")
+    cat("ids:",
+        paste(selectSome(ids(object), maxToShow=4),
+              collapse=", "),
+        paste("(total: ", length(ids(object)), ")\n",
+              sep=""),
+        sep=" ")
+    show(geneIdType(object))
+    show(collectionType(object))
+}
 
 setMethod("show",
           signature=signature(object="GeneSet"),
           function(object) {
-              cat("setName: ", setName(object), "\n",
-                  "setIdentifier: ", setIdentifier(object), "\n", sep="")
-              cat("geneIds:",
-                  paste(selectSome(geneIds(object), maxToShow=4),
-                        collapse=", "),
-                  paste("(total: ", length(geneIds(object)), ")\n",
-                        sep=""),
-                  sep=" ")
-              show(geneIdType(object))
-              show(collectionType(object))
+              .showGeneSet(object)
+              cat("details: use 'details(object)'\n")
+          })
+
+setMethod("details",
+          signature=signature(object="GeneSet"),
+          function(object) {
+              .showGeneSet(object)
+              cat("setIdentifier: ", setIdentifier(object), "\n", sep="")
               cat("description: ", description(object), "\n",
                   if(nchar(longDescription(object))!=0 &&
                      longDescription(object) !=  description(object)) {

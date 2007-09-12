@@ -294,22 +294,34 @@ setMethod("setdiff",
         
 ## other methods
 
+.showGeneColoring <- function(object) {
+    cat("phenotype:", phenotype(object), "\n")
+    cat("geneColor: ",
+        paste(selectSome(as.character(geneColor(object)),
+                         maxToShow=4),
+              collapse=", "),
+        "\n  levels: ", paste(levels(geneColor(object)),
+                              collapse=", "), "\n",
+        "phenotypeColor: ",
+        paste(selectSome(as.character(phenotypeColor(object)),
+                         maxToShow=4),
+              collapse=", "),
+        "\n  levels: ", paste(levels(phenotypeColor(object)),
+                              collapse=", "), "\n",
+        sep="")
+}
+
 setMethod("show",
           signature=signature(object="GeneColorSet"),
           function(object) {
+              .showGeneSet(object)
+              .showGeneColoring(object)
+              cat("details: use 'details(object)'\n")
+          })
+
+setMethod("details",
+          signature=signature(object="GeneColorSet"),
+          function(object) {
               callNextMethod()
-              cat("phenotype:", phenotype(object), "\n")
-              cat("geneColor: ",
-                  paste(selectSome(as.character(geneColor(object)),
-                                   maxToShow=4),
-                        collapse=", "),
-                  "\n  levels: ", paste(levels(geneColor(object)),
-                                        collapse=", "), "\n",
-                  "phenotypeColor: ",
-                  paste(selectSome(as.character(phenotypeColor(object)),
-                                   maxToShow=4),
-                        collapse=", "),
-                  "\n  levels: ", paste(levels(phenotypeColor(object)),
-                                        collapse=", "), "\n",
-                  sep="")
+              .showGeneColoring(object)
           })

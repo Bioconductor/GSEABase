@@ -20,6 +20,9 @@ setGeneric("mapIdentifiers",
 
 ## GeneSet
 
+setGeneric("details",
+           function(object) standardGeneric("details"))
+
 setGeneric("geneIdType<-",
            function(object, verbose=FALSE, value)
            standardGeneric("geneIdType<-"),

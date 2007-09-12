@@ -16,6 +16,7 @@
 \newcommand{\Rmethod}[1]{{\texttt{#1}}}
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
 
 \textwidth=6.2in
 \textheight=8.5in
@@ -25,10 +26,13 @@
 \headheight=-.3in
 
 \newcommand{\R}{\textsf{R}}
-\newcommand{\GeneSet}{\Robject{GeneSet}}
-\newcommand{\GeneSetCollection}{\Robject{GeneSetCollection}}
-\newcommand{\GeneColorSet}{\Robject{GeneColorSet}}
 \newcommand{\GSEABase}{\Rpackage{GSEABase}}
+\newcommand{\GeneSet}{\Rclass{GeneSet}}
+\newcommand{\GeneColorSet}{\Rclass{GeneColorSet}}
+\newcommand{\GeneSetCollection}{\Rclass{GeneSetCollection}}
+\newcommand{\ExpressionSet}{\Rclass{ExpressionSet}}
+\newcommand{\AnnotationIdentifier}{\Rclass{AnnotationIdentifier}}
+\newcommand{\GOCollection}{\Rclass{GOCollection}}
 
 \newcommand{\term}[1]{\emph{#1}}
 \newcommand{\mref}[2]{\htmladdnormallinkfoot{#2}{#1}}
@@ -45,128 +49,248 @@ library(GSEABase)
 library(hgu95av2)
 library(hgu95av2.db)
 library(GO)
+## temporary
+## ids <- geneIds
+## idType <- geneIdType
+## mapIds <- mapIdentifiers
 @ 
 
-\section{\GeneSet{} and \GeneSetCollection{}}
+\section{\GeneSet{}}
 
+A \GeneSet{} stores a set of related gene identifiers. Important
+components of the gene set are a vector of identifiers, general
+descriptive information about the set, and informatoin about how the
+gene set was constructed. To construct a gene set, use
+\Rfunction{GeneSet}. For example, to create a gene set from the all
+identifiers in a subset of the sample \Robject{ExpressionSet} in the
+Biobase package (see \Rpackage{Biobase} documentation for a
+description of expression sets), use
 <<GeneSet>>=
-## FIXME: collectionType;
-## FIXME: redundant setName, setIdentifier, setValidity, creationDate
-GeneSet()
+library(GSEABase)
+data(sample.ExpressionSet) # from Biobase
+egs <- GeneSet(sample.ExpressionSet[201:250,], setName="Sample")
+egs
+@ 
+% 
+Each gene set may have a name. The gene set contains
+\Sexpr{length(geneIds(egs))} identifiers ('genes') from the expression
+set. These are accessible using \Rfunction{geneIds}, e.g.,
+<<geneIds>>=
+head(geneIds(egs))
+@ 
+% 
+The gene set records that the identifiers are probeset names from the
+annotation package \Sexpr{annotation(geneIdType(egs))}, and that the source
+of the gene set was an expression set. Additional details are
+availabe:
+<<details>>=
+details(egs)
+@ 
+%% 
+The set identifier, set version, and creation date provide mechanisms
+for carefully curating gene sets. Additonal informaton is
+automatically copied from the expression set used to create
+\Robject{egs}. 
+
+<<>>=
+  ## FIXME: GeneSet(AnnotationIdentifier("hgu95av2")) --> non-empty
+  ## FIXME: GeneSet(AnnotationIdentifier("hgu95av2"),
+  ## collectionType=GOCollection()) filters on GOCollection (or KEGG)
 @ 
 
+View additional methods for creating gene sets with:
+<<GeneSet-methods>>=
+showMethods("GeneSet", inherited=FALSE)
+@ 
+%% 
+These are described on the \GeneSet{} help page. 
+
+The identifier type of gene sets created from expression sets is
+\Sexpr{as.character(class(geneIdType(egs)))}. Additional predefined
+identifiers are also available:
 <<GeneIdentifierTypes>>=
 names(getSubclasses(getClass("GeneIdentifierType")))
 @ 
+%% 
+It is possible to map between identifier types (provided the
+corresponding map in the annotation package exists), or to create a
+gene set with particular identifiers:
+<<mapIdentifiers>>=
+mapIdentifiers(egs, EntrezIdentifier())
+eids <- unique(unlist(mget(geneIds(egs), hgu95av2ENTREZID)))
+eids <- eids[!is.na(eids)]
+GeneSet(EntrezIdentifier(), geneIds=as.character(eids))
+@ 
+%% 
+Use the \Rfunction{verbose} argument of \Rmethod{mapIdentifiers} to be informed when
+the map between identifier types is not 1:1.
 
+The \Rmethod{collectionType} of a gene set provides addiitonal
+information about a gene set. Available collection types are
 <<CollectionType>>=
 names(getSubclasses(getClass("CollectionType")))
 @ 
+%% 
+Collection types are most important when creating gene sets. For
+instance, the \GOCollection{} class allows creation of gene sets based
+on gene ontology (GO) terms. The following command creates a gene set
+from two terms, including all genes with a particular evidence code:
+<<GOCollection>>=
+GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
+                     evidenceCode="IDA"),
+        setName="Sample GO Collection")
+@ 
+%% 
+Gene sets encoded in XML following the schema and conventions of the
+Broad Institute can be created as follows:
+<<Broad>>=
+fl <- system.file("extdata", "Broad1.xml", package="GSEABase")
+bgs <- GeneSet(BroadCollection(), urls=fl)
+bgs
+@ 
+%% 
+The example above uses a local file, but it might also be a web
+address accessible via the \Rcode{http://} protocol. The file name is
+added to the url of the gene set. The set name and category of the
+Broad collection indicate that the gene set contains gene symbols from
+band 24 of the q arm of chromsome 16. The probe sets in chip
+\Rcode{hgu95av2} corresponding to these symbols can be determined by
+mapping identifiers
+<<Broad-to-annotation>>=
+bgs1 <- mapIdentifiers(bgs, AnnotationIdentifier("hgu95av2"))
+bgs1
+@ 
+%% 
 
+Subsetting creates sets with just the sybmols identified. Subsetting
+can use indices or symbol names.
+<<subset>>=
+bgs[1:5]
+bgs[c("GALNS", "LOC646365")]
+@ 
+%% 
+
+Logical operations provide a convenient way to identify genes with
+particular properties. For instance, the intersection
+<<egs-bgs>>=
+egs & bgs1
+@ 
+%% 
+is empty, incidating that none of the identifiers in \Robject{egs} are
+on \Rcode{16q24}. Additional operations on sets include union
+(performed with \Rfunction{|}) and difference (\Rfunction{setdiff}).
+
+Methods exist to directly subset expression sets using gene sets
+<<subset-ExpressionSet>>=
+sample.ExpressionSet[bgs,]
+@ 
+%% 
+Remember that \Robject{sample.ExpressionSet} contains just
+\Sexpr{nrow(sample.ExpressionSet)} probe sets, so the small size of the
+subset is not surprising. Note also that subsetting requried mapping
+of symbol identifiers in \Robject{bgs} to \AnnotationIdentifier{}s;
+this map used the annotation information in the expression set,
+and is not necessarily 1:1.
+
+\section{\GeneColorSet{}}
+
+A \GeneColorSet{} is a gene set with ``coloring'' to indicate how
+features of genes and phenotypes are associated. The following sample
+data describes how changes in expression levels of several genes (with
+Entrez and Symbol names) influence cisplatin resistance phenotype.
+<<GeneColorSet-setup,echo=false,results=hide>>=
+conn <- textConnection("
+Entrez ID, Gene Symbol, Expression level, Phenotype response
+##used to be MRP2
+1244, ABCC2, Increase, Resistant
+538, ATP7A, Increase, Resistant
+540, ATP7B, Increase, Resistant
+9961, MVP, Increase, Resistant
+##the LRP below must be MVP
+##LRP, Increase, Resistant - need to know which one
+7507,XPA, Increase, Resistant
+2067, ERCC1, Increase, Resistant
+##TOP, Increase, Resistant  - need to know which one, notes say II
+672, BRCA1, Increase, Resistant
+3725, JUN, Increase, Resistant
+#GCS, Increase, Resistant  - my notes say alpha-GCS - so which one?
+##I only found gamma at PubMed as being related
+2730, GCLM, Increase, Resistant")
+tbl <- read.csv(conn, strip.white=TRUE,comment.char="#")
+close(conn); unlink(conn)
+@ 
+<<GeneColorSet-phenotype>>=
+tbl
+@ 
+%% 
+Note that three different aspects of data influence coloring: the
+phenotype under consideration (cisplatin resistance), whether
+consequences for phenotype refer to increasing or decreasing levels of
+gene expression, and whether the phenotypic response represents
+greater resistance or sensitivity to cisplatin. Here is the resulting
+gene color set:
+<<GeneColorSet-constructor>>=
+gcs <- GeneColorSet(EntrezIdentifier(),
+                    setName="A color set",
+                    geneIds=as.character(tbl$Entrez.ID),
+                    phenotype="Cisplatin resistance",
+                    geneColor=tbl$Expression.level,
+                    phenotypeColor=tbl$Phenotype.response)
+gcs
+@ 
+%% 
+Gene color sets can be used in the same way as gene sets, e.g., for
+subsetting expression sets (provided the map between identifiers is
+1:1, so that coloring corresponding to identifiers can be
+determined). The \Rmethod{coloring} method allows access to the coloring
+information with a data frame interface; \Rmethod{phenotype},
+\Rmethod{geneColor} and \Rmethod{phenotypeColor} provide additional
+accessors.
+
+\section{\GeneSetCollection{}}
+
+A \GeneSetCollection{} is a collection of gene sets. Sets in the
+collection must have distinct \Rmethod{setName}s, but can be a mix of
+\GeneSet{} and \GeneColorSet{}. Two convenient ways to create a gene
+set collection are by specifying a source of identifiers (e.g., an
+\ExpressionSet{} or \AnnotationIdentifier{}) and how the identifiers
+are to be induced into sets (e.g., by consulting the GO or KEGG
+ontologies):
 <<GeneSetCollection>>=
+gsc <- GeneSetCollection(sample.ExpressionSet[201:250,], setType=GOCollection())
+gsc
+gsc[["GO:0005737"]]
+@ 
+%% 
+In this example, the annotation identifiers of the sample expression
+set are organized into gene sets based on their presence in GO
+pathways. Providing arguments such as \Rmethod{evidenceCode} to
+\GOCollection{} act to select just those pathways satisfying the GO
+collection constraint:
+<<GeneSetCollection-GOCollection>>=
+GeneSetCollection(sample.ExpressionSet[201:300,],
+                  setType=GOCollection(evidenceCode="IMP"))
+@ 
+%% 
+Sets in the collection are named after the GO terms, and can be
+accessed by numeric index or name.
+
+<<GeneSetCollection-BroadCollection>>=
+  ## FIXME: BroadCollection default to paste("c", 1:4, sep="")
+  ## FIXME: GeneSetCollection(BroadCollection(), urls=fl); filters on bcCategory
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gss <- getBroadSets(fl)
 class(gss)
 names(gss)
 @ 
 
-<<GeneSet-accessors>>=
-## FIXME: GeneSetCollection show
-gs <- gss[[1]]
-geneIds(gs)
+Identifiers within a gene set collection can be mapped to a common
+type (provided maps are available) with, for example,
+<<mapIds-GeneSetCollection>>=
+gsc <- mapIdentifiers(gsc, EntrezIdentifier())
+gsc
+gsc[["GO:0005737"]]
 @ 
-
-<<example-constructors>>=
-## retain evidenceCode?
-## exclude, rather than include, evidence code
-GeneSet(GOCollection("GO:0005488"), setName="A set")
-GeneSet(GOCollection("GO:0005488", evidenceCode="ANY"))
-GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
-                     evidenceCode="IDA"))
-## FIXME: setName, setIdentifier after computation
-data(sample.ExpressionSet)
-gs5 <- GeneSet(sample.ExpressionSet[100:109], setName="subset1")
-gs6 <- GeneSet(sample.ExpressionSet[105:114], setName="subset2")
-@ 
-<<logical-operations>>=
-gs5 & gs6
-gs5 | gs6
-setdiff(gs5, gs6)
-@ 
-
-<<mapIds>>=
-## creates reverse map, since none found.
-## FIXME: mapIds
-mapIdentifiers(gs5, EntrezIdentifier())
-## silently 'flattens' map
-res <- mapIdentifiers(gs5, EntrezIdentifier(), verbose=TRUE)
-mapIdentifiers(gs, AnnotationIdentifier("hgu95av2"))
-## uses AnnotationDbi when direct map not available; flattens map
-res <- mapIdentifiers(gs, AnnotationIdentifier("hgu95av2"), verbose=TRUE)
-
-## using AnnotationDbi, reverse map already present
-mapIdentifiers(gs, AnnotationIdentifier("hgu95av2.db"))
-@ 
-
-<<interoperatbility>>=
-## coerces EntrezIdentifier to AnnotationIdentifier, using annotation
-## slot of ExpressionSet. No probes correspondnig to selected genes
-data(sample.ExpressionSet)
-sample.ExpressionSet[gs,]
-
-## FIXME: should accept GeneSetCollection
-toBroadXML(gss[[1]], stdout())
-@
-
-\section{\GeneColorSet{}}
-
-<<GeneColorSet-constructors>>=
-## GeneColorSet
-## FIXME: better show method; 'description' method?
-GeneColorSet(phenotype="Phenotype")     # required arg
-
-## Color data
-conn <- textConnection("
-Entrez ID, Gene Symbol, Direction, Effect on cisplatin trt
-##used to be MRP2
-1244, ABCC2, INCREASE, Resistant
-538, ATP7A, INCREASE, Resistant
-540, ATP7B, INCREASE, Resistant
-9961, MVP, INCREASE, Resistant
-##the LRP below must be MVP
-##LRP, INCREASE, Resistant - need to know which one
-7507,XPA, INCREASE, Resistant
-2067, ERCC1, INCREASE, Resistant
-##TOP, INCREASE, Resistant  - need to know which one, notes say II
-672, BRCA1, INCREASE, Resistant
-3725, JUN, INCREASE, Resistant
-#GCS, INCREASE, Resistant  - my notes say alpha-GCS - so which one?
-##I only found gamma at PubMed as being related
-2730, GCLM, INCREASE, Resistant")
-tbl <- read.csv(conn, strip.white=TRUE,comment.char="#")
-close(conn); unlink(conn)
-tbl
-
-(gsc <- GeneColorSet(EntrezIdentifier(),
-                     setName="color set",
-                     geneIds=as.character(tbl$Entrez.ID),
-                     phenotype="cisplatin resistance",
-                     geneColor=tbl$Direction,
-                     phenotypeColor=tbl$Effect.on.cisplatin.trt))
-@ 
-
-<<GeneColorSet-accessors>>=
-geneIds(gsc)
-coloring(gsc)
-geneColor(gsc)
-phenotypeColor(gsc)
-@ 
-
-<<GeneSetCollection-constuctors>>=
-gsc <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2"), 
-                         setType=KEGGCollection())
-gsc <- GeneSetCollection(sample.ExpressionSet[200:300,],
-                         setType=GOCollection(evidenceCode="IMP"))
-@ 
+%% 
 
 \end{document}

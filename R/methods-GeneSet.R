@@ -255,10 +255,10 @@ setMethod("incidence",
 
 .showGeneSet <- function(object) {
     cat("setName: ", setName(object), "\n")
-    cat("ids:",
-        paste(selectSome(ids(object), maxToShow=4),
+    cat("geneIds:",
+        paste(selectSome(geneIds(object), maxToShow=4),
               collapse=", "),
-        paste("(total: ", length(ids(object)), ")\n",
+        paste("(total: ", length(geneIds(object)), ")\n",
               sep=""),
         sep=" ")
     show(geneIdType(object))

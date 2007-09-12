@@ -30,6 +30,10 @@
             full <- path.expand(file)
             if (length(grep("^/", full))==1)
                 url <- paste("file:/", full, sep="")
+            else if (.Platform$OS.type=="windows")
+                url <- paste("file:///", full, sep="")
+            else
+                url = full
         }
     }
     ## handler: XMLNode -> GeneSet

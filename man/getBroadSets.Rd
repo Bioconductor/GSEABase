@@ -75,6 +75,8 @@ toBroadXML(gss[[1]], con=fl)
 noquote(readLines(fl))
 unlink(fl)
 
+\dontrun{
 toBroadXML(gss[[1]]) # character vector
+}
 }
 \keyword{manip}

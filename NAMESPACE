@@ -1,6 +1,9 @@
 cat("NAMESPACE:", search(), "\n")
 import(methods)
 
+importFrom(XML, getNodeSet, free, saveXML,
+           xmlAttrs, xmlTreeParse, xmlNode)
+
 importMethodsFrom(AnnotationDbi, revmap, mget, as.list)
 
 importClassesFrom(Biobase, ScalarCharacter, Versions)

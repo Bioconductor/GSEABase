@@ -8,6 +8,7 @@
 \alias{GeneColorSet,ExpressionSet-method}
 \alias{GeneColorSet,GeneSet-method}
 \alias{GeneColorSet,GOCollection-method}
+\alias{GeneColorSet,BroadCollection-method}
 \title{Methods to Construct "GeneColorSet" Instances}
 \description{
   \code{GeneColorSet} is a generic for constructing gene color sets

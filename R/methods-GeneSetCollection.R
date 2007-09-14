@@ -312,6 +312,7 @@ setReplaceMethod("[[",
 setReplaceMethod("[[",
                  signature=signature(
                    x="GeneSetCollection",
+                   i="numeric",
                    value="GeneSet"),
                  function(x, i, j ,..., value) {
                      .subsetReplace(x, i, value)
@@ -416,14 +417,14 @@ setMethod("setdiff",
               GeneSetCollection(lapply(x, setdiff, y))
           })
 
-setMethod("setdiff",
-          signature=signature(
-            x="GeneSetCollection",
-            y="GeneSetCollection"),
-          function(x, y) {
-              .stopf("'setdiff(%s, %s)' not yet implemented",
-                     class(x), class(y))
-          })
+## setMethod("setdiff",
+##           signature=signature(
+##             x="GeneSetCollection",
+##             y="GeneSetCollection"),
+##           function(x, y) {
+##               .stopf("'setdiff(%s, %s)' not yet implemented",
+##                      class(x), class(y))
+##           })
 
 setMethod("Logic",
           signature=signature(e1="character", e2="GeneSetCollection"),

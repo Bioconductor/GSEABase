@@ -6,6 +6,7 @@
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,missing-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
+\alias{mapIdentifiers,GeneSet,GeneIdentifierType,environment-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
 \alias{mapIdentifiers,GeneSetCollection,GeneIdentifierType,missing-method}
@@ -45,6 +46,10 @@
       other identifiers. This method consults the annotation package specified
       in \code{from}, looking for a mapping between \code{genes(what)} and
       \code{paste(annotation(what), toupper(geneIdType(to)), sep="")}.}
+
+    \item{what = "GeneSet", to = "GeneIdentifierType", from = "environment", verbose=FALSE}{
+      Maps between identifiers found in \code{from} to those in
+      \code{to}, using the map (key-value pairs) found in \code{with}.}
 
     \item{what = "GeneSet", to = "AnnotationIdentifier", from = "NullIdentifier", verbose=FALSE}{
       This maps a gene set from gene identifiers represented by the

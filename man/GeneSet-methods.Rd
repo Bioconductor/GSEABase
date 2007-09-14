@@ -6,6 +6,7 @@
 \alias{GeneSet,character-method}
 \alias{GeneSet,GeneIdentifierType-method}
 \alias{GeneSet,ExpressionSet-method}
+\alias{GeneSet,BroadCollection-method}
 \alias{GeneSet,GOCollection-method}
 \title{Methods to construct GeneSet instances}
 \description{
@@ -62,6 +63,14 @@ GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
         setIdentifier=.uniqueIdentifier())}}{Use genes contained in \code{type} to
         create a \code{GeneSet }. The default \code{geneIdType} assumes
         that the identifiers are Entrez ids.}
+    
+    \item{
+      \code{signature(type = "BroadCollection", ..., urls = character(0),
+        setIdentifier=.uniqueIdentifier())}}{
+      Read XML following the Broad Institute schema and located at
+      \code{urls} to create a gene set. The url can be a local file or
+      internet connection, but must contain just a single gene set. See
+      \code{\link{getBroadSets}} for details.}
   }
 }
 \seealso{

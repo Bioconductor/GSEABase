@@ -226,7 +226,10 @@
       \code{\linkS4class{GeneIdentifierType}} for additional detail.}
     \item{incidence}{Summarize shared membership in genes across gene
       sets. See \code{\link{incidence-methods}}.}
-    \item{show}{\code{signature(object = "GeneSet")}: display the gene set.}
+    \item{show}{\code{signature(object = "GeneSet")}: display a short
+      summary of the gene set.}
+    \item{details}{\code{signature(object = "GeneSet")}: display
+      additional information about the gene set. See \code{\link{details}}.}
     \item{initialize}{\code{signature(.Object = "GeneSet")}: Used
       internally during gene set construction.}
   }

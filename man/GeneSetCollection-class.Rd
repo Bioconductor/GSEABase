@@ -25,9 +25,10 @@
 \alias{[,GeneSetCollection,logical-method}
 \alias{[,GeneSetCollection,numeric-method}
 \alias{[,GeneSetCollection,character-method}
-\alias{[[<-,GeneSetCollection,ANY,ANY,ANY-method}
-\alias{[[<-,GeneSetCollection,character,ANY,GeneSet-method}
 \alias{[[,GeneSetCollection,character-method}
+\alias{[[<-,GeneSetCollection,ANY,ANY,ANY-method}
+\alias{[[<-,GeneSetCollection,numeric,ANY,GeneSet-method}
+\alias{[[<-,GeneSetCollection,character,ANY,GeneSet-method}
 
 \alias{show,GeneSetCollection-method}
 
@@ -100,8 +101,9 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
     \item{setdiff}{
       \code{signature(x = "GeneSetCollection", y = "ANY")}:
       calculate the logical set difference betwen all gene sets in a
-      collection and the gene identifiers of of a gene set or character
-      vector.}
+      collection and the gene identifiers of a gene set or character
+      vector. A \code{setdiff} method must be available for
+      \code{x="GeneSet"} and the type of \code{y}. }
 
     \item{[<-}{
       \code{signature(x = "GeneSetCollection", i = "ANY", j = "ANY",
@@ -120,14 +122,17 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
       a \code{GeneSetCollection} consisting of a subset of the current
       set. All indicies \code{i} must already be present in the set.
     }
+    \item{[[}{
+      \code{signature(x = "GeneSetCollection", i = "character")}: 
+      Select a single gene set from the collection. Methods for
+      \code{i="numeric"} are inherited from \code{list}.}
+
     \item{[[<-}{
-      \code{signature(x = "GeneSetCollection", i = "ANY", j = "ANY",
-        value = "ANY")},
-      \code{signature(x = "GeneSetCollection", i = "character", j =
-        "ANY", value = "GeneSet")},
-      \code{signature(x = "GeneSetCollection", i = "character")}: Select
-      a single gene set from the collection.
-    }
+      \code{signature(x = "GeneSetCollection", i = "ANY", j = "ANY", value = "ANY")},
+      \code{signature(x = "GeneSetCollection", i = "numeric", j = "ANY", value = "GeneSet")},
+      \code{signature(x = "GeneSetCollection", i = "character", j = "ANY", value = "GeneSet")}:
+      Replace a gene set in the collecton with another.
+      \code{value = "ANY"} serves to stop invalid assignments.} 
   }
 
   Additional useful methods.

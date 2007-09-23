@@ -81,18 +81,23 @@ GeneSetCollection(object, ..., idType, setType)
     }{
       Construct a gene set collection using the \code{annotation} and
       \code{featureNames} of \code{object} to identify 
-      \code{GO} pathways implied by \code{object}. The gene set
-      collection contains only those \code{AnnotationIdentifiers} found
-      in \code{featurNames(object)}.
+      \code{GO} pathways implied by \code{object}. The map between
+      \code{featureNames} and \code{GO} pathway identifiers is derived
+      from the \code{GO2PROBE} table of the annotation
+      package of \code{object}. The gene set collection contains only
+      those \code{AnnotationIdentifiers} found in
+      \code{featureNames(object)}. The \code{evidenceCode} of
+      \code{GOCollection} can be used to restrict the pathways seleted to
+      those with matching evidence codes.
     }
 
     \item{
-      \code{signature(object="missing", idType="AnnotationIdentifier", setType="GoCollection")}
+      \code{signature(object="missing", idType="AnnotationIdentifier", setType="GOCollection")}
     }{
       Construct a gene set collection containing all GO pathways
-      referenced in the annotation of \code{idType}. The
-      \code{evidenceCode} of \code{GOCollection} can be used to restrict
-      the pathways seleted to those with matching evidence codes.
+      referenced in the annotation package of \code{idType}. See the
+      \code{signature(object="ExpressionSet", idType="missing",
+        setType="GOCollection")} method for details.
     }
   }
 }

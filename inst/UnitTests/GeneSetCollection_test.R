@@ -39,7 +39,8 @@ test_GSC_docs_constructor <- function() {
 test_GSC_idAndSetType_constructor <- function() {
     gsc1 <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2"),
                               setType=KEGGCollection())
-    checkEquals(189, length(gsc1))
+    checkEquals(length(reverseSplit(as.list(hgu95av2PATH))),
+                length(gsc1))
     i1 <- incidence(gsc1)
     i1 <- i1[sort(rownames(i1)), sort(colnames(i1))]
     gsc2 <- GeneSetCollection(idType=AnnotationIdentifier("hgu95av2.db"),
@@ -51,19 +52,32 @@ test_GSC_idAndSetType_constructor <- function() {
 
 test_GSC_ExpressionSet_constructor <- function() {
     data(sample.ExpressionSet)
-    gss <- GeneSetCollection(sample.ExpressionSet[200:220], setType=KEGGCollection())
+    gss <- GeneSetCollection(sample.ExpressionSet[200:220,],
+                             setType=KEGGCollection())
     checkTrue(is(collectionType(gss[[1]]), "KEGGCollection"))
     checkTrue(is(geneIdType(gss[[1]]), "AnnotationIdentifier"))
-    checkEquals(12, length(gss))
-    checkEquals(as.integer(c(11,1)),
-                as.vector(table(sapply(lapply(gss, geneIds), length))))
+
+    kids <- mget(featureNames(sample.ExpressionSet[200:220,]),
+                 hgu95av2PATH)
+    kids <- kids[!is.na(kids)]
+    ukids <- unique(unlist(kids))
+    checkEquals(length(ukids), length(gss))
+    checkEquals(table(sapply(reverseSplit(kids), length)),
+                table(sapply(lapply(gss, geneIds), length)))
 
     gss <- GeneSetCollection(sample.ExpressionSet[200:220], setType=GOCollection())
     checkTrue(is(collectionType(gss[[1]]), "GOCollection"))
     checkTrue(is(geneIdType(gss[[1]]), "AnnotationIdentifier"))
-    checkEquals(80, length(gss))
-    checkEquals(as.integer(c(61, 11, 4, 2, 2)),
-                as.vector(table(sapply(lapply(gss, geneIds), length))))
+
+    kids <- mget(featureNames(sample.ExpressionSet[200:220,]),
+                 hgu95av2GO)
+    kids <- kids[!is.na(kids)]
+    ukids <- unique(unlist(sapply(kids, names)))
+    checkTrue(all(sort(ukids)==sort(names(gss))))
+    rkids <- lapply(kids, lapply, "[[", "GOID")
+    checkEquals(table(sapply(reverseSplit(lapply(rkids, unique)),
+                             length)),
+                table(sapply(lapply(gss, geneIds), length)))
 }
 
 test_GSC_validity <- function() {
@@ -159,30 +173,23 @@ test_GSC_incidence <- function() {
 }
 
 test_GSC_logic <- function() {
-    .checkGSCAnd <- function(gsc, gsc1) {
-        checkTrue(is(gsc1, "GeneSetCollection"))
-        checkTrue(length(gsc1)==length(gsc))
-        gids <- unlist(geneIds(gsc1))
-        checkEquals(19, length(gids))
-        checkTrue(all(gids %in% geneIds(gsc[[1]])))
-    }
-    .checkGSCOr <- function(gsc, gsc1) {
-        checkTrue(is(gsc1, "GeneSetCollection"))
-        checkTrue(length(gsc1)==length(gsc))
-        gids <- unlist(geneIds(gsc1))
-        checkEquals(118, length(gids))
-        checkEquals(length(unique(unlist(geneIds(gsc)))), length(unique(gids)))
-    }
-    data(sample.ExpressionSet)
-    gsc <- GeneSetCollection(sample.ExpressionSet[200:210],
-                             setType=GOCollection())
-    .checkGSCAnd(gsc, gsc & geneIds(gsc[[1]]))
-    .checkGSCAnd(gsc, gsc & gsc[[1]])
-    .checkGSCAnd(gsc, gsc[[1]] & gsc)
+    gsc <- GeneSetCollection(list(GeneSet(letters[1:3], setName="A"),
+                                  GeneSet(letters[3:5], setName="B"),
+                                  GeneSet(letters[5:7], setName="C")))
+    expected <- list(letters[1:3], "c", character(0))
+    checkEquals(expected,
+                sapply(gsc & geneIds(gsc[[1]]), geneIds))
+    checkEquals(expected,
+                sapply(gsc & gsc[[1]], geneIds))
+    checkEquals(expected,
+                sapply(gsc[[1]] & gsc, geneIds))
 
-    .checkGSCOr(gsc, gsc | geneIds(gsc[[1]]))
-    .checkGSCOr(gsc, gsc | gsc[[1]])
-    .checkGSCOr(gsc, gsc[[1]] | gsc)
+    expected <- list(letters[1:3],
+                     c(letters[3:5], letters[1:2]),
+                     c(letters[5:7], letters[1:3]))
+    checkEquals(expected, sapply(gsc | geneIds(gsc[[1]]), geneIds))
+    checkEquals(expected, sapply(gsc | gsc[[1]], geneIds))
+    checkEquals(expected, sapply(gsc[[1]] | gsc, geneIds))
 }
 
 test_GSC_mapIdentifiers <- function() {

@@ -1,4 +1,3 @@
-cat("NAMESPACE:", search(), "\n")
 import(methods)
 
 importFrom(XML, getNodeSet, free, saveXML,

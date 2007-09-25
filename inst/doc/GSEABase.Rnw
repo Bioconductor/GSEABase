@@ -1,8 +1,8 @@
 % NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
 % likely to be overwritten.
 %
-%\VignetteIndexEntry{Using GeneSet and GeneColorSet classes}
-%\VignetteDepends{}
+%\VignetteIndexEntry{An introduction to GSEABase}
+%\VignetteDepends{hgu95av2,hgu95av2.db,GO}
 %\VignetteKeywords{Gene Set Enrichment Analysis}
 %\VignettePackage{GSEABase}
 \documentclass[]{article}
@@ -17,13 +17,6 @@
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
 \newcommand{\Rcode}[1]{{\texttt{#1}}}
-
-\textwidth=6.2in
-\textheight=8.5in
-%\parskip=.3cm
-\oddsidemargin=.1in
-\evensidemargin=.1in
-\headheight=-.3in
 
 \newcommand{\R}{\textsf{R}}
 \newcommand{\GSEABase}{\Rpackage{GSEABase}}
@@ -45,6 +38,10 @@
 
 \maketitle
 
+<<options,echo=FALSE>>=
+options(width=60)
+@ 
+
 <<preliminaries>>=
 ## FIXME: <adjMat> adjacency matrix -- color w. +/- 1
 ## FIXME: limma topTable --> GeneColorSet
@@ -53,17 +50,13 @@ library(GSEABase)
 library(hgu95av2)
 library(hgu95av2.db)
 library(GO)
-## temporary
-## ids <- geneIds
-## idType <- geneIdType
-## mapIds <- mapIdentifiers
 @ 
 
 \section{\GeneSet{}}
 
 A \GeneSet{} stores a set of related gene identifiers. Important
 components of the gene set are a vector of identifiers, general
-descriptive information about the set, and informatoin about how the
+descriptive information about the set, and information about how the
 gene set was constructed. To construct a gene set, use
 \Rfunction{GeneSet}. For example, to create a gene set from the
 identifiers in a subset of the sample \Robject{ExpressionSet} in the
@@ -86,13 +79,13 @@ head(geneIds(egs))
 The gene set records that the identifiers are probeset names from the
 annotation package \Sexpr{annotation(geneIdType(egs))}, and that the source
 of the gene set was an expression set. Additional details are
-availabe:
+available:
 <<details>>=
 details(egs)
 @ 
 %% 
 The set identifier, set version, and creation date provide mechanisms
-for carefully curating gene sets. Additonal informaton is
+for carefully curating gene sets. Additional information is
 automatically copied from the expression set used to create
 \Robject{egs}. 
 
@@ -107,11 +100,11 @@ View additional methods for creating gene sets with:
 showMethods("GeneSet", inherited=FALSE)
 @ 
 %% 
-These are described on the \GeneSet{} help page. 
+These are described on the \Rfunction{GeneSet} help page. 
 
 The identifier type of gene sets created from expression sets is
 \Sexpr{as.character(class(geneIdType(egs)))}. Additional predefined
-identifiers are also available:
+identifiers are available:
 <<GeneIdentifierTypes>>=
 names(getSubclasses(getClass("GeneIdentifierType")))
 @ 
@@ -139,7 +132,7 @@ eids <- eids[!is.na(eids)]
 GeneSet(EntrezIdentifier(), geneIds=as.character(eids))
 @ 
 
-The \Rmethod{collectionType} of a gene set provides addiitonal
+The \Rmethod{collectionType} of a gene set provides additional
 information about a gene set. Available collection types are
 <<CollectionType>>=
 names(getSubclasses(getClass("CollectionType")))
@@ -173,7 +166,7 @@ The example above uses a local file, but the source for the gene set
 might also be a web address accessible via the \Rcode{http://}
 protocol. The file name is added to the url of the gene set. The set
 name and category of the Broad collection indicate that the gene set
-contains gene symbols from band 24 of the q arm of chromsome 16. The
+contains gene symbols from band 24 of the q arm of chromosome 16. The
 probe sets in chip \Rcode{hgu95av2} corresponding to these symbols can
 be determined by mapping identifiers
 <<Broad-to-annotation>>=
@@ -182,7 +175,7 @@ bgs1
 @ 
 %% 
 
-Subsetting creates sets with just the sybmols identified. Subsetting
+Subsetting creates sets with just the symbols identified. Subsetting
 can use indices or symbol names.
 <<subset>>=
 bgs[1:5]
@@ -196,9 +189,10 @@ particular properties. For instance, the intersection
 egs & bgs1
 @ 
 %% 
-is empty, incidating that none of the identifiers in \Robject{egs} are
-on \Rcode{16q24}. Additional operations on sets include union
-(performed with \Rfunction{|}) and difference (\Rfunction{setdiff}).
+is empty (note that the identifiers in the two sets were of the same
+type), indicating that none of the identifiers in \Robject{egs} are on
+\Rcode{16q24}. Additional operations on sets include union (performed
+with \Rfunction{|}) and difference (\Rfunction{setdiff}).
 
 Methods exist to directly subset expression sets using gene sets
 <<subset-ExpressionSet>>=
@@ -207,7 +201,7 @@ sample.ExpressionSet[bgs,]
 %% 
 Remember that \Robject{sample.ExpressionSet} contains just
 \Sexpr{nrow(sample.ExpressionSet)} probe sets, so the small size of the
-subset is not surprising. Note also that subsetting requried mapping
+subset is not surprising. Note also that subsetting required mapping
 of symbol identifiers in \Robject{bgs} to \AnnotationIdentifier{}s;
 this map used the annotation information in the expression set,
 and is not necessarily 1:1.

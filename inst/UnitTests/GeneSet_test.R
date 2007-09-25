@@ -31,6 +31,9 @@ do_GeneSet_setter_check <- function(obj) {
                        list(obj, new(class(slot(obj, setters[[s]])))))
         checkTrue(validObject(obj,complete=TRUE))
     }
+    ## assign character to 'ScalarCharacter' slot
+    setName(obj) <- "A name"
+    checkTrue(validObject(obj, complete=TRUE))
 }
 
 test_GS_MakeNoType <- function() {
@@ -174,4 +177,21 @@ test_GS_incidence <- function() {
     res <- incidence(gss[[1]], gss[[2]])
     checkTrue(all(dim(res)==c(2, 215)))
     checkTrue(sum(res)== 215)
+}
+
+test_GS_uniqueSetIdentifier <- function() {
+    gs <- GeneSet(letters[1:3], setName="A")
+
+    checkTrue(setIdentifier(gs) !=
+              setIdentifier(GeneSet(letters[1:2])))
+    checkTrue(setIdentifier(gs) !=
+              setIdentifier(gs["b"]))
+
+    setters <- GSEABase:::.nameAll(GSEABase:::.SETTERS_GeneSet)
+    for (s in names(setters)) {
+        ss <- paste(s, "<-", sep="")
+        obj <- do.call(ss,
+                       list(gs, new(class(slot(gs, setters[[s]])))))
+        checkTrue(setIdentifier(gs) != setIdentifier(obj))
+    }
 }

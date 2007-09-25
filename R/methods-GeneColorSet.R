@@ -47,7 +47,7 @@ setMethod("GeneColorSet",
 
 .SETTERS_GeneColorSet <- .GETTERS_GeneColorSet
 
-.setters("GeneColorSet", .SETTERS_GeneColorSet)
+.GeneSet_setters("GeneColorSet", .SETTERS_GeneColorSet)
 
 setReplaceMethod("phenotype",
                  signature(object="GeneColorSet",
@@ -86,7 +86,6 @@ setReplaceMethod("coloring",
                          geneColor=value[ogenes, "geneColor"],
                          phenotypeColor=value[ogenes, "phenotypeColor"],
                          setName=setName(object),
-                         setIdentifier=setIdentifier(object),
                          phenotype=phenotype(object))
                  })
 
@@ -197,7 +196,6 @@ setMethod("$",
     pc <- color(phenotypeColor(x)[idx], phenotypeColor(y)[idy],
                 "phenotypeColor")
     new(class(x), x,
-        setIdentifier=setIdentifier(x),
         setName = .glue(setName(x), setName(y), " & "),
         urls = .unique(urls(x), urls(y)),
         phenotype = phenotype,
@@ -223,7 +221,6 @@ setMethod("$",
                    levels(phenotypeColor(x)),
                    levels(phenotypeColor(y)))))
     new(class(x), x,
-        setIdentifier=setIdentifier(x),
         setName = .glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
         geneIds = geneIds, geneColor = gc, phenotypeColor = pc)      
@@ -243,7 +240,6 @@ setMethod("$",
     pc <- factor(phenotypeColor(x)[idx],
                  levels=levels(phenotypeColor(x)))
     new(class(x), x,
-        setIdentifier=setIdentifier(x),
         setName = .glue(setName(x), setName(y), " - "),
         urls = .unique(urls(x), urls(y)),
         geneIds=gx[idx], geneColor = gc, phenotypeColor = pc)
@@ -268,7 +264,6 @@ setMethod("&",
           function(e1, e2) {
               idx <- which(geneIds(e1)==e2)
               new(class(e1), e1,
-                  setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " & "),
                   geneIds=geneIds(e1)[idx],
                   geneColor=geneColor(e1)[idx],

@@ -42,7 +42,7 @@ setMethod("initialize",
           signature=signature(.Object="GeneSet"),
           function(.Object, .Template=.Object, ...,
                    ## additional args, manipulated by method
-                   setIdentifier=.Template@setIdentifier,
+                   setIdentifier=.uniqueIdentifier(),
                    setName=.Template@setName,
                    shortDescription=.Template@shortDescription,
                    longDescription=.Template@longDescription,
@@ -68,7 +68,9 @@ setMethod("initialize",
 .SETTERS_GeneSet <-
     .GETTERS_GeneSet["geneIdType" != .GETTERS_GeneSet]
 
-.setters("GeneSet", .SETTERS_GeneSet)
+.GeneSet_setters("GeneSet", .SETTERS_GeneSet[.SETTERS_GeneSet!="setIdentifier"])
+
+.setters("GeneSet", "setIdentifier")    # no need to set unique identifier!
 
 ## convert between GeneIdentifier types
 
@@ -163,7 +165,6 @@ setMethod("$",
 .geneSetIntersect <- function(x, y) {
    .checkGeneSetLogicTypes(x, y, "'&' or 'intersect'")
     new(class(x), x,
-        setIdentifier=setIdentifier(x),
         setName=.glue(setName(x), setName(y), " & "),
         urls=.unique(urls(x), urls(y)),
         geneIds=intersect(geneIds(x), geneIds(y)))
@@ -172,7 +173,6 @@ setMethod("$",
 .geneSetUnion <- function(x, y) {
     .checkGeneSetLogicTypes(x, y, "'|' or 'union'")
     new(class(x), x,
-        setIdentifier=setIdentifier(x),
         setName=.glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
         geneIds=union(geneIds(x), geneIds(y)))
@@ -195,7 +195,6 @@ setMethod("&",
           function(e1, e2) {
               geneIds <- intersect(geneIds(e1), e2)
               new(class(e1), e1,
-                  setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " & "),
                   geneIds=geneIds)
           })
@@ -209,7 +208,6 @@ setMethod("|",
           function(e1, e2) {
               geneIds <- union(geneIds(e1), e2)
               new(class(e1), e1,
-                  setIdentifier=setIdentifier(e1),
                   setName=.glue(setName(e1), "<character>", " | "),
                   geneIds=geneIds)
           })
@@ -224,7 +222,6 @@ setMethod("setdiff",
               .checkGeneSetLogicTypes(x, y, "'setdiff'")
               geneIds=setdiff(geneIds(x), geneIds(y))
               new(class(x), x,
-                  setIdentifier=setIdentifier(x),
                   setName=.glue(setName(x), setName(y), " - "),
                   geneIds=setdiff(geneIds(x), geneIds(y)),
                   creationDate=date())
@@ -254,7 +251,7 @@ setMethod("incidence",
 ## show / description
 
 .showGeneSet <- function(object) {
-    cat("setName: ", setName(object), "\n")
+    cat("setName:", setName(object), "\n")
     cat("geneIds:",
         paste(selectSome(geneIds(object), maxToShow=4),
               collapse=", "),

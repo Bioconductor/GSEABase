@@ -202,3 +202,43 @@
                 WHERE=where)))
     }
 }
+
+## setters that also assign a new unique identifier
+.GeneSet_setters <- function(klass, slots,
+                             where=topenv(parent.frame()), ...) {
+    slots <- .nameAll(slots)
+    for (i in seq(along=slots)) {
+        vtype <- getSlots(klass)[[ slots[[i]] ]]
+        if (vtype == "ScalarCharacter") {
+            vtype <- "character"
+            value <- quote(mkScalar(value))
+        } else {
+            value <- quote(value)
+        }
+        eval(substitute({
+            if (!isGeneric(SETTER, where=where))
+                setGeneric(SETTER, function(object, value)
+                           standardGeneric(SETTER),
+                           where = WHERE)
+            setReplaceMethod(GENERIC,
+                             signature=signature(
+                               object=CLASS,
+                               value=VTYPE),
+                             function(object, value) {
+                                 slot(object, SLOT) <- VALUE
+                                 `slot<-`(object, "setIdentifier",
+                                          check=FALSE,
+                                          mkScalar(.uniqueIdentifier()))
+                                 validObject(object)
+                                 object
+                             },
+                             where = WHERE)
+        }, list(CLASS=klass,
+                GENERIC=names(slots)[[i]],
+                SETTER=paste(names(slots)[[i]], "<-", sep=""),
+                SLOT=slots[[i]],
+                VTYPE=vtype,
+                VALUE=value,
+                WHERE=where)))
+    }
+}

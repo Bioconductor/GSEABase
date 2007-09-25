@@ -102,7 +102,8 @@ setMethod("mapIdentifiers",
             to="GeneIdentifierType",
             from="missing"),
           function(what, to, from, ..., verbose=FALSE) {
-              callGeneric(what, to, from=geneIdType(what), ..., verbose=verbose)
+              callGeneric(what, to, from=geneIdType(what), ...,
+                          verbose=verbose)
           })
 
 ## Null --> X
@@ -160,8 +161,7 @@ setMethod("mapIdentifiers",
               geneIds <- .fromAnnotation(from, tag, what,
                                          verbose=verbose)
               new(class(what), what,
-                  geneIds=geneIds,
-                  geneIdType=to)
+                  geneIds=geneIds, geneIdType=to)
           })
 
 ## X --> AnnotationIdentifier

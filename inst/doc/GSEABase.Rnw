@@ -37,13 +37,17 @@
 \newcommand{\term}[1]{\emph{#1}}
 \newcommand{\mref}[2]{\htmladdnormallinkfoot{#2}{#1}}
 
+\title{An Introduction to \Rpackage{GSEABase}}
+\author{Martin Morgan}
+\date{24 September, 2007}
+
 \begin{document}
+
+\maketitle
 
 <<preliminaries>>=
 ## FIXME: <adjMat> adjacency matrix -- color w. +/- 1
 ## FIXME: limma topTable --> GeneColorSet
-## FIXME: collectionType == flatten hierarcy? other info in collection
-## slots, e.g., origin
 ## w. verbose=TRUE
 library(GSEABase)
 library(hgu95av2)
@@ -61,10 +65,10 @@ A \GeneSet{} stores a set of related gene identifiers. Important
 components of the gene set are a vector of identifiers, general
 descriptive information about the set, and informatoin about how the
 gene set was constructed. To construct a gene set, use
-\Rfunction{GeneSet}. For example, to create a gene set from the all
+\Rfunction{GeneSet}. For example, to create a gene set from the
 identifiers in a subset of the sample \Robject{ExpressionSet} in the
 Biobase package (see \Rpackage{Biobase} documentation for a
-description of expression sets), use
+description of expression sets) use
 <<GeneSet>>=
 library(GSEABase)
 data(sample.ExpressionSet) # from Biobase
@@ -113,17 +117,27 @@ names(getSubclasses(getClass("GeneIdentifierType")))
 @ 
 %% 
 It is possible to map between identifier types (provided the
-corresponding map in the annotation package exists), or to create a
-gene set with particular identifiers:
+corresponding map in the annotation package exists):
 <<mapIdentifiers>>=
 mapIdentifiers(egs, EntrezIdentifier())
+@ 
+%% 
+\Rfunction{mapIdentifiers} consults the gene set to determine that
+annotation (probeset) identifiers are to be converted to Entrez IDs
+using the \Robject{hgu95av2ENTREZID} environment in the
+\Rcode{hgu95av2} package. \Rfunction{mapIdentifiers} can automatically
+determine many of the common maps; it is also possible to provide as a
+third argument an environment containing an arbitrary map. Use the
+\Rfunction{verbose} argument of \Rmethod{mapIdentifiers} to be
+informed when the map between identifier types is not 1:1.
+
+A gene set can be created with different types of identifier, e.g., to
+create a gene set with Entrez IDs, use
+<<GeneSet_Identifiers>>=
 eids <- unique(unlist(mget(geneIds(egs), hgu95av2ENTREZID)))
 eids <- eids[!is.na(eids)]
 GeneSet(EntrezIdentifier(), geneIds=as.character(eids))
 @ 
-%% 
-Use the \Rfunction{verbose} argument of \Rmethod{mapIdentifiers} to be informed when
-the map between identifier types is not 1:1.
 
 The \Rmethod{collectionType} of a gene set provides addiitonal
 information about a gene set. Available collection types are
@@ -134,28 +148,34 @@ names(getSubclasses(getClass("CollectionType")))
 Collection types are most important when creating gene sets. For
 instance, the \GOCollection{} class allows creation of gene sets based
 on gene ontology (GO) terms. The following command creates a gene set
-from two terms, including all genes with a particular evidence code:
+from two terms, including all genes with a particular evidence code. 
 <<GOCollection>>=
 GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
                      evidenceCode="IDA"),
         setName="Sample GO Collection")
 @ 
 %% 
-Gene sets encoded in XML following the schema and conventions of the
-Broad Institute can be created as follows:
+This creates a gene set by consulting an environment in the
+\Rpackage{GO} package. A gene set created from an expression set, and
+with collection type \Robject{GOCollection()} consults
+the appropriate environment in the annotation package associated with
+the expression set. 
+
+Gene sets encoded in XML following the schema and
+conventions of the Broad Institute can be read into \R{} as follows:
 <<Broad>>=
 fl <- system.file("extdata", "Broad1.xml", package="GSEABase")
 bgs <- GeneSet(BroadCollection(), urls=fl)
 bgs
 @ 
 %% 
-The example above uses a local file, but it might also be a web
-address accessible via the \Rcode{http://} protocol. The file name is
-added to the url of the gene set. The set name and category of the
-Broad collection indicate that the gene set contains gene symbols from
-band 24 of the q arm of chromsome 16. The probe sets in chip
-\Rcode{hgu95av2} corresponding to these symbols can be determined by
-mapping identifiers
+The example above uses a local file, but the source for the gene set
+might also be a web address accessible via the \Rcode{http://}
+protocol. The file name is added to the url of the gene set. The set
+name and category of the Broad collection indicate that the gene set
+contains gene symbols from band 24 of the q arm of chromsome 16. The
+probe sets in chip \Rcode{hgu95av2} corresponding to these symbols can
+be determined by mapping identifiers
 <<Broad-to-annotation>>=
 bgs1 <- mapIdentifiers(bgs, AnnotationIdentifier("hgu95av2"))
 bgs1
@@ -225,7 +245,7 @@ tbl
 %% 
 Note that three different aspects of data influence coloring: the
 phenotype under consideration (cisplatin resistance), whether
-consequences for phenotype refer to increasing or decreasing levels of
+expression responses refer to increasing or decreasing levels of
 gene expression, and whether the phenotypic response represents
 greater resistance or sensitivity to cisplatin. Here is the resulting
 gene color set:
@@ -275,12 +295,14 @@ GeneSetCollection(sample.ExpressionSet[201:300,],
 Sets in the collection are named after the GO terms, and can be
 accessed by numeric index or name.
 
+A file or url containing several gene sets defined by Broad XML can be
+used to create a gene set collection, e.g.,
 <<GeneSetCollection-BroadCollection>>=
   ## FIXME: BroadCollection default to paste("c", 1:4, sep="")
   ## FIXME: GeneSetCollection(BroadCollection(), urls=fl); filters on bcCategory
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 gss <- getBroadSets(fl)
-class(gss)
+gss
 names(gss)
 @ 
 
@@ -292,5 +314,8 @@ gsc
 gsc[["GO:0005737"]]
 @ 
 %% 
+
+This concludes a brief tour of gene sets and gene set collections
+available in the \Rpackage{GSEABase} package.
 
 \end{document}

@@ -466,5 +466,8 @@ setMethod("show",
               cat("GeneSetCollection\n",
                   "  names: ",
                   paste(Biobase::selectSome(names(object), 4), collapse=", "),
-                  " (", length(object), " total)\n", sep="")
+                  " (", length(object), " total)\n",
+                  "  unique identifiers: ",
+                  length(unique(sapply(object, geneIds))), "\n",
+                  sep="")
           })

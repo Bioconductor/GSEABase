@@ -468,6 +468,6 @@ setMethod("show",
                   paste(Biobase::selectSome(names(object), 4), collapse=", "),
                   " (", length(object), " total)\n",
                   "  unique identifiers: ",
-                  length(unique(sapply(object, geneIds))), "\n",
+                  length(unique(unlist(lapply(object, geneIds)))), "\n",
                   sep="")
           })

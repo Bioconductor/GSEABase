@@ -76,8 +76,12 @@ setMethod("initialize",
     pkgName <- annotation(object)
     pkg <- sub(".db$", "", pkgName)
     symbol <- paste(pkg, symbol, sep="")
-    if (!.requireQ(pkgName))
-        .stopf("cannot load annotation package '%s'", pkgName)
+    if (!.requireQ(pkgName)) {
+        pkgNameDb <- paste(pkg, "db", sep=".")
+        if (pkgName != pkgNameDb && !.requireQ(pkgNameDb))
+            .stopf("cannot load annotation package '%s'", pkgName)
+        pkgName <- pkgNameDb
+    }
     pkgPos <- match(paste("package", pkgName, sep=":"), search())
     if (!exists(symbol, pkgPos, inherits=FALSE))
         .stopf("no symbol '%s' in annotation package '%s'",

@@ -464,16 +464,16 @@ setMethod("show",
             object="GeneSetCollection"),
           function(object) {
               some <- function(x)
-                  paste(paste(Biobase::selectSome(x, 4), collapse=","),
+                  paste(paste(Biobase::selectSome(x, 4), collapse=", "),
                         " (", length(x), " total)", sep="")
-              gids <- unique(unlist(lapply(object, geneIds)))
-              itypes <- unique(sapply(lapply(gsc, geneIdType), class))
-              ctypes <- unique(sapply(lapply(gsc, collectionType), class))
+              gids <- unique(unlist(geneIds(object)))
+              itypes <- unique(sapply(lapply(object, geneIdType), class))
+              ctypes <- unique(sapply(lapply(object, collectionType), class))
               cat("GeneSetCollection\n",
                   "  names: ", some(names(object)), "\n",
                   "  unique identifiers: ", some(gids), "\n",
-                  "  types in set:\n",
-                  "    identifiers: ", some(itypes), "\n",
-                  "    collections: ", some(ctypes), "\n",
+                  "  types in collection:\n",
+                  "    geneIdType: ", some(itypes), "\n",
+                  "    collectionType: ", some(ctypes), "\n",
                   sep="")
           })

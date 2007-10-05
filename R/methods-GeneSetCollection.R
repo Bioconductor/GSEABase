@@ -463,11 +463,17 @@ setMethod("show",
           signature=signature(
             object="GeneSetCollection"),
           function(object) {
+              some <- function(x)
+                  paste(paste(Biobase::selectSome(x, 4), collapse=","),
+                        " (", length(x), " total)", sep="")
+              gids <- unique(unlist(lapply(object, geneIds)))
+              itypes <- unique(sapply(lapply(gsc, geneIdType), class))
+              ctypes <- unique(sapply(lapply(gsc, collectionType), class))
               cat("GeneSetCollection\n",
-                  "  names: ",
-                  paste(Biobase::selectSome(names(object), 4), collapse=", "),
-                  " (", length(object), " total)\n",
-                  "  unique identifiers: ",
-                  length(unique(unlist(lapply(object, geneIds)))), "\n",
+                  "  names: ", some(names(object)), "\n",
+                  "  unique identifiers: ", some(gids), "\n",
+                  "  types in set:\n",
+                  "    identifiers: ", some(itypes), "\n",
+                  "    collections: ", some(ctypes), "\n",
                   sep="")
           })

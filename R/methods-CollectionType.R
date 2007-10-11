@@ -44,7 +44,9 @@ setMethod("show",
           function(object) {
               callNextMethod()
               ids <- ids(object)
-              cat("  ids: ", selectSome(ids),
+              cat("  ids: ",
+                  paste(selectSome(ids, maxToShow=4),
+                        collapse=", "),
                   " (", length(ids), " total)\n", sep="")
           })
 

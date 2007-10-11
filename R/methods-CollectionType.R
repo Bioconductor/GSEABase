@@ -43,15 +43,17 @@ setMethod("show",
             object = "CollectionIdType"),
           function(object) {
               callNextMethod()
-              cat("  ids:", selectSome(ids(object)), "\n")
+              ids <- ids(object)
+              cat("  ids: ", selectSome(ids),
+                  " (", length(ids), " total)\n", sep="")
           })
 
 ## GOCollection
 
 GOCollection <- function(ids=character(0),
                          evidenceCode="ANY", ...) {
-    codes <- c("IMP", "IGI", "IPI", "ISS", "IDA", "IEP", "IEA", "TAS",
-               "NAS", "ND", "IC", "NR", "ANY", NA)
+    codes <- c("IMP", "IPI", "TAS", "ISS", "IDA", "NAS", "IEA", "IGI",
+               "RCA", "IEP", "IC", "NR", "ND", "ANY", NA)
     codeOk <- evidenceCode %in% codes
     if (!all(codeOk))
         .stopf("evidenceCode invalid: '%s'",

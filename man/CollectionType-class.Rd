@@ -26,6 +26,8 @@
 \alias{show,GOCollection-method}
 \alias{evidenceCode}
 \alias{goIds}
+% OBOCollection-class
+\alias{OBOCollection-class}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
 % additional classes
@@ -62,6 +64,9 @@
       \code{\link{GeneColorSet}}.}
     \item{GOCollection}{Collection derived using Gene Ontology (GO)
       terms.}
+    \item{OBOCollection}{Collection derived from \code{GOCollection},
+      specifically from files described by the OBO file format. See
+      \url{http://www.geneontology.org} for details of the OBO format.}
     \item{KEGGCollection}{Collection derived using KEGG terms.}
     \item{ChrCollection}{Collection derived using chromsome locations}
     \item{ChrlocCollection}{Collection derived using chromosome starting

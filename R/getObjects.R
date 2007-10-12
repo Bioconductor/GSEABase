@@ -130,3 +130,43 @@ toBroadXML <- function(geneSet, con = stdout(), ...) {
     })
 }
 
+## 
+##  OBO collections
+## 
+
+## Read 'obo' files for GO ids
+.fromOBO <- function(src) {
+    ## Parse OBO into 'stanza' and 'kv' (key-value) tables.
+    ## VERY NAIVE
+    data <- readLines(src)
+    parser <- list(stanza="^\\[(.*)\\]", kv="^([^:]*):\\s*(.*)")
+    stanza <- data.frame(id=c(0,grep(parser$stanza, data)),
+                         value=c("Root", sub(parser$stanza, "\\1",
+                           grep(parser$stanza, data, value=TRUE))),
+                         stringsAsFactors=FALSE)
+    kv_pairs <- grep(parser$kv, data, value=TRUE)
+    kv_id <- grep(parser$kv, data)
+    stanza_id <- sapply(kv_id, function(x) {
+        idx <- x > stanza$id
+        stanza$id[xor(idx, c(idx[-1], FALSE))]
+    })
+    kv <- data.frame(id=kv_id, stanza_id=stanza_id,
+                     key=sub(parser$kv, "\\1", kv_pairs),
+                     value=sub(parser$kv, "\\2", kv_pairs),
+                     stringsAsFactors=FALSE)
+
+    ## Get GO ids
+    list(stanza=stanza, kv=kv)
+}
+
+.idsFromOBO <- function(stanza, kv) {
+    merge(kv[kv$key=="id", names(kv)!="key", drop=FALSE],
+          stanza[stanza$value=="Term", names(stanza)!="value",
+                 drop=FALSE],
+          by.x="stanza_id", by.y="id")$value
+ }
+
+getOBOCollection <- function(uri, ...) {
+    res <- .fromOBO(uri)
+    OBOCollection(.idsFromOBO(res$stanza, res$kv), ...)
+}

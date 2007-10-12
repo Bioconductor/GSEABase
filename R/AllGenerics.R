@@ -18,6 +18,13 @@ setGeneric("mapIdentifiers",
                }
            })
 
+## goSlim
+
+setGeneric("goSlim",
+           function(idSrc, slimCollection, ontology, ..., verbose=FALSE)
+           standardGeneric("goSlim"),
+           signature=c("idSrc", "slimCollection"))
+
 ## GeneSet
 
 setGeneric("details",

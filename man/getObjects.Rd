@@ -21,8 +21,8 @@ asBroadUri(name,
 }
 \arguments{
   \item{uri}{A file name or URL containing gene sets encoded following
-    the Broad specification. Gene sets can be embedded in other
-    elements, such as those for Broad's MSIGDB.}
+    the Broad specification. For Broad sets, the uri can point to
+    a MSIGDB.}
   \item{geneSet}{A \code{\linkS4class{GeneSet}} with
     \code{collectionType} \code{BroadCollection} (to ensure that
     required information is available).}

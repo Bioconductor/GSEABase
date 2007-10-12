@@ -110,6 +110,12 @@
                evidenceCode = as.character(NA)),
              where = where)
 
+    setClass("OBOCollection",
+             contains="GOCollection",
+             prototype=prototype(
+               type=new("ScalarCharacter", "OBO")),
+             where=where)
+
     setClass("BroadCollection",
              contains = "CollectionType",
              representation = representation(

@@ -17,7 +17,7 @@ exportClasses(## GeneIdentifierType
               CollectionType, NullCollection, ExpressionSetCollection,
               CollectionIdType, KEGGCollection, OMIMCollection, PMIDCollection,
               ChrCollection, ChrlocCollection, PfamCollection, PrositeCollection,
-              GOCollection,
+              GOCollection, OBOCollection,
               BroadCollection,
 
               ## GeneSet
@@ -37,6 +37,7 @@ exportMethods(show, details, initialize, intersect, union, setdiff,
               ids,
               bcCategory, bcSubCategory,
               evidenceCode,
+              goSlim,
 
               ## GeneSet
               GeneSet,
@@ -70,7 +71,10 @@ export(## IdentifierType
        NullCollection, ExpressionSetCollection, KEGGCollection,
        OMIMCollection, PMIDCollection, ChrCollection,
        ChrlocCollection, MapCollection, PfamCollection,
-       PrositeCollection, GOCollection, BroadCollection,
+       PrositeCollection, GOCollection, OBOCollection, BroadCollection,
 
        ## XML
-       asBroadUri, getBroadSets, toBroadXML)
+       asBroadUri, getBroadSets, toBroadXML,
+
+       ## OBO
+       getOBOCollection)

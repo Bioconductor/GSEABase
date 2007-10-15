@@ -8,13 +8,14 @@
   consortium.
 }
 \usage{
-getOBOCollection(uri, ...)
+getOBOCollection(uri, evidenceCode="ANY", ...)
 }
 \arguments{
   \item{uri}{A file name or URL containing gene sets encoded following
     the OBO specification.}
+  \item{evidenceCode}{A character vector of evidence codes.}
   \item{\dots}{Further arguments passed to the
-    \code{\link{OBOCollection}} constructor, e.g., \code{evidenceCode}.}
+    \code{\link{OBOCollection}} constructor.}
 }
 \value{
   \code{getOBOCollection} returns an \code{OBOCollection} of gene

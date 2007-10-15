@@ -188,8 +188,9 @@ toBroadXML <- function(geneSet, con = stdout(), ...) {
     row.names(stanza)[stanza$value=="Term"]
 
 getOBOCollection <- function(uri, evidenceCode="ANY", ...) {
+    evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
     res <- .fromOBO(uri)
     new("OBOCollection",
         .stanza=res$stanza, .kv=res$kv,
-        ids=.OBOids(res$stanza), ...)
+        ids=.OBOids(res$stanza), evidenceCode=evidenceCode, ...)
 }

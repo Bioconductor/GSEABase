@@ -184,11 +184,12 @@ toBroadXML <- function(geneSet, con = stdout(), ...) {
     list(stanza=stanza, kv=kv)
 }
 
-.idsFromOBO <- function(stanza) {
-    row.names(stanza)[stanza$Value=="Term"]
- }
+.OBOids <- function(stanza)
+    row.names(stanza)[stanza$value=="Term"]
 
-getOBOCollection <- function(uri, ...) {
+getOBOCollection <- function(uri, evidenceCode="ANY", ...) {
     res <- .fromOBO(uri)
-    OBOCollection(.idsFromOBO(res$stanza), ...)
+    new("OBOCollection",
+        .stanza=res$stanza, .kv=res$kv,
+        ids=.OBOids(res$stanza), ...)
 }

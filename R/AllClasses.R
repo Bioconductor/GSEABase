@@ -112,6 +112,9 @@
 
     setClass("OBOCollection",
              contains="GOCollection",
+             representation=representation(
+               .stanza="data.frame",
+               .kv="data.frame"),
              prototype=prototype(
                type=new("ScalarCharacter", "OBO")),
              where=where)

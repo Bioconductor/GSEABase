@@ -87,7 +87,18 @@ setMethod("show",
 OBOCollection <- function(ids=character(0),
                           evidenceCode="ANY", ...) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
-    new("OBOCollection", ids=ids, evidenceCode=evidenceCode)
+    if (any(duplicated(ids)))
+        .stopf("OBO 'ids' contains duplicates: %s",
+               paste(ids[duplicated(ids)], collapse=" "))
+    .stanza <- data.frame(ids,
+                          value=rep("Term", length(ids)),
+                          row.names="ids")
+    goMap <- getAnnMap("TERM", "GO")
+    .kv <- data.frame(stanza_id=ids,
+                      key=rep("name", length(ids)),
+                      value=sapply(mget(ids, goMap), Term))
+    new("OBOCollection", .stanza=.stanza, .kv=.kv,
+        ids=ids, evidenceCode=evidenceCode)
 }
 
 ## Group GO ids into GO_ontology-specific GO_slim categories

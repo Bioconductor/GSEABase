@@ -138,35 +138,57 @@ toBroadXML <- function(geneSet, con = stdout(), ...) {
 .fromOBO <- function(src) {
     ## Parse OBO into 'stanza' and 'kv' (key-value) tables.
     ## VERY NAIVE
+    parser <- list(blank_line="^\\s*$",
+                   comment_line="^\\s*!",
+                   comment="\\s*!.*$",
+                   stanza="^\\[(.+)\\]",
+                   kv="^([^:]*):\\s*(.*)")
     data <- readLines(src)
-    parser <- list(stanza="^\\[(.*)\\]", kv="^([^:]*):\\s*(.*)")
-    stanza <- data.frame(id=c(0,grep(parser$stanza, data)),
-                         value=c("Root", sub(parser$stanza, "\\1",
-                           grep(parser$stanza, data, value=TRUE))),
+    comments <- grep(parser$comment_line, data)
+    if (length(comments) > 0)
+        data <- data[-comments]
+    data <- sub(parser$comment, "", data)
+    ## stanzas: parser$blank_line followed by parser$stanza
+    stnz <- grep(parser$stanza, data)
+    stnz <- stnz[stnz %in% (grep(parser$blank_line, data) + 1)]
+    stanza <- data.frame(id=c(0,stnz),
+                         value=c("Root",
+                           sub(parser$stanza, "\\1", data[stnz])),
                          stringsAsFactors=FALSE)
-    kv_pairs <- grep(parser$kv, data, value=TRUE)
+    ## key-value pairs, mapped to stanza
     kv_id <- grep(parser$kv, data)
     stanza_id <- sapply(kv_id, function(x) {
         idx <- x > stanza$id
         stanza$id[xor(idx, c(idx[-1], FALSE))]
     })
-    kv <- data.frame(id=kv_id, stanza_id=stanza_id,
-                     key=sub(parser$kv, "\\1", kv_pairs),
-                     value=sub(parser$kv, "\\2", kv_pairs),
-                     stringsAsFactors=FALSE)
 
-    ## Get GO ids
+    kv_pairs <- data[kv_id]
+    kv_key=sub(parser$kv, "\\1", kv_pairs)
+    kv_value=sub(parser$kv, "\\2", kv_pairs)
+
+    ## a lot of work to map stanza row.names as corresponding id's
+    id_keys <- kv_key=="id"
+    stanza_idx <- match(stanza_id[id_keys], stanza$id)
+    row.names(stanza)[c(1, stanza_idx)] <-
+        c(".__Root__", kv_value[id_keys])
+    stanza_id <- row.names(stanza)[match(stanza_id, stanza$id)]
+    stanza$id <- NULL
+
+    ## kv data frame
+    kv <- data.frame(id=kv_id[!id_keys],
+                     stanza_id=stanza_id[!id_keys],
+                     key=kv_key[!id_keys],
+                     value=kv_value[!id_keys],
+                     stringsAsFactors=FALSE,
+                     row.names="id")
     list(stanza=stanza, kv=kv)
 }
 
-.idsFromOBO <- function(stanza, kv) {
-    merge(kv[kv$key=="id", names(kv)!="key", drop=FALSE],
-          stanza[stanza$value=="Term", names(stanza)!="value",
-                 drop=FALSE],
-          by.x="stanza_id", by.y="id")$value
+.idsFromOBO <- function(stanza) {
+    row.names(stanza)[stanza$Value=="Term"]
  }
 
 getOBOCollection <- function(uri, ...) {
     res <- .fromOBO(uri)
-    OBOCollection(.idsFromOBO(res$stanza, res$kv), ...)
+    OBOCollection(.idsFromOBO(res$stanza), ...)
 }

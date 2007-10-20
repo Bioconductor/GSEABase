@@ -114,9 +114,17 @@
              contains="GOCollection",
              representation=representation(
                .stanza="data.frame",
+               .subset="data.frame",
                .kv="data.frame"),
              prototype=prototype(
-               type=new("ScalarCharacter", "OBO")),
+               type=new("ScalarCharacter", "OBO"),
+               .stanza=data.frame(id=character(0),
+                 value=character(0), row.names="id"),
+               .subset=data.frame(id=character(0),
+                 value=character(0), row.names="id"),
+               .kv=data.frame(stanza_id=character(0),
+                 key=character(0), value=character(0))
+               ),
              where=where)
 
     setClass("BroadCollection",
@@ -132,6 +140,7 @@
 
     ## constructors / getters / setters
     ## (GOCollection and BroadCollection in methods-CollectionType.R)
+    ## (OBOCollection in methods-OBOCollection.R)
     simpleCollections <- paste(simpleCollections, "Collection", sep="")
     .constructors_Simple(simpleCollections, where=where)
     .getters("CollectionType", c(collectionType="type"), where=where)

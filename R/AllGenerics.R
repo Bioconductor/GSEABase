@@ -60,3 +60,8 @@ setGeneric("coloring<-",
 setGeneric("GeneSetCollection",
            function(object, ..., idType, setType)
            standardGeneric("GeneSetCollection"))
+
+## OBOCollection
+
+setGeneric("subsets",
+           function(object, ...)  standardGeneric("subsets"))

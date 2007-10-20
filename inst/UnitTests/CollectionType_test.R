@@ -18,9 +18,3 @@ test_CollectionType_Constructors <- function() {
     checkTrue("yyy" == bcSubCategory(BroadCollection(subCategory="yyy")))
 }
 
-test_getOBOCollection <- function() {
-    fl <- system.file("extdata", "goslim_plant.obo", package="GSEABase")
-    obj <- getOBOCollection(fl, evidenceCode="TAS")
-    checkEquals(106, length(ids(obj)))
-    checkEquals("TAS", evidenceCode(obj))
-}

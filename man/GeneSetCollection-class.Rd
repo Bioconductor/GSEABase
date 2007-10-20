@@ -22,9 +22,9 @@
 \alias{[<-,GeneSetCollection,ANY,ANY,ANY-method}
 \alias{[<-,GeneSetCollection,ANY,ANY,GeneSet-method}
 \alias{[<-,GeneSetCollection,character,ANY,GeneSet-method}
-\alias{[,GeneSetCollection,logical-method}
-\alias{[,GeneSetCollection,numeric-method}
-\alias{[,GeneSetCollection,character-method}
+\alias{[,GeneSetCollection,logical,ANY-method}
+\alias{[,GeneSetCollection,numeric,ANY-method}
+\alias{[,GeneSetCollection,character,ANY-method}
 \alias{[[,GeneSetCollection,character-method}
 \alias{[[<-,GeneSetCollection,ANY,ANY,ANY-method}
 \alias{[[<-,GeneSetCollection,numeric,ANY,GeneSet-method}

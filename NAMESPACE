@@ -37,7 +37,7 @@ exportMethods(show, details, initialize, intersect, union, setdiff,
               ids,
               bcCategory, bcSubCategory,
               evidenceCode,
-              goSlim,
+              subsets, goSlim,
 
               ## GeneSet
               GeneSet,

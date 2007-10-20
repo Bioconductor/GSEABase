@@ -5,6 +5,7 @@
 \alias{collectionType,CollectionType-method}
 \alias{show,CollectionType-method}
 \alias{CollectionIdType-class}
+\alias{[,CollectionIdType,missing,missing-method}
 \alias{show,CollectionIdType-method}
 \alias{ids}
 \alias{ids,CollectionIdType-method}
@@ -23,11 +24,10 @@
 \alias{GOCollection-class}
 \alias{evidenceCode,GOCollection-method}
 \alias{goIds,GOCollection-method}
+\alias{[,GOCollection,missing,missing-method}
 \alias{show,GOCollection-method}
 \alias{evidenceCode}
 \alias{goIds}
-% OBOCollection-class
-\alias{OBOCollection-class}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
 % additional classes
@@ -66,7 +66,7 @@
       terms.}
     \item{OBOCollection}{Collection derived from \code{GOCollection},
       specifically from files described by the OBO file format. See
-      \url{http://www.geneontology.org} for details of the OBO format.}
+      \code{\linkS4class{OBOCollection}}}
     \item{KEGGCollection}{Collection derived using KEGG terms.}
     \item{ChrCollection}{Collection derived using chromsome locations}
     \item{ChrlocCollection}{Collection derived using chromosome starting
@@ -107,6 +107,9 @@
       containing GO evidence codes used to construct the gene set.}
   }
 
+  \code{OBOCollection} extends \code{GOCollection}; see
+  \code{\linkS4class{OBOCollection}}.
+
   \code{BroadCollection} has slots:
   \describe{
      \item{\code{category}:}{Object of class \code{"ScalarCharacter"}
@@ -132,6 +135,9 @@
   \describe{
     \item{ids}{\code{signature(object="CollectionIdType")}: Retrieve the
       identifiers of the collection type.}
+    \item{[}{\code{signature(object="CollectionIdType", i="missing",
+        j="missing", ..., ids=ids(object))}: return a subset of
+      \code{object} containing only ids in \code{ids}}
   }
 
   \code{GOCollection} inherits \code{CollectionIdType} methods, and has
@@ -140,7 +146,12 @@
     \item{evidenceCode}{Retrieve the evidence codes of the GO
       collection. Evidence codes are summarize in, e.g.,
       \code{\link[GO]{GOENTREZID}}.}
-    }
+    \item{[}{\code{signature(object="CollectionIdType", i="missing",
+        j="missing", ..., evidenceCode=evidenceCode(object))}: return a subset of
+      \code{object} containing only evidence codes in
+      \code{evidenceCode}. This method passes arguments ... to
+      \code{[,CollectionIdType} methods.}
+  }
 
   \code{BroadCollection} has methods:
   \describe{

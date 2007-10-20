@@ -18,8 +18,8 @@
 \alias{setdiff,GeneColorSet,GeneColorSet-method}
 \alias{show,GeneColorSet-method}
 \alias{union,GeneColorSet,GeneColorSet-method}
-\alias{[,GeneColorSet,numeric-method}
-\alias{[,GeneColorSet,character-method}
+\alias{[,GeneColorSet,numeric,ANY-method}
+\alias{[,GeneColorSet,character,ANY-method}
 \alias{[[,GeneColorSet,numeric-method}
 \alias{[[,GeneColorSet,character-method}
 \alias{$,GeneColorSet-method}

@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.1.8
+Version: 1.1.9
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>
 Description: This package provides classes and methods to support
@@ -23,4 +23,5 @@ Collate: utilities.R
          methods-GeneIdentifierType.R
          methods-GeneSet.R
          methods-GeneSetCollection.R
+         methods-OBOCollection.R
          zzz.R

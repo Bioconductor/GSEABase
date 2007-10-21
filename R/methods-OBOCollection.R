@@ -76,8 +76,8 @@ setMethod("[",
               i <- unique(i)
               if (!all(i %in% subsets(x, "key"))) {
                   bad <- i[!i %in% subsets(x, "key")]
-                  .stopf("'[[' indicies must be valid subsets.\n  bad values: %s\n possible values: %s\n",
-                         bad, paste(subsets(x), collapse=", ", sep=""))
+                  .stopf("'[' indicies must be valid subsets.\n  bad values: %s\n possible values: %s\n",
+                         bad, paste(subsets(x, "key"), collapse=", ", sep=""))
               }
               stanza <- .stanza(x)
               subset <- .obo_subset(x)

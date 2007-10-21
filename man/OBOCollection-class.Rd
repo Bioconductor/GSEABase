@@ -4,6 +4,8 @@
 \alias{OBOCollection-class}
 \alias{subsets,OBOCollection-method}
 \alias{[,OBOCollection,character,missing-method}
+\alias{coerce,OBOCollection,graphNEL-method}
+\alias{coerce,graphNEL,OBOCollection-method}
 \alias{show,OBOCollection-method}
 
 \title{Class "OBOCollection"}
@@ -45,8 +47,10 @@
 }
 
 \section{Methods}{
-  \code{OBOCollection} has the following methods, in addition to those inheritted from
-  \code{\linkS4class{GOCollection}}:
+  \code{OBOCollection} has the following methods, in addition to those inherited from
+  \code{\linkS4class{GOCollection}}.
+
+  These methods list and select subsets of \code{OBOCollection}:
   \describe{
     \item{subsets}{\code{signature(object="OBOCollection",
         display="named")}: return a character vector of subsets present
@@ -65,6 +69,17 @@
       used to restricts which evidence codes the collection will
       identify.}
   }
+
+  These methods coerce to and from \code{OBOCollection}:
+  \describe{
+    \item{as}{\code{signature(object="OBOCollection", "graphNEL")}:
+      create a directed graph with nodes generated from
+      \code{ids(object)} and edges from \code{is_a} relations of
+      \code{object}.}
+    \item{as}{\code{signature(object="graphNEL", "OBOCollection")}:
+      create an \code{OBOCollection} with \code{ids} from the graph
+      nodes, and edges from \code{inNodes(object)}.}
+  }
 }
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
@@ -81,5 +96,9 @@ obo <- getOBOCollection(fl)
 obo
 subsets(obo)
 obo["goslim_plant", evidenceCode="TAS"]
+g <- as(obo["goslim_goa"], "graphNEL")
+if (interactive() && require("Rgraphviz")) {
+    plot(g)
+}
 }
 \keyword{classes}

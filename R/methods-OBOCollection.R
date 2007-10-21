@@ -10,9 +10,14 @@ OBOCollection <- function(ids=character(0),
                           value=rep("Term", length(ids)),
                           row.names="ids")
     goMap <- getAnnMap("TERM", "GO")
+    value <- rep(NA_character_, length(ids))
+    goTerms <- mget(ids, goMap, ifnotfound=NA)
+    ok <- !is.na(goTerms)
+    if (sum(ok)>0)
+        value[ok] <-  sapply(goTerms[ok], Term)
     .kv <- data.frame(stanza_id=ids,
                       key=rep("name", length(ids)),
-                      value=sapply(mget(ids, goMap), Term))
+                      value=value)
     new("OBOCollection", .stanza=.stanza, .kv=.kv,
         ids=ids, evidenceCode=evidenceCode, ...)
 }
@@ -173,6 +178,40 @@ getOBOCollection <- function(uri, evidenceCode="ANY", ...) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
     .fromOBO(uri, evidenceCode=evidenceCode, ...)
 }
+
+setAs("OBOCollection", "graphNEL",
+      function(from) {
+          if (!.requireQ("graph")) {
+              stop("package 'graph' required but not available")
+          }
+          s <- .stanza(from)
+          k <- .kv(from)
+          nodes <- .OBOids(s)
+          edgeL <- rep(list(list(edges=numeric())), length(nodes))
+          names(edgeL) <- nodes
+          df <- k[k$key=="is_a" & k$value %in% nodes,
+                  !names(k)=="key",drop=FALSE]
+          f <- function(x) list(edges=as.character(x))
+          edgeL[df$stanza_id] <- lapply(df$value, f)
+          new("graphNEL", nodes, edgeL, "directed")
+      })
+
+setAs("graphNEL", "OBOCollection",
+      function(from) {
+          ids <- nodes(from)
+          obo <- OBOCollection(ids)
+
+          iedge <- inEdges(from)
+          nedge <- sapply(iedge, length)
+          value <- unlist(mapply(rep, names(iedge), nedge,
+                                 USE.NAMES=FALSE))
+          stanza_id <- unlist(iedge, use.names=FALSE)
+
+          kv <- .kv(obo)
+          kv <- rbind(.kv(obo),
+                      data.frame(stanza_id, key="is_a", value))
+          new("OBOCollection", obo, .kv=kv)
+      })
 
 setMethod("show",
           signature=signature(

@@ -1,6 +1,31 @@
 fl <- system.file("extdata", "goslim_plant.obo", package="GSEABase")
 obo <- getOBOCollection(fl)
 
+test_obo_OBOCollection <- function() {
+    obj <- OBOCollection()
+    checkTrue(validObject(obj))
+    checkEquals(c(0,3), dim(GSEABase:::.kv(obj)))
+    checkEquals(c(0,1), dim(GSEABase:::.stanza(obj)))
+    checkEquals(c(0,1), dim(GSEABase:::.obo_subset(obj)))
+
+    obj <- OBOCollection(letters[1:5])
+    checkTrue(validObject(obj))
+    checkEquals(c(5,3), dim(GSEABase:::.kv(obj)))
+    checkEquals(c(5,1), dim(GSEABase:::.stanza(obj)))
+    checkEquals(c(0,1), dim(GSEABase:::.obo_subset(obj)))
+    ## value should be NA_character_
+    checkTrue(all(is.na(GSEABase:::.kv(obj)$value)))
+    
+    obj <- OBOCollection(c("GO:0008967", "GO:0015119"))
+    checkTrue(validObject(obj))
+    checkEquals(c(2,3), dim(GSEABase:::.kv(obj)))
+    checkEquals(c(2,1), dim(GSEABase:::.stanza(obj)))
+    checkEquals(c(0,1), dim(GSEABase:::.obo_subset(obj)))
+    ## terms should be filled with definitions
+    checkTrue(!any(is.na(GSEABase:::.kv(obj)$value)))
+}
+
+
 test_getOBOCollection <- function() {
     obj <- getOBOCollection(fl, evidenceCode="TAS")
     checkEquals(106, length(ids(obj)))
@@ -46,4 +71,23 @@ test_obo_subset <- function() {
                    msg="ids must match those implied by subsets",
                    silent=TRUE)
     checkTrue(validObject(obo[ids=ids(obo)]))
+}
+
+test_obo_as_graphNEL_empty_obj <- function() {
+    validObject(as(OBOCollection(), "graphNEL"))
+    validObject(as(new("graphNEL"), "OBOCollection"))
+}
+
+test_obo_as_graphNEL <- function() {
+    obo0 <- obo["goslim_goa"]
+    ## some loss of information here
+    g <- as(obo0, "graphNEL")
+    ## round trip should be identical
+    x <- as(g, "OBOCollection")
+    checkEquals(41, length(ids(x)))
+    g1 <- as(x, "graphNEL")
+    checkEquals(41, length(nodes(g1)))
+    checkEquals(28, length(unlist(edges(g1))))
+    checkIdentical(g, g1)
+    checkIdentical(x, as(g1, "OBOCollection"))
 }

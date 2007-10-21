@@ -7,6 +7,8 @@ importMethodsFrom(AnnotationDbi, revmap, mget, as.list)
 
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
+importClassesFrom(graph, graphNEL)
+
 exportClasses(## GeneIdentifierType
               GeneIdentifierType,
               NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
@@ -27,8 +29,8 @@ exportClasses(## GeneIdentifierType
               GeneSetCollection
               )
 
-exportMethods(show, details, initialize, intersect, union, setdiff,
-              "&", "|", incidence,
+exportMethods(show, coerce, details, initialize, intersect, union,
+              setdiff, "&", "|", incidence,
 
               ## IdentifierType
               mapIdentifiers, annotation,

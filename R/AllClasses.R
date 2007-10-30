@@ -84,7 +84,7 @@
                type = "ScalarCharacter"),
              where = where)
 
-    simpleCollections <- c("Null", "ExpressionSet")
+    simpleCollections <- c("Null", "ExpressionSet", "Computed")
     for (class in simpleCollections)
         setSimpleCollection(class, "CollectionType")
 

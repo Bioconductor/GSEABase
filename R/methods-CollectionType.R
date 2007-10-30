@@ -1,10 +1,70 @@
 ## constructors / getters / setters in AllClasses.R
 
+## CollectionType
+
+.collectionTypeLogic <- function(x, y)
+    if (class(x)!=class(y)) {
+        ComputedCollection()
+    } else x
+
+setMethod("Logic",
+          signature=signature(
+            e1="CollectionType",
+            e2="CollectionType"),
+          function(e1, e2) .collectionTypeLogic(e1, e2))
+
+setMethod("intersect",
+          signature=signature(
+            x="CollectionType",
+            y="CollectionType"),
+          .collectionTypeLogic)
+
+setMethod("union",
+          signature=signature(
+            x="CollectionType",
+            y="CollectionType"),
+          .collectionTypeLogic)
+
+setMethod("setdiff",
+          signature=signature(
+            x="CollectionType",
+            y="CollectionType"),
+          .collectionTypeLogic)
+
 setMethod("show",
           signature=signature(object="CollectionType"),
           function(object) {
               cat("collectionType:", collectionType(object), "\n")
           })
+
+## CollectionIdType
+
+.collectionIdTypeLogic <- function(x, y)
+    ComputedCollection()
+
+setMethod("Logic",
+         signature=signature(
+           e1="CollectionIdType",
+           e2="CollectionIdType"),
+          function(e1, e2) .collectionIdTypeLogic(e1, e2))
+
+setMethod("intersect",
+          signature=signature(
+            x="CollectionIdType",
+            y="CollectionIdType"),
+          .collectionIdTypeLogic)
+
+setMethod("union",
+          signature=signature(
+            x="CollectionIdType",
+            y="CollectionIdType"),
+          .collectionIdTypeLogic)
+
+setMethod("setdiff",
+          signature=signature(
+            x="CollectionIdType",
+            y="CollectionIdType"),
+          .collectionIdTypeLogic)
 
 ## BroadCollection
 

@@ -6,11 +6,23 @@
 \alias{show,CollectionType-method}
 \alias{CollectionIdType-class}
 \alias{[,CollectionIdType,missing,missing-method}
+\alias{|,CollectionType,CollectionType-method}
+\alias{|,CollectionIdType,CollectionIdType-method}
+\alias{&,CollectionType,CollectionType-method}
+\alias{&,CollectionIdType,CollectionIdType-method}
 \alias{show,CollectionIdType-method}
 \alias{ids}
 \alias{ids,CollectionIdType-method}
+\alias{intersect,CollectionType,CollectionType-method}
+\alias{intersect,CollectionIdType,CollectionIdType-method}
+\alias{setdiff,CollectionType,CollectionType-method}
+\alias{setdiff,CollectionIdType,CollectionIdType-method}
+\alias{union,CollectionType,CollectionType-method}
+\alias{union,CollectionIdType,CollectionIdType-method}
 % NullCollection-class
 \alias{NullCollection-class}
+% ComputedCollection-class
+\alias{ComputedCollection-class}
 % ExpressionSetCollection-class
 \alias{ExpressionSetCollection-class}
 % BroadCollection-class
@@ -58,6 +70,8 @@
     \item{BroadCollection}{Derived from, or destined to be, Broad
       XML. Usually created and written \code{\link{getBroadSets}},
       \code{\link{toBroadXML}}.}
+    \item{ComputedCollection}{A computationally created collection, e.g.,
+      by performing logic operations on gene sets.}
     \item{ExpressionSetCollection}{Derived from
       \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. Usually
       created during a call to \code{\link{GeneSet}} or
@@ -84,7 +98,8 @@
 }
 
 \section{Slots}{
-  \code{CollectionType} classes (\code{Null, ExpressionSet}) have the slot:
+  \code{CollectionType} classes (\code{Null, ComputedCollection,
+    ExpressionSet}) have the slot:
   \describe{
     \item{\code{type}:}{Object of class \code{"ScalarCharacter"}
       containing the character string representation of this
@@ -126,6 +141,9 @@
         "CollectionType")}: Replace the \code{CollectionType} }
     \item{collectionType}{\code{signature(object = "CollectionType")}:
       Retrieve the collection type.}
+    \item{|, &, intersect, union, setdiff}{\code{signature(e1="CollectionType",
+        e2="CollectionType")}: return \code{e1} when \code{class(e1)} and
+      \code{class(e2)} are the same, or \code{ComputedCollection} when different.}
     \item{show}{\code{signature(object = "CollectionType")}: display the
       collection type.}
   }
@@ -138,6 +156,8 @@
     \item{[}{\code{signature(object="CollectionIdType", i="missing",
         j="missing", ..., ids=ids(object))}: return a subset of
       \code{object} containing only ids in \code{ids}}
+    \item{|, &, intersect, union, setdiff}{\code{signature(e1="CollectionIdType",
+        e2="CollectionIdType")}: always return \code{ComputedCollection}.}
   }
 
   \code{GOCollection} inherits \code{CollectionIdType} methods, and has

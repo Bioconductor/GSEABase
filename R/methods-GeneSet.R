@@ -167,7 +167,8 @@ setMethod("$",
     new(class(x), x,
         setName=.glue(setName(x), setName(y), " & "),
         urls=.unique(urls(x), urls(y)),
-        geneIds=intersect(geneIds(x), geneIds(y)))
+        geneIds=intersect(geneIds(x), geneIds(y)),
+        collectionType=intersect(collectionType(x), collectionType(y)))
 }
 
 .geneSetUnion <- function(x, y) {
@@ -175,7 +176,8 @@ setMethod("$",
     new(class(x), x,
         setName=.glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
-        geneIds=union(geneIds(x), geneIds(y)))
+        geneIds=union(geneIds(x), geneIds(y)),
+        collectionType=union(collectionType(x), collectionType(y)))
 }
 
 setMethod("intersect",
@@ -224,7 +226,7 @@ setMethod("setdiff",
               new(class(x), x,
                   setName=.glue(setName(x), setName(y), " - "),
                   geneIds=setdiff(geneIds(x), geneIds(y)),
-                  creationDate=date())
+                  collectionType=setdiff(collectionType(x), collectionType(y)))
           })
 
 ## incidence

@@ -17,6 +17,7 @@ exportClasses(## GeneIdentifierType
 
               ## CollectionType
               CollectionType, NullCollection, ExpressionSetCollection,
+              ComputedCollection,
               CollectionIdType, KEGGCollection, OMIMCollection, PMIDCollection,
               ChrCollection, ChrlocCollection, PfamCollection, PrositeCollection,
               GOCollection, OBOCollection,
@@ -30,7 +31,7 @@ exportClasses(## GeneIdentifierType
               )
 
 exportMethods(show, coerce, details, initialize, intersect, union,
-              setdiff, "&", "|", incidence,
+              setdiff, "&", "|", Logic, incidence,
 
               ## IdentifierType
               mapIdentifiers, annotation,
@@ -70,8 +71,8 @@ export(## IdentifierType
        EntrezIdentifier, AnnotationIdentifier,
 
        ## CollectionType
-       NullCollection, ExpressionSetCollection, KEGGCollection,
-       OMIMCollection, PMIDCollection, ChrCollection,
+       NullCollection, ExpressionSetCollection, ComputedCollection,
+       KEGGCollection, OMIMCollection, PMIDCollection, ChrCollection,
        ChrlocCollection, MapCollection, PfamCollection,
        PrositeCollection, GOCollection, OBOCollection, BroadCollection,
 

@@ -3,6 +3,7 @@
 
 \alias{NullCollection}
 \alias{ExpressionSetCollection}
+\alias{ComputedCollection}
 \alias{KEGGCollection}
 \alias{OMIMCollection}
 \alias{PfamCollection}
@@ -25,6 +26,7 @@
 }
 \usage{
 NullCollection(...)
+ComputedCollection(...)
 ExpressionSetCollection(...)
 ChrCollection(ids,...)
 ChrlocCollection(ids,...)

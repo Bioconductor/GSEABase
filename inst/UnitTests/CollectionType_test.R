@@ -18,3 +18,20 @@ test_CollectionType_Constructors <- function() {
     checkTrue("yyy" == bcSubCategory(BroadCollection(subCategory="yyy")))
 }
 
+test_CollectionType_Logic <- function() {
+    ops <- c("|", "&", intersect, union, setdiff)
+    ## same CollectionType
+    gs1 <- NullCollection()
+    sapply(sapply(ops, do.call, list(gs1, gs1)),
+           checkIdentical, NullCollection())
+    ## different CollectionType
+    gs2 <- ExpressionSetCollection()
+    sapply(sapply(ops, do.call, list(gs1, gs2)),
+           checkIdentical, ComputedCollection())
+    ## CollectionIdType always 'Computed'
+    gs3 <- KEGGCollection(ids=letters[1:3])
+    sapply(sapply(ops, do.call, list(gs2, gs3)),
+           checkIdentical, ComputedCollection())
+    sapply(sapply(ops, do.call, list(gs3, gs3)),
+           checkIdentical, ComputedCollection())
+}

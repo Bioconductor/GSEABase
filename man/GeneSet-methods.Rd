@@ -30,24 +30,20 @@ GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
 \section{Methods}{
   \describe{
     \item{
-      \code{signature(type = "missing", ...,
-        setIdentifier=.uniqueIdentifier())}}{
+      \code{signature(type = "missing", ..., setIdentifier=.uniqueIdentifier())}}{
       Construct an empty gene set.}
 
     \item{
-      \code{signature(type = "character", ..., 
-        setIdentifier=.uniqueIdentifier())}}{
+      \code{signature(type = "character", ..., setIdentifier=.uniqueIdentifier())}}{
       Construct a gene set using identifiers \code{type}.}
 
     \item{
-      \code{signature(type = "GeneIdentifierType", ...,
-        setIdentifier=.uniqueIdentifier())}}{
+      \code{signature(type = "GeneIdentifierType", ..., setIdentifier=.uniqueIdentifier())}}{
       Construct an empty gene set. The gene set has \code{geneIdType}
       created from the \code{GeneIdentifierType} of \code{type}.}
 
     \item{
-      \code{signature(type = "ExpressionSet", ...,
-        setIdentifier=.uniqueIdentifier())}}{
+      \code{signature(type = "ExpressionSet", ..., setIdentifier=.uniqueIdentifier())}}{
       Construct a gene set from an
       \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}. \code{geneIdType}
       is set to \code{AnnotationIdentifier}; the annotation field and
@@ -58,15 +54,13 @@ GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
       derived from \code{experimentData}.}
 
     \item{
-      \code{signature(type = "GOCollection", ...,
-        geneIdType = EntrezIdentifier(),
-        setIdentifier=.uniqueIdentifier())}}{Use genes contained in \code{type} to
-        create a \code{GeneSet }. The default \code{geneIdType} assumes
-        that the identifiers are Entrez ids.}
+      \code{signature(type = "GOCollection", ..., geneIdType = EntrezIdentifier(), setIdentifier=.uniqueIdentifier())}}{
+      Use genes contained in \code{type} to
+      create a \code{GeneSet }. The default \code{geneIdType} assumes
+      that the identifiers are Entrez ids.}
     
     \item{
-      \code{signature(type = "BroadCollection", ..., urls = character(0),
-        setIdentifier=.uniqueIdentifier())}}{
+      \code{signature(type = "BroadCollection", ..., urls = character(0), setIdentifier=.uniqueIdentifier())}}{
       Read XML following the Broad Institute schema and located at
       \code{urls} to create a gene set. The url can be a local file or
       internet connection, but must contain just a single gene set. See

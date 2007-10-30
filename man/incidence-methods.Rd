@@ -15,11 +15,12 @@
   columns genes.
 
   \item{
-    \code{signature(x = "GeneColor", ...)}
+    \code{signature(x="GeneSet", ...)}
+    \code{signature(x="GeneColorSet", ...)}
   }{
-    All additional arguments \code{...} are \code{GeneColor} sets. The
-    incidence matrix is contains elements 0 (genes not present) or 1
-    (genes present).
+    All additional arguments \code{...} are of the same class as
+    \code{x}. The incidence matrix contains elements 0 (genes not
+    present) or 1 (genes present).
   }
 
   \item{

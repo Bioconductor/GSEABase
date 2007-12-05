@@ -15,6 +15,7 @@ setMethod("GeneSetCollection",
             idType="missing",
             setType="missing"),
           function(object, ..., idType, setType) {
+              names(object) <- NULL
               new("GeneSetCollection", object)
           })
 

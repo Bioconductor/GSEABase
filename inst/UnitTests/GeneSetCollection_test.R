@@ -24,6 +24,12 @@ test_GSC_list_constructor <- function() {
     checkException(GeneSetCollection(gs1, gs1), silent=TRUE)
 }
 
+test_GSC_list_constructor_strips_names <- function() {
+    gsc <- .gsc()
+    lst <- list(gsc1=gsc[[1]], gsc2=gsc[[2]])
+    checkTrue(is.null(attr(GeneSetCollection(lst),"names")))
+}
+
 test_GSC_docs_constructor <- function() {
     gs1 <- GeneSet(setName="123", setIdentifier="456",
                    geneIds=LETTERS[1:5])

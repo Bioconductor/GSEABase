@@ -1,0 +1,30 @@
+        **************************************************
+        *                                                *
+        *              2.7 SERIES NEWS                   *
+        *                                                *
+        **************************************************
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Add ComputedCollection class to describe gene set collections
+    resulting from computations.
+
+    o Additional GeneSetCollection constructors
+
+    o Add OBOCollection class for reading OBO gene sets, including
+    functions to retrieve OBO collections from the internet
+    (getOBOCollectoin) and convert OBOCollections to and from graphNEL
+    objects.
+
+NEW FEATURES
+
+    o Parse revised Broad gene sets.
+
+    o More extensive information in some 'show' methods
+
+BUG FIXES
+
+    o A GeneSetCollection constructed with a named list could
+    incorrectly propagate the set names.
+
+(start date: 9 February, 2008)

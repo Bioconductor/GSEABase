@@ -6,6 +6,8 @@
 \alias{show,CollectionType-method}
 \alias{CollectionIdType-class}
 \alias{[,CollectionIdType,missing,missing-method}
+\alias{Logic,CollectionType,CollectionType-method}
+\alias{Logic,CollectionIdType,CollectionIdType-method}
 \alias{|,CollectionType,CollectionType-method}
 \alias{|,CollectionIdType,CollectionIdType-method}
 \alias{&,CollectionType,CollectionType-method}

@@ -2,6 +2,7 @@
 \docType{class}
 % OBOCollection-class
 \alias{OBOCollection-class}
+\alias{subsets}
 \alias{subsets,OBOCollection-method}
 \alias{[,OBOCollection,character,missing-method}
 \alias{coerce,OBOCollection,graphNEL-method}
@@ -33,7 +34,7 @@
       stanza name (e.g., \sQuote{Term}, i.e., the stanza name associated
       with a GO identifier).}
     \item{\code{.subset}}{A \code{data.frame} representing (optional)
-      subsets defined in thecollection. Subsets are defined in the
+      subsets defined in the collection. Subsets are defined in the
       header of an OBO file with a subsetdef tag. Row names of the data
       frame are the subsetdef names; the \code{value} column contains
       the subset definition.}

@@ -52,7 +52,7 @@ setValidity("OBOCollection",
 setMethod("subsets",
           signature=signature(
             object="OBOCollection"),
-          function(object,display="named") {
+          function(object, display="named") {
               subsets <- .obo_subset(object)
               k <- row.names(subsets)
               v <- subsets[["value"]]

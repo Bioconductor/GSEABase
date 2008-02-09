@@ -6,6 +6,7 @@
 \alias{[,ExpressionSet,GeneSet,ANY-method}
 \alias{[[,GeneSet,character-method}
 \alias{[[,GeneSet,numeric-method}
+\alias{Logic,character,GeneSet-method}
 \alias{|,GeneSet,GeneSet-method}
 \alias{|,GeneSet,character-method}
 \alias{$,GeneSet-method}

@@ -6,6 +6,8 @@
 \alias{geneIds,GeneSetCollection-method}
 \alias{geneIds<-,GeneSetCollection,list-method}
 
+\alias{Logic,character,GeneSetCollection-method}
+\alias{Logic,GeneSet,GeneSetCollection-method}
 \alias{|,GeneSetCollection,GeneSetCollection-method}
 \alias{|,GeneSetCollection,ANY-method}
 \alias{|,ANY,GeneSetCollection-method}
@@ -84,16 +86,18 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
       \code{signature(x = "ANY", y = "GeneSetCollection")}: ...}
     \item{|}{
       \code{signature(e1 = "GeneSetCollection", e2 = "ANY")},
+      \code{signautre(e1 = "GeneSet", e2 = "GeneSetCollection")},
+      \code{signautre(e1 = "character", e2 = "GeneSetCollection")},
       \code{signature(e1 = "ANY", e2 = "GeneSetCollection")}:
       calculate the logical `or` (union) of all gene identifiers
-      the other object, over all members of the gene
-      set collection.} 
-
+      in an object over all members of the gene set collection.} 
     \item{intersect}{
       \code{signature(x = "GeneSetCollection", y = "ANY")},
       \code{signature(x = "ANY", y = "GeneSetCollection")}: ...}
     \item{&}{
       \code{signature(e1 = "GeneSetCollection", e2 = "ANY")},
+      \code{signautre(e1 = "character", e2 = "GeneSetCollection")},
+      \code{signautre(e1 = "GeneSet", e2 = "GeneSetCollection")},
       \code{signature(e1 = "ANY", e2 = "GeneSetCollection")}:
       calculate the logical `and' (intersection) of all gene identifiers
       in a gene set or character vector, over all members of the gene

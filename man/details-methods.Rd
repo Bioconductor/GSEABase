@@ -6,7 +6,8 @@
 \alias{details,GeneColorSet-method}
 \title{Methods for Displaying Detailed GeneSet Information}
 \description{
-  This method supplements \code{show}, providing more detail on object contents.
+  This generic and methods supplement \code{show}, providing more detail
+  on object contents.
 }
 \section{Methods}{
   \describe{

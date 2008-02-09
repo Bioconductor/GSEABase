@@ -2,7 +2,7 @@
 % likely to be overwritten.
 %
 %\VignetteIndexEntry{An introduction to GSEABase}
-%\VignetteDepends{hgu95av2,hgu95av2.db,GO}
+%\VignetteDepends{hgu95av2.db,GO.db, GO}
 %\VignetteKeywords{Gene Set Enrichment Analysis}
 %\VignettePackage{GSEABase}
 \documentclass[]{article}
@@ -47,9 +47,8 @@ options(width=60)
 ## FIXME: limma topTable --> GeneColorSet
 ## w. verbose=TRUE
 library(GSEABase)
-library(hgu95av2)
 library(hgu95av2.db)
-library(GO)
+library(GO.db)
 @ 
 
 \section{\GeneSet{}}
@@ -118,16 +117,17 @@ mapIdentifiers(egs, EntrezIdentifier())
 \Rfunction{mapIdentifiers} consults the gene set to determine that
 annotation (probeset) identifiers are to be converted to Entrez IDs
 using the \Robject{hgu95av2ENTREZID} environment in the
-\Rcode{hgu95av2} package. \Rfunction{mapIdentifiers} can automatically
-determine many of the common maps; it is also possible to provide as a
-third argument an environment containing an arbitrary map. Use the
+\Rcode{hgu95av2.db} (or \Rcode{hgu95av2})
+package. \Rfunction{mapIdentifiers} can automatically determine many
+of the common maps; it is also possible to provide as a third argument
+an environment containing an arbitrary map. Use the
 \Rfunction{verbose} argument of \Rmethod{mapIdentifiers} to be
 informed when the map between identifier types is not 1:1.
 
 A gene set can be created with different types of identifier, e.g., to
 create a gene set with Entrez IDs, use
 <<GeneSet_Identifiers>>=
-eids <- unique(unlist(mget(geneIds(egs), hgu95av2ENTREZID)))
+eids <- unique(getEG(geneIds(egs), "hgu95av2"))
 eids <- eids[!is.na(eids)]
 GeneSet(EntrezIdentifier(), geneIds=as.character(eids))
 @ 
@@ -148,8 +148,8 @@ GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
         setName="Sample GO Collection")
 @ 
 %% 
-This creates a gene set by consulting an environment in the
-\Rpackage{GO} package. A gene set created from an expression set, and
+This creates a gene set by consulting an object in the
+\Rpackage{GO.db} package. A gene set created from an expression set, and
 with collection type \Robject{GOCollection()} consults
 the appropriate environment in the annotation package associated with
 the expression set. 

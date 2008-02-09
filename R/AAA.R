@@ -85,7 +85,7 @@
             ## look for geneIdType; default is EntrezId
             idType <- geneIdType(geneIdType)
             lookup <- get(paste("GO", toupper(idType),sep=""))
-            ids <- mget(ids(type), lookup, ifnotfound=as.character(NA))
+            ids <- mget(ids(type), lookup, ifnotfound=NA_character_)
             ids <- lapply(ids,
                           function(x, codes) x[names(x) %in% codes],
                           evidenceCode(type))
@@ -109,9 +109,8 @@
             organism <- 
                 tryCatch({
                     pkg <- annotation(type)
-                    if (length(pkg) == 1 && nchar(pkg) > 0 &&
-                        .requireQ(pkg))
-                        .getAnnMap(type, "ORGANISM")
+                    if (length(pkg) == 1 && nchar(pkg) > 0)
+                        getAnnMap("ORGANISM", pkg)
                     else
                         ""
                 }, error=function(err) "")

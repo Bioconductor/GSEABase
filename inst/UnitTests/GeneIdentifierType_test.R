@@ -47,7 +47,6 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
     suppressWarnings({
         res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2"))
     })
-    detach("package:hgu95av2")
     checkTrue(validObject(res))
     checkEquals(41, length(geneIds(res)))
 }

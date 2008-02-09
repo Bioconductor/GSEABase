@@ -153,14 +153,14 @@ try(gs & sets[[1]])
 ## Use the annotation package associated with the original
 ## ExpressionSet to map to EntrezIdentifier() ...
 geneIdType(gs) <- EntrezIdentifier()
-...## and try again
+## ...and try again
 gs & bsets[[1]]
 
 ## Another way to change annotation to Entrez (or other) ids
 probeIds <- featureNames(sample.ExpressionSet)[100:109]
-geneIds <- as.character(unlist(mget(probeIds, hgu95av2ENTREZID)))
+geneIds <- getEG(probeIds, "hgu95av2")
 GeneSet(EntrezIdentifier(),
-        setName="sample.GenSet2", setIdentifier="101",
+        setName="sample.GeneSet2", setIdentifier="101",
         geneIds=geneIds)
 }
 

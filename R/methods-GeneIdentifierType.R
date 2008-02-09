@@ -73,20 +73,7 @@ setMethod("initialize",
           })
 
 .getAnnMap <- function(object, symbol) {
-    pkgName <- annotation(object)
-    pkg <- sub(".db$", "", pkgName)
-    symbol <- paste(pkg, symbol, sep="")
-    if (!.requireQ(pkgName)) {
-        pkgNameDb <- paste(pkg, "db", sep=".")
-        if (pkgName != pkgNameDb && !.requireQ(pkgNameDb))
-            .stopf("cannot load annotation package '%s'", pkgName)
-        pkgName <- pkgNameDb
-    }
-    pkgPos <- match(paste("package", pkgName, sep=":"), search())
-    if (!exists(symbol, pkgPos, inherits=FALSE))
-        .stopf("no symbol '%s' in annotation package '%s'",
-               symbol, pkgName)
-    get(symbol, pkgPos, inherits=FALSE)
+    getAnnMap(symbol, annotation(object))
 }
 
 setMethod("show",

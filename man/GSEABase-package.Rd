@@ -18,7 +18,6 @@
   gene set was made, and can order genes into distinct sets or
   collections.
 }
-\details{}
 \author{
   Written by Martin Morgan, Seth Falcon, Robert Gentleman. 
   Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>

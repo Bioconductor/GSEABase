@@ -47,6 +47,7 @@
 % additional classes
 \alias{ChrCollection-class}
 \alias{ChrlocCollection-class}
+\alias{MapCollection-class}
 \alias{OMIMCollection-class}
 \alias{PMIDCollection-class} 
 \alias{PfamCollection-class}

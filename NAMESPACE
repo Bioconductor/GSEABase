@@ -18,8 +18,9 @@ exportClasses(## GeneIdentifierType
               ## CollectionType
               CollectionType, NullCollection, ExpressionSetCollection,
               ComputedCollection,
-              CollectionIdType, KEGGCollection, OMIMCollection, PMIDCollection,
-              ChrCollection, ChrlocCollection, PfamCollection, PrositeCollection,
+              CollectionIdType, KEGGCollection, OMIMCollection,
+              PMIDCollection, ChrCollection, ChrlocCollection,
+              MapCollection, PfamCollection, PrositeCollection,
               GOCollection, OBOCollection,
               BroadCollection,
 

@@ -27,4 +27,6 @@ BUG FIXES
     o A GeneSetCollection constructed with a named list could
     incorrectly propagate the set names.
 
+    o Export MapCollection class
+
 (start date: 9 February, 2008)

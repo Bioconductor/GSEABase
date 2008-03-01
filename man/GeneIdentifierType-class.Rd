@@ -112,6 +112,8 @@
       \code{signature(what = "GeneSet", to = "GeneIdentifierType", from
         = "AnnotationIdentifier", verbose=FALSE)},
       \code{signature(what = "GeneSet", to="AnnotationIdentifier", from
+        = "GeneIdentifierType", verbose=FALSE)},
+      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from
         = "GeneIdentifierType", verbose=FALSE)}:
       see \code{\link{mapIdentifiers}}.}
 

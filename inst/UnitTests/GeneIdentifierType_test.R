@@ -73,6 +73,14 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
     checkEquals(41, length(geneIds(res)))
 }
 
+test_GeneIdentifierType_mapIdentifiers_from_to_Annotation <- function() {
+    gs <- GeneSet("EGF")
+    geneIdType(gs) <- AnnotationIdentifier("org.Hs.eg.db")
+    gs1 <- gs
+    geneIdType(gs1) <- AnnotationIdentifier("org.Hs.eg.db")
+    checkIdentical(gs, gs1)
+}
+
 test_GeneIdentifierType_mapIdentifiers_verbose_warnings <- function() {
     ## duplicate gene names exception
     gs <- GeneSet(sample.ExpressionSet[100:200],

@@ -29,4 +29,7 @@ BUG FIXES
 
     o Export MapCollection class
 
+    o Mapping AnnotationIdentifer to AnnotationIdentifier failed due
+    to incorrect method selection
+
 (start date: 9 February, 2008)

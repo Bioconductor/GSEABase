@@ -240,6 +240,16 @@ setMethod("mapIdentifiers",
 setMethod("mapIdentifiers",
           signature=signature(
             what="GeneSet",
+            to="AnnotationIdentifier",
+            from="AnnotationIdentifier"),
+          function(what, to, from, ..., verbose=FALSE) {
+              ## null map
+              what
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
             to="GeneIdentifierType",
             from="environment"),
           function(what, to, from, ..., verbose=FALSE) {

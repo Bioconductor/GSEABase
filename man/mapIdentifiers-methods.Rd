@@ -6,6 +6,7 @@
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,missing-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
+\alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnDbBimap-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,environment-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
 \alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
@@ -49,8 +50,12 @@
       \code{paste(annotation(what), toupper(geneIdType(to)), sep="")}.}
 
     \item{what = "GeneSet", to = "GeneIdentifierType", from = "environment", verbose=FALSE}{
-      Maps between identifiers found in \code{from} to those in
-      \code{to}, using the map (key-value pairs) found in \code{with}.}
+      Maps identifiers found in \code{what} to the type described by
+      \code{to}, using the map (key-value pairs) found in \code{from}.}
+
+    \item{what = "GeneSet", to = "GeneIdentifierType", from = "AnnDbBimap", verbose=FALSE}{
+      Maps identifiers found in \code{what} to the type described by
+      \code{to}, using the map (key-value pairs) found in \code{from}.}
 
     \item{what = "GeneSet", to = "AnnotationIdentifier", from = "NullIdentifier", verbose=FALSE}{
       This maps a gene set from gene identifiers represented by the

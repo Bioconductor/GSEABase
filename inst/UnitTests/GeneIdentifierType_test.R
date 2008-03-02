@@ -81,6 +81,14 @@ test_GeneIdentifierType_mapIdentifiers_from_to_Annotation <- function() {
     checkIdentical(gs, gs1)
 }
 
+test_GeneIdentifierType_mapIdentifiers_AnDbBimap <- function() {
+    library(org.Hs.eg.db)
+    on.exit(detach("package:org.Hs.eg.db"))
+    gs <- mapIdentifiers(GeneSet("4214"), SymbolIdentifier(), org.Hs.egSYMBOL)
+    checkIdentical("MAP3K1", geneIds(gs))
+    checkIdentical(mkScalar("Symbol"), geneIdType(geneIdType(gs)))
+}
+
 test_GeneIdentifierType_mapIdentifiers_verbose_warnings <- function() {
     ## duplicate gene names exception
     gs <- GeneSet(sample.ExpressionSet[100:200],

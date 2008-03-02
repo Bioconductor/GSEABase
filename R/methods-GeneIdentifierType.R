@@ -26,6 +26,36 @@ IdFactory <- function(classPrefix,
 
 ## GeneIdentifierType
 
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="environment"),
+          function(what, to, from, ..., verbose=FALSE) {
+              geneIds <- .getMappedGenes(geneIds(what), from,
+                                         "environment",
+                                         "user-supplied environment",
+                                         verbose=verbose)
+              new(class(what), what,
+                  geneIds = geneIds,
+                  geneIdType = to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="AnnDbBimap"),
+          function(what, to, from, ..., verbose=FALSE) {
+              geneIds <- .getMappedGenes(geneIds(what), from,
+                                         deparse(substitute(from)),
+                                         "user-supplied AnnDbBimap",
+                                         verbose=verbose)
+              new(class(what), what,
+                  geneIds = geneIds,
+                  geneIdType = to)
+          })
+
 setMethod("show",
           signature=signature(object="GeneIdentifierType"),
           function(object) cat("geneIdType:", geneIdType(object), "\n"))
@@ -245,20 +275,4 @@ setMethod("mapIdentifiers",
           function(what, to, from, ..., verbose=FALSE) {
               ## null map
               what
-          })
-
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="environment"),
-          function(what, to, from, ..., verbose=FALSE) {
-              geneIds <- .getMappedGenes(geneIds(what),
-                                         from,
-                                         "environment",
-                                         "user-supplied environment",
-                                         verbose=verbose)
-              new(class(what), what,
-                  geneIds = geneIds,
-                  geneIdType = to)
           })

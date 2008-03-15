@@ -37,7 +37,7 @@ exportMethods(show, coerce, details, initialize, intersect, union,
               setdiff, "&", "|", Logic, incidence,
 
               ## IdentifierType
-              mapIdentifiers, annotation,
+              mapIdentifiers, annotation, "annotation<-",
 
               ## CollectionType
               ids,

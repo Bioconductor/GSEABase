@@ -136,27 +136,56 @@ setMethod("show",
 
 ## GOCollection
 
+.checkCode <- function(term, codes) {
+    codeOk <- term %in% codes
+    if (!all(codeOk))
+        .stopf("%s invalid: %s\n  valid codes: %s",
+               deparse(substitute(term)),
+               paste(term[!codeOk], collapse=", "),
+               paste(codes, collapse=", "))
+    if ("ANY" %in% term)
+      term <- codes[!codes %in% c("ANY", NA)]
+    term
+}
+
 .checkGOEvidenceCodes <- function(evidenceCode) {
     codes <- c("IMP", "IPI", "TAS", "ISS", "IDA", "NAS", "IEA", "IGI",
                "RCA", "IEP", "IC", "NR", "ND", "ANY", NA)
-    codeOk <- evidenceCode %in% codes
-    if (!all(codeOk))
-        .stopf("evidenceCode invalid: %s\n  valid codes: %s",
-               paste(evidenceCode[!codeOk], collapse=", "),
-               paste(codes, collapse=", "))
-    if ("ANY" %in% evidenceCode)
-        evidenceCode <- codes[!codes %in% c("ANY", NA)]
-    evidenceCode
+    .checkCode(evidenceCode, codes)
+}
+
+.checkGOOntologyCode <- function(ontology) {
+    .checkCode(ontology, c("CC", "MF", "BP", "ANY", NA))
+}
+
+.GOFilterIds <- function(ids, ontology, err=TRUE) {
+    terms <- mget(ids, getAnnMap("TERM", "GO"), ifnotfound=NA_character_)
+    termsOk <- !is.na(terms)
+    if (err && !all(termsOk))
+      .stopf("GO ids not found: '%s'",
+             paste(ids[!termsOk], collapse="' '"))
+    terms <- terms[termsOk]
+    ids <- ids[termsOk]
+    idsOk <- unlist(lapply(terms, Ontology)) %in% ontology
+    if (err && !all(idsOk))
+      .stopf("ontology '%s' does not contain ids '%s'",
+             paste(ontology, collapse="' '"),
+             paste(ids[!idsOk], collapse="' '"))
+    ids[idsOk]
 }
 
 GOCollection <- function(ids=character(0),
-                         evidenceCode="ANY", ...) {
+                         evidenceCode="ANY",
+                         ontology="ANY", ...) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
-    new("GOCollection", ids=ids, evidenceCode=evidenceCode)
+    ontology <- .checkGOOntologyCode(ontology)
+    ids <- .GOFilterIds(ids, ontology)
+    new("GOCollection", ids=ids, ...,
+        evidenceCode=evidenceCode, ontology=ontology)
 }
 
 .SETTERS_GOCollection <- .GETTERS_GOCollection <-
-    c("evidenceCode")
+    c("evidenceCode", "ontology")
 .getters("GOCollection", .GETTERS_GOCollection)
 
 setMethod("[",                          # e.g., x[evidenceCode="TAS"]
@@ -165,12 +194,19 @@ setMethod("[",                          # e.g., x[evidenceCode="TAS"]
             i="missing",
             j="missing"),
           function(x, i, j, ...,
+                   ids=GSEABase::ids(x),
                    evidenceCode=GSEABase::evidenceCode(x),
+                   ontology=GSEABase::ontology(x),
                    drop=TRUE) {
               if (!missing(evidenceCode))
                   .collection_subset_chk("evidenceCode", evidenceCode,
                                          evidenceCode(x))
-              callNextMethod(x,,,...,evidenceCode=evidenceCode,
+              if (!missing(ontology))
+                  ids <- .GOFilterIds(ids, ontology, err=FALSE)
+              callNextMethod(x,,,...,
+                             ids=ids,
+                             evidenceCode=evidenceCode,
+                             ontology=ontology,
                              drop=drop)
           })
 
@@ -179,4 +215,5 @@ setMethod("show",
           function(object) {
               callNextMethod()
               cat("  evidenceCode:", evidenceCode(object), "\n")
+              cat("  ontology:", ontology(object), "\n")
           })

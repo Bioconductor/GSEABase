@@ -5,12 +5,10 @@
 \alias{mapIdentifiers,ANY,ANY,ANY-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,missing-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,NullIdentifier-method}
-\alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnotationIdentifier-method}
+\alias{mapIdentifiers,GeneSet,NullIdentifier,GeneIdentifierType-method}
+\alias{mapIdentifiers,GeneSet,GeneIdentifierType,GeneIdentifierType-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnDbBimap-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,environment-method}
-\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,NullIdentifier-method}
-\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,GeneIdentifierType-method}
-\alias{mapIdentifiers,GeneSet,AnnotationIdentifier,AnnotationIdentifier-method}
 \alias{mapIdentifiers,GeneSetCollection,GeneIdentifierType,missing-method}
 \title{Methods for Function mapIdentifiers in Package `GSEABase'}
 \description{
@@ -43,11 +41,10 @@
       gene identifiers represent by any class derived from
       \code{GeneIdentifierType}.}
 
-    \item{what = "GeneSet", to = "GeneIdentifierType", from = "AnnotationIdentifier", verbose=FALSE}{
-      Maps between identifiers of type \code{AnnotationIdentifier} and
-      other identifiers. This method consults the annotation package specified
-      in \code{from}, looking for a mapping between \code{genes(what)} and
-      \code{paste(annotation(what), toupper(geneIdType(to)), sep="")}.}
+    \item{what = "GeneSet", to = "NullIdentifier", from = "GeneIdentifierType", verbose=FALSE}{ 
+      This maps a gene set from gene identifiers represented by any
+      \code{GeneIdentifierType} type to one represented by the
+      \code{NullIdentifier} (i.e., no type associated with the genes).}
 
     \item{what = "GeneSet", to = "GeneIdentifierType", from = "environment", verbose=FALSE}{
       Maps identifiers found in \code{what} to the type described by
@@ -56,23 +53,6 @@
     \item{what = "GeneSet", to = "GeneIdentifierType", from = "AnnDbBimap", verbose=FALSE}{
       Maps identifiers found in \code{what} to the type described by
       \code{to}, using the map (key-value pairs) found in \code{from}.}
-
-    \item{what = "GeneSet", to = "AnnotationIdentifier", from = "NullIdentifier", verbose=FALSE}{
-      This maps a gene set from gene identifiers represented by the
-      \code{NullIdentifier} type (i.e., no type associated with the genes) to
-      gene identifiers represent by any class derived from
-      \code{GeneIdentifierType}.}
-
-    \item{what = "GeneSet", to = "AnnotationIdentifier", from = "GeneIdentifierType", verbose=FALSE}{
-      Maps between identifiers of type \code{GeneIdentifierType} to
-      \code{AnnotationIdentifier}. This method uses the annotation package
-      specified in \code{from}. It tries first to use \code{AnnotationDbi} and
-      DBI-based chip annotations to find the reverse mapping. If that fails,
-      the method then tries to use the \code{annotation} package and
-      environment-based mappings to find a reverse map.}
-
-    \item{what = "GeneSet", to = "AnnotationIdentifierType", from = "AnnotationIdentifier", verbose=FALSE}{
-      Null map, i.e., returned gene set is identical to input gene set.}
 
     \item{what = "GeneSetCollection", to = "GeneIdentifierType", from = "missing", verbose = FALSE}{
       Map each gene set in \code{what} to gene identifier type

@@ -1,8 +1,10 @@
 ## Constructors
 
 OBOCollection <- function(ids=character(0),
-                          evidenceCode="ANY", ...) {
+                          evidenceCode="ANY",
+                          ontology="ANY", ...) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
+    ontology <- .checkGOOntologyCode(ontology)
     if (any(duplicated(ids)))
         .stopf("OBO 'ids' contains duplicates: %s",
                paste(ids[duplicated(ids)], collapse=" "))
@@ -19,7 +21,7 @@ OBOCollection <- function(ids=character(0),
                       key=rep("name", length(ids)),
                       value=value)
     new("OBOCollection", .stanza=.stanza, .kv=.kv,
-        ids=ids, evidenceCode=evidenceCode, ...)
+        ids=ids, evidenceCode=evidenceCode, ontology=ontology, ...)
 }
 
 setValidity("OBOCollection",

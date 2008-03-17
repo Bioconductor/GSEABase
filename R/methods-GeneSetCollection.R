@@ -164,7 +164,7 @@ setMethod("GeneSetCollection",
 
 .GSC_GO_helper <- function(genes, idType, setType, ...) {
     ## filter on evidence codes
-    evidenceCode = evidenceCode(setType)
+    evidenceCode <- evidenceCode(setType)
     eviOk <- lapply(lapply(genes, names), "%in%", evidenceCode)
     genes <- mapply("[", genes, eviOk)
     ugenes <- lapply(genes, unique)
@@ -176,7 +176,8 @@ setMethod("GeneSetCollection",
                 setName=setName,
                 collectionType=GOCollection(
                   ids=setName,
-                  evidenceCode=evidenceCode(collectionType)),
+                  evidenceCode=evidenceCode(collectionType),
+                  ontology=ontology(collectionType)),
                 ...)
     }, ugenes, setName=names(ugenes), MoreArgs=list(
                                 collectionType=setType,

@@ -42,7 +42,7 @@ exportMethods(show, coerce, details, initialize, intersect, union,
               ## CollectionType
               ids,
               bcCategory, bcSubCategory,
-              evidenceCode,
+              evidenceCode, ontology,
               subsets, goSlim,
 
               ## GeneSet

@@ -36,8 +36,8 @@ OMIMCollection(ids,...)
 PMIDCollection(ids,...)
 PfamCollection(ids, ...)
 PrositeCollection(ids, ...)
-GOCollection(ids, evidenceCode="ANY", ...)
-OBOCollection(ids, evidenceCode="ANY", ...)
+GOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
+OBOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
 BroadCollection(category, subCategory=NA, ...)
 }
 
@@ -53,6 +53,10 @@ BroadCollection(category, subCategory=NA, ...)
     ontology, so evidenceCode is a convenient way of specifying how
     users of a GOCollection might restrict derived objects (as in
     done during create of a gene set from an expression set).}
+  \item{ontology}{(Optional) Character vector of GO ontology terms to be
+    included, or "ANY" (any identifier; the default). Unlike evidence
+    code, ontology membership is enforced when GOCollection gene sets
+    are constructed.}
   \item{...}{Additional arguments, usually none but see specific
     \code{linkS4class{CollectionType}} classes  for possibilities.}
 }

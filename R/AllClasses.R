@@ -18,10 +18,10 @@
 
 ## GeneIdentifierType
 .IdentifierClasses <- function(where) {
-    setSimpleClass <- function(class) {
+    setSimpleClass <- function(class, contains) {
         classId <- paste(class, "Identifier", sep="")
         setClass(classId,
-                 contains = c("GeneIdentifierType"),
+                 contains = contains,
                  prototype = prototype(
                    type = new("ScalarCharacter", class)),
                  where = where)
@@ -30,38 +30,31 @@
     setClass("GeneIdentifierType",
              contains="VIRTUAL",
              representation=representation(
-               type = "ScalarCharacter"),
+               type = "ScalarCharacter",
+               annotation = "ScalarCharacter"),
              where=where)
+    .getters("GeneIdentifierType", c(geneIdType="type"), where=where)
+    .getters("GeneIdentifierType", "annotation", where=where)
+    .setters("GeneIdentifierType", "annotation", where=where)
 
-    ## gene-level classes
-    geneIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq",
-                         "Symbol", "Unigene")
-    for (class in geneIdentifiers) setSimpleClass(class)
-    
+    ## Straight derivation from GeneIdentifierType
+    annoIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq", "Symbol",
+                         "Unigene")
+    for (class in annoIdentifiers)
+      setSimpleClass(class, "GeneIdentifierType")
+    ## More complicated derviation from GeneIdentifierType:
+    setClass("AnnotationIdentifier",    # 'annotation' slot
+             contains = c("GeneIdentifierType"),
+             prototype = prototype(
+               type = new("ScalarCharacter", "Annotation")),
+             where = where)
     setClass("EntrezIdentifier",        # special 'type'
              contains = "GeneIdentifierType",
              prototype = prototype(
                type = new("ScalarCharacter", "EntrezId")),
              where = where)
-
-    setClass("AnnotationIdentifier",    # 'annotation' slot
-             contains = c("GeneIdentifierType"),
-             representation = representation(
-               annotation = "ScalarCharacter"), # annotation package
-             prototype = prototype(
-               type = new("ScalarCharacter", "Annotation")),
-             where = where)
-
-    ## constructors / getters / setters
-    idTypes <- names(getSubclasses(getClass("GeneIdentifierType")))
-    idTypes <- idTypes[idTypes != "AnnotationIdentifier"]
-    .constructors_Simple(idTypes, where=where)
-    .getters("GeneIdentifierType", c(geneIdType="type"), where=where)
-
-    .constructors_Simple("AnnotationIdentifier",
-                         required="annotation", where=where)
-    .getters("AnnotationIdentifier", "annotation", where=where)
-    .setters("AnnotationIdentifier", "annotation", where=where)
+    idTypes <- names(slot(getClass("GeneIdentifierType"), "subclasses"))
+    .constructors_Simple(idTypes, optional="annotation", where=where)
  }
 
 .IdentifierClasses(topenv())
@@ -104,10 +97,12 @@
     setClass("GOCollection",
              contains = "CollectionIdType",
              representation=representation(
-               evidenceCode="character"),
+               evidenceCode="character",
+               ontology="character"),
              prototype = prototype(
                type = new("ScalarCharacter", "GO"),
-               evidenceCode = as.character(NA)),
+               evidenceCode = NA_character_,
+               ontology = NA_character_),
              where = where)
 
     setClass("OBOCollection",

@@ -37,10 +37,12 @@
 % GOCollection-class
 \alias{GOCollection-class}
 \alias{evidenceCode,GOCollection-method}
+\alias{ontology,GOCollection-method}
 \alias{goIds,GOCollection-method}
 \alias{[,GOCollection,missing,missing-method}
 \alias{show,GOCollection-method}
 \alias{evidenceCode}
+\alias{ontology}
 \alias{goIds}
 % KEGGCollection-class
 \alias{KEGGCollection-class}
@@ -170,10 +172,11 @@
       collection. Evidence codes are summarize in, e.g.,
       \code{\link[GO]{GOENTREZID}}.}
     \item{[}{\code{signature(object="CollectionIdType", i="missing",
-        j="missing", ..., evidenceCode=evidenceCode(object))}: return a subset of
-      \code{object} containing only evidence codes in
-      \code{evidenceCode}. This method passes arguments ... to
-      \code{[,CollectionIdType} methods.}
+        j="missing", ..., evidenceCode=evidenceCode(object),
+        ontology=ontology(object))}: return a subset of
+      \code{object} containing only evidence and ontology codes in
+      \code{evidenceCode}, \code{ontology}. This method passes
+      arguments ... to \code{[,CollectionIdType} methods.}
   }
 
   \code{BroadCollection} has methods:
@@ -190,7 +193,7 @@
   \code{\link{CollectionType}} consturctors.
 }
 \examples{
-getSubclasses(getClass("CollectionType"))
+names(getClass("CollectionType")@subclasses)
 
 ## Create a CollectionType and ask for its type
 collectionType(ExpressionSetCollection())

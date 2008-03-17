@@ -1,5 +1,5 @@
 constructors <- local({
-    idTypes <- names(getSubclasses(getClass("GeneIdentifierType")))
+    idTypes <- names(slot(getClass("GeneIdentifierType"), "subclasses"))
     idTypes[idTypes != "AnnotationIdentifier"]
 })
 
@@ -9,13 +9,15 @@ test_GeneIdentifierType_Constructors <- function() {
         res <- do.call(constructors[[i]], list())
         checkTrue(validObject(res))
         checkTrue(is(res, constructors[[i]]))
+        res <- do.call(constructors[[i]], list("foo"))
+        checkTrue(validObject(res))
+        checkTrue(is(res, constructors[[i]]))
     }
 
     ## Required slot for AnnotationIdentifier
     res <- AnnotationIdentifier(annotation="123")
     checkTrue(validObject(res))
     checkTrue(is(res, "AnnotationIdentifier"))
-    checkException(AnnotationIdentifier(), silent=TRUE) # required arg missing
     checkTrue("hgu95av2"==annotation(AnnotationIdentifier("hgu95av2")))
 }
 
@@ -49,18 +51,12 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
     })
     checkTrue(validObject(res))
     checkEquals(41, length(geneIds(res)))
-}
-
-test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
-    ## Original bug: 
-    ##     1: Ambiguous method selection for "mapIdentifiers", target "GeneSet#AnnotationIdentifier#NullIdentifier" (the first of the signatures shown will be used)
-    ##     GeneSet#AnnotationIdentifier#GeneIdentifierType
-    ##     GeneSet#GeneIdentifierType#NullIdentifier
-    opts <- options(warn=2)
-    on.exit(options(opts))
-    gs <- GeneSet(setName="123", setIdentifier="345")
-    geneIdType(gs) <- AnnotationIdentifier("xyz")
-    checkTrue(validObject(gs))
+    checkIdentical(res,
+                   mapIdentifiers(res, AnnotationIdentifier()))
+    checkIdentical(res,
+                   mapIdentifiers(res, AnnotationIdentifier("hgu95av2")))
+    checkException(mapIdentifiers(res, AnnotationIdentifier("dfs")),
+                   silent=TRUE)
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
@@ -81,6 +77,28 @@ test_GeneIdentifierType_mapIdentifiers_from_to_Annotation <- function() {
     checkIdentical(gs, gs1)
 }
 
+test_GeneIdentifierType_mapIdentifiers_from_Annotation <- function() {
+    data(sample.ExpressionSet)
+    gs <- GeneSet(sample.ExpressionSet[100:110])
+    ## AnnotationIdentifier --> AnnotationIdentifier
+    checkIdentical(gs,
+                   mapIdentifiers(gs, AnnotationIdentifier()))
+    checkIdentical(gs,
+                   mapIdentifiers(gs, AnnotationIdentifier("hgu95av2")))
+    checkException(mapIdentifiers(gs, AnnotationIdentifier("fdsf")),
+                   silent=TRUE)
+    res <- mapIdentifiers(gs, EntrezIdentifier())
+    checkTrue(validObject(res))
+    checkIdentical(geneIdType(res), EntrezIdentifier("hgu95av2"))
+
+    ## AnnotationIdentifier --> Other Annotation-based Identifier
+    res <- mapIdentifiers(gs, EntrezIdentifier("hgu95av2"))
+    checkTrue(validObject(res))
+    checkIdentical(geneIdType(res), EntrezIdentifier("hgu95av2"))
+    checkException(mapIdentifiers(gs, EntrezIdentifier("sdfs")),
+                   silent=TRUE)
+}
+
 test_GeneIdentifierType_mapIdentifiers_AnDbBimap <- function() {
     library(org.Hs.eg.db)
     on.exit(detach("package:org.Hs.eg.db"))
@@ -96,4 +114,159 @@ test_GeneIdentifierType_mapIdentifiers_verbose_warnings <- function() {
     opt <- options(warn=2)
     on.exit(options(opt))
     checkException(mapIdentifiers(gs,  EntrezIdentifier(), verbose=TRUE), silent=TRUE)
+}
+
+
+test_GeneIdentifierType_show <- function() {
+    f <- function(x) capture.output(show(x))
+    checkEquals("geneIdType: Annotation", f(AnnotationIdentifier()))
+    checkEquals("geneIdType: Annotation (hgu95av2)",
+                f(AnnotationIdentifier("hgu95av2")))
+    checkEquals("geneIdType: EntrezId", f(EntrezIdentifier()))
+    checkEquals("geneIdType: EntrezId (hgu95av2)",
+                f(EntrezIdentifier("hgu95av2")))
+    checkEquals("geneIdType: Genename", f(GenenameIdentifier()))
+    checkEquals("geneIdType: Genename (hgu95av2)",
+                f(GenenameIdentifier("hgu95av2")))
+}
+
+test_GeneIdentifierType_mapIdentifiers_isNullMap <- function() {
+    f <- GSEABase:::.mapIdentifiers_isNullMap
+    ai <- AnnotationIdentifier()
+    aia <- AnnotationIdentifier("hgu95av2")
+    checkTrue(!f(ai, ai, FALSE))        # not mappable at all
+    checkTrue(!f(ai, aia, FALSE))       # 
+    checkTrue(f(aia, aia, FALSE))
+}
+
+test_GeneIdentifierType_mapIdentifiers_isMappable <- function() {
+    f <- GSEABase:::.mapIdentifiers_isMappable
+    ai <- AnnotationIdentifier()
+    aia <- AnnotationIdentifier("hgu95av2")
+    si <- SymbolIdentifier()
+
+    ## both with annotation -- ok only when annotation same
+    checkTrue(f(aia, aia))
+    checkException(f(aia, AnnotationIdentifier("hgu133plus2")),
+                   silent=TRUE)
+
+    ## one with annotation -- ok
+    checkTrue(f(ai, aia))
+    checkTrue(f(aia, si))
+    checkTrue(f(si, aia))
+
+    ## neither with annotation -- err
+    checkException(f(ai, ai), silent=TRUE)
+}
+
+test_GeneIdentifierType_mapIdentifiers_normalize <- function() {
+    f <- GSEABase:::.mapIdentifiers_normalize
+    ai <- AnnotationIdentifier()
+    aia <- AnnotationIdentifier("hgu95av2")
+    si <- SymbolIdentifier()
+    sia <- SymbolIdentifier("hgu95av2")
+
+    checkIdentical(list(aia, aia), f(ai, aia))
+    checkIdentical(list(aia, aia), f(aia, ai))
+    checkIdentical(list(aia, aia), f(aia, aia))
+
+    checkIdentical(list(sia, aia), f(si, aia))
+    checkIdentical(list(sia, aia), f(sia, ai))
+    checkIdentical(list(sia, aia), f(sia, aia))
+
+    checkException(f(ai, ai), silent=TRUE)
+}
+
+test_GeneIdentifierType_mapIdentifiers_selectMaps <- function() {
+    f <- GSEABase:::.mapIdentifiers_selectMaps
+    ## all fully specified and mappable at this point
+    ## single maps
+    chk1 <- function(map, id1, id2) {
+        res <- f(id1, id2)
+        checkTrue(length(res)==1)
+        checkIdentical(map, res[[1]])
+    }
+    ## two maps
+    chk2 <- function(map1, map2, id1, id2) {
+        res <- f(id1, id2)
+        checkTrue(length(res)==2)
+        checkIdentical(map1, res[[1]])
+        checkIdentical(map2, res[[2]])
+    }
+
+    pkg <- "hgu95av2"
+    ## need to look at EntrezId too, as these could also be dispatched
+    ## on for chip-based packages
+    ai <- AnnotationIdentifier(pkg)
+    ei <- EntrezIdentifier(pkg)
+    si <- SymbolIdentifier(pkg)
+    gi <- GenenameIdentifier(pkg)
+    chk1(hgu95av2ENTREZID, ai, ei)
+    chk1(hgu95av2SYMBOL, ai, si)
+    chk1(revmap(hgu95av2ENTREZID), ei, ai)
+    chk1(revmap(hgu95av2SYMBOL), si, ai)
+    chk2(revmap(hgu95av2ENTREZID), hgu95av2SYMBOL, ei, si)
+    chk2(revmap(hgu95av2SYMBOL), hgu95av2ENTREZID, si, ei)
+    chk2(revmap(hgu95av2GENENAME), hgu95av2SYMBOL, gi, si)
+    chk2(revmap(hgu95av2SYMBOL), hgu95av2GENENAME, si, gi)
+
+    pkg <- "org.Hs.eg.db"
+    ei <- EntrezIdentifier(pkg)
+    si <- SymbolIdentifier(pkg)
+    gi <- GenenameIdentifier(pkg)
+
+    chk1(org.Hs.egSYMBOL, ei, si)
+    chk1(revmap(org.Hs.egSYMBOL), si, ei)
+    chk2(revmap(org.Hs.egSYMBOL), org.Hs.egGENENAME, si, gi)
+}
+
+.test_GeneIdentifierType_mapIdentifiers_map <- function() {
+    f <- GSEABase:::.mapIdentifiers_map
+    ## ids 300:310 of sample.ExpressionSet; not 1:1 maps below; These
+    ## are hand-validated
+    aids <- c("31539_r_at", "31540_at", "31541_at", "31542_at",
+              "31543_at", "31544_at", "31545_at", "31546_at",
+              "31547_at", "31548_at", "31549_at")
+    eids <- c("3604", "54735", "2312", "58503", "2299", "6222",
+              "6141", "6805", "141", "4142")
+    sids <- c("TNFRSF9", "HSHUR7SEQ", "FLG", "PROL1", "FOXI1",
+              "RPS18", "RPL18", "ADPRH", "MAS1")
+    gids <- c("tumor necrosis factor receptor superfamily, member 9",
+              "UV-B repressed sequence, HUR 7", "filaggrin",
+              "proline rich, lacrimal 1", "forkhead box I1",
+              "ribosomal protein S18", "ribosomal protein L18",
+              "ADP-ribosylarginine hydrolase", "MAS1 oncogene" )
+
+    pkg <- "hgu95av2"
+    ai <- AnnotationIdentifier(pkg)
+    ei <- EntrezIdentifier(pkg)
+    si <- SymbolIdentifier(pkg)
+
+    checkEquals(eids, f(aids, ai, ei))
+    checkEquals(sids, f(aids, ai, si))
+    ## the following is convenient, not a general property
+    checkEquals(sids, f(f(aids, ai, ei), ei, si))
+
+    pkg <- "org.Hs.eg.db"
+    ei <- EntrezIdentifier(pkg)
+    si <- SymbolIdentifier(pkg)
+    gi <- GenenameIdentifier(pkg)
+
+    checkEquals(sids, f(eids, ei, si))
+    checkEquals(eids[-8], f(sids, si, ei)) # one lost in translation
+    checkEquals(gids, f(sids, si, gi))
+}
+
+## edge cases
+
+test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
+    ## Original bug: 
+    ##     1: Ambiguous method selection for "mapIdentifiers", target "GeneSet#AnnotationIdentifier#NullIdentifier" (the first of the signatures shown will be used)
+    ##     GeneSet#AnnotationIdentifier#GeneIdentifierType
+    ##     GeneSet#GeneIdentifierType#NullIdentifier
+    opts <- options(warn=2)
+    on.exit(options(opts))
+    gs <- GeneSet(setName="123", setIdentifier="345")
+    geneIdType(gs) <- AnnotationIdentifier("xyz")
+    checkTrue(validObject(gs))
 }

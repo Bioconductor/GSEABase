@@ -6,8 +6,9 @@
 \alias{show,GeneIdentifierType-method}
 % AnnotationIdentifier-class
 \alias{AnnotationIdentifier-class}
-\alias{annotation,AnnotationIdentifier-method}
-\alias{initialize,AnnotationIdentifier-method}
+\alias{annotation,GeneIdentifierType-method}
+\alias{annotation<-,GeneIdentifierType,character-method}
+\alias{initialize,GeneIdentifierType-method}
 \alias{show,AnnotationIdentifier-method}
 % additional classes
 \alias{NullIdentifier-class}
@@ -49,18 +50,14 @@
 }
 
 \section{Slots}{
-  All \code{GeneIdentifierType} classes have the following slot:
+  All \code{GeneIdentifierType} classes have the following slots:
   \describe{
     \item{type}{Object of class \code{"ScalarCharacter"}
       containing the character string representation of this
       \code{GeneIdentifierType}.}
-  }
-
-  The \code{AnnotationIdentifier} class has an additional slot
-  \describe{
     \item{annotation}{Object of class \code{"ScalarCharacter"}
       containing the name of the annotation package from which the
-      annotations (probe identifiers) are derived.}
+      identifiers (probe identifiers) are derived.}
   }
 }
 \section{Methods}{
@@ -74,55 +71,27 @@
       Create a new \code{\link{GeneColorSet}} using identifiers of
       \code{GeneIdentifierType}.}
 
+    \item{annotation}{\code{signature(object = "GeneIdentifierType")}:
+      extract the name of the annotation package as a character string.}
+
+    \item{annotation<-}{\code{signature(object = "GeneIdentifierType", value = "character")}:
+      assign the name of the annotation package as a character string.}
+
+    \item{geneIdType}{\code{signature(object = "GeneIdentifierType")}:
+      return a character string representation of the type of this
+      \code{object}.}
+
     \item{geneIdType<-}{\code{signature(object = "GeneSet", verbose=FALSE, value =
         "GeneIdentifierType")}: Changes the \code{GeneIdentifierType} of
       \code{object} to \code{value}, attempting to convert symbols in
       the process. This method calls \code{mapIdentifiers(what=object,
         to=value, from=geneIdType(what), verbose=verbose)}.}
 
-    \item{geneIdType}{\code{signature(object = "GeneIdentifierType")}:
-      return a character string representation of the type of this
-      \code{object}.}
-
-    \item{mapIdentifiers}{
-      \code{signature(what="GeneSet", to="GeneIdentifierType"
-        from="missing", verbose=FALSE)},
-      \code{signature(what="GeneSet", to="GeneIdentifierType"
-        from="NullIdentifier", verbose=FALSE)}
-      : See \code{\link{mapIdentifiers}}.}
+    \item{mapIdentifiers}{See \code{\link{mapIdentifiers}}.}
 
     \item{show}{\code{signature(object = "GeneIdentifierType")}: display
       this object.}
   }
-
-  \code{AnnotationIdentifier} has the
-  following method:
-  \describe{
-    \item{geneIdType}{\code{signature(object = "AnnotationIdentifier")}:
-      Retrieve the \code{geneIdType} (e.g., annotation string for
-      \code{AnnotationIdentifier}; ad hoc string for \code{NullIdentifier}).}
-  }
-
-  \code{AnnotationIdentifier} classes are also used in:
-  \describe{
-    \item{annotation}{\code{signature(object = "AnnotationIdentifier")}:
-      extract the name of the annotation package as a character string.}
-
-    \item{mapIdentifiers}{
-      \code{signature(what = "GeneSet", to = "GeneIdentifierType", from
-        = "AnnotationIdentifier", verbose=FALSE)},
-      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from
-        = "GeneIdentifierType", verbose=FALSE)},
-      \code{signature(what = "GeneSet", to="AnnotationIdentifier", from
-        = "GeneIdentifierType", verbose=FALSE)}:
-      see \code{\link{mapIdentifiers}}.}
-
-    \item{show}{\code{signature(object = "AnnotationIdentifier")}:
-      Display \code{object}, including the annotation string if available.}
-    \item{initialize}{\code{signature(.Object =
-        "AnnotationIdentifier")}: Used internally during object creation.}
-  }
-  
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
@@ -130,7 +99,7 @@
    this package; See the help pages of these classes for specific information.
 }
 \examples{
-getSubclasses(getClass("GeneIdentifierType"))
+names(getClass("GeneIdentifierType")@subclasses)
 
 # create an AnnotationIdentifier, and ask it's type
 geneIdType(AnnotationIdentifier(annotation="hgu95av2"))

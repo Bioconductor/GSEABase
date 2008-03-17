@@ -2,7 +2,7 @@
 % likely to be overwritten.
 %
 %\VignetteIndexEntry{An introduction to GSEABase}
-%\VignetteDepends{hgu95av2.db,GO.db, GO}
+%\VignetteDepends{hgu95av2.db,GO.db}
 %\VignetteKeywords{Gene Set Enrichment Analysis}
 %\VignettePackage{GSEABase}
 \documentclass[]{article}
@@ -62,7 +62,6 @@ identifiers in a subset of the sample \Robject{ExpressionSet} in the
 Biobase package (see \Rpackage{Biobase} documentation for a
 description of expression sets) use
 <<GeneSet>>=
-library(GSEABase)
 data(sample.ExpressionSet) # from Biobase
 egs <- GeneSet(sample.ExpressionSet[201:250,], setName="Sample")
 egs

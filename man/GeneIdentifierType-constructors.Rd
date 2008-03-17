@@ -18,18 +18,19 @@
   \code{AnnotationIdentifier()}).
 }
 \usage{
-NullIdentifier(...)
-EnzymeIdentifier(...)
-GenenameIdentifier(...)
-RefseqIdentifier(...)
-SymbolIdentifier(...)
-UnigeneIdentifier(...)
-EntrezIdentifier(...)
+NullIdentifier(annotation, ...)
+EnzymeIdentifier(annotation,...)
+GenenameIdentifier(annotation,...)
+RefseqIdentifier(annotation,...)
+SymbolIdentifier(annotation,...)
+UnigeneIdentifier(annotation,...)
+EntrezIdentifier(annotation,...)
 AnnotationIdentifier(annotation, ...)
 }
 \arguments{
-  \item{annotation}{(required) A single character string identifying  the
-    Bioconductor package from which the annotations are drawn.}
+  \item{annotation}{An optional character string identifying  the
+    Bioconductor package from which the annotations are drawn, e.g.,
+    \sQuote{hgu95av2}, \sQuote{org.Hs.eg.db}.}
   \item{\dots}{Additional arguments, usually none.}
 }
 \value{

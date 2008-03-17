@@ -6,6 +6,15 @@
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o Constructors for classes EntrezIdentifier, EnzymeIdentifier,
+    GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
+    UnigeneIdentifier can now accept an 'annotation' argument. This is
+    used to indicate which annotation package the identifiers are
+    from, e.g., EntrezIdentifier("hgu95av2.db") indicates that the
+    EntrezId's are from the hgu95av2.db package.
+
+    o GOCollection now tracks ontology as well as evidenceCode
+
     o Add ComputedCollection class to describe gene set collections
     resulting from computations.
 
@@ -17,6 +26,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     objects.
 
 NEW FEATURES
+
+    o geneIdType<- and mapIdentifiers can now map between any two
+    identifier types within an annotation package, e.g.,
+    SymbolIdentifer('org.Hs.eg.db') to
+    GenenameIdentifier('org.Hs.eg.db')
 
     o Parse revised Broad gene sets.
 

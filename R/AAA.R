@@ -149,7 +149,7 @@
     slots <- .nameAll(slots)
     for (i in seq_along(slots)) {
         eval(substitute({
-            if (!isGeneric(GENERIC, where=where))
+            if (!isGeneric(GENERIC))
                 setGeneric(GENERIC,
                            function(object) standardGeneric(GENERIC),
                            where=WHERE)
@@ -168,7 +168,7 @@
     slots <- .nameAll(slots)
     for (i in seq(along=slots)) {
         eval(substitute({
-            if (!isGeneric(SETTER, where=where))
+            if (!isGeneric(SETTER))
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER),
                            where = WHERE)
@@ -215,7 +215,7 @@
             value <- quote(value)
         }
         eval(substitute({
-            if (!isGeneric(SETTER, where=where))
+            if (!isGeneric(SETTER))
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER),
                            where = WHERE)

@@ -66,7 +66,7 @@ exportMethods(show, coerce, details, initialize, intersect, union,
               "coloring<-",
 
               ## GeneSetCollection
-              GeneSetCollection, names, "[", "[[")
+              GeneSetCollection, updateObject, names, "[", "[[")
 
 export(## IdentifierType
        NullIdentifier, EnzymeIdentifier, GenenameIdentifier,

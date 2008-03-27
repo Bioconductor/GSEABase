@@ -208,6 +208,18 @@ setMethod("GeneSetCollection",
               .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
+## updateObject
+
+setMethod("updateObject",
+          signature=signature(
+            object="GeneSetCollection"),
+          function(object, ..., verbose=FALSE) {
+              if (verbose)
+                  message("updateObject,GeneSetCollection-method")
+              initialize(object,
+                         lapply(object, updateObject, verbose=verbose))
+          })
+
 ## accessors
 
 setMethod("geneIds<-",

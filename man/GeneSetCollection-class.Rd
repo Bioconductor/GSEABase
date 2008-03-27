@@ -2,6 +2,7 @@
 \docType{class}
 \alias{GeneSetCollection-class}
 
+\alias{updateObject,GeneSetCollection-method}
 \alias{names,GeneSetCollection-method}
 \alias{geneIds,GeneSetCollection-method}
 \alias{geneIds<-,GeneSetCollection,list-method}
@@ -142,6 +143,14 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
   Additional useful methods.
 
   \describe{
+    \item{updateObject}{
+      Objects created in previous versions of GSEABase may be
+      incompatible with current object definitions. Usually this is
+      singalled by an error suggesting that a slot is missing, and a
+      recommnedation to use \code{updateObject}. Use \code{updateObject}
+      to update a \code{GeneSetCollection} and all contained
+      \code{GeneSets} to their current defintion.}
+
     \item{mapIdentifiers}{
       Convert genes from one \code{GeneIdentifierType} to another. See
       \code{\link{mapIdentifiers}} and specific methods in

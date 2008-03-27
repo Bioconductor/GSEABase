@@ -34,7 +34,6 @@
                annotation = "ScalarCharacter"),
              where=where)
     .getters("GeneIdentifierType", c(geneIdType="type"), where=where)
-    .getters("GeneIdentifierType", "annotation", where=where)
     .setters("GeneIdentifierType", "annotation", where=where)
 
     ## Straight derivation from GeneIdentifierType

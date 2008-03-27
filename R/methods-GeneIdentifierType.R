@@ -1,4 +1,16 @@
-## constructors / getters / setters in AllClasses.R
+## constructors in AllClasses.R
+
+setMethod("annotation",
+          signature=signature(
+            object="GeneIdentifierType"),
+          function(object) {
+              tryCatch({
+                  slot(object, "annotation")
+              }, error=function(err) {
+                  .stopf("'%s' slot unavailable, try updateObject()",
+                         "annotation")
+              })
+          })
 
 IdFactory <- function(classPrefix,
                       type=classPrefix,

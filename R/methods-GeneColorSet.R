@@ -295,9 +295,9 @@ setMethod("setdiff",
         ok <- sapply(mcolor, length) == 1
         if (!all(ok))
             .stopf("geneIds '%s' mapping to '%s' have inconsistent colors '%s'",
+                   paste(origIds[unlist(gidx[!ok])], collapse="', '"),
                    paste(geneIds[!ok], collapse="', '"),
-                   paste(names(gidx)[!ok], collapse="', '"),
-                   paste(color[!ok], collapse="', '"))
+                   paste(unlist(mcolor[!ok]), collapse="', '"))
         unlist(mcolor, use.names=FALSE)
     }
     revMap <- .mapIdentifiers_revMap(origIds, type[[1]], type[[2]])

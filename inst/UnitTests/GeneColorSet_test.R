@@ -279,7 +279,8 @@ test_GCS_mapIdentifiers <- function() {
     gcs <- GeneColorSet(geneIds=c("TYMP", "XPO1", "LBR"),
                         geneIdType=si,
                         phenotype="pheno data",
-                        geneColor = factor(c("increase","increase","increase")),
+                        geneColor = factor(c("increase","increase","increase"),
+                          levels=c("increase", "decrease")),
                         phenotypeColor = factor(c("A","B","A")))
     gcs1 <- mapIdentifiers(gcs, ai)
     checkTrue(validObject(gcs1))
@@ -299,6 +300,21 @@ test_GCS_mapIdentifiers <- function() {
     checkEquals(f(geneIds(gcs), si, gi), geneIds(gcs1))
     checkEquals(phenotypeColor(gcs), phenotypeColor(gcs1))
     checkEquals(geneColor(gcs), geneColor(gcs1))
+}
+
+test_GCS_mapIdentifiers_exceptions <- function() {
+    ai <- AnnotationIdentifier("hgu95av2")
+    si <- SymbolIdentifier("hgu95av2")
+    gcs <- GeneColorSet(geneIds=c("183_at", "1972_s_at", "219_i_at",
+                          "220_r_at", "35422_at", "37729_at",
+                          "288_s_at"),
+                        geneIdType=ai,
+                        phenotype="phenotype",
+                        geneColor=factor(c("decrease", "increase",
+                          "increase", "increase", "increase",
+                          "increase", "increase")),
+                        phenotypeColor=factor(rep("A", 7)))
+    checkException(mapIdentifiers(gcs, si), silent=TRUE)
 }
 
 test_GCS_mapIdentifiers_NullIdentifier <- function() {

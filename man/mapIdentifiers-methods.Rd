@@ -41,7 +41,7 @@
       This method will re-dispatch to a method with signature
       \code{signature(what=what, to=to, from=geneIdType(what))}, and is
       present so that a user can call \code{mapIdentifiers} without providing an
-      explicit argument to \code{from}.}
+      explicit \code{from} argument.}
 
     \item{what = "GeneSet", to = "GeneIdentifierType", from = "NullIdentifier", verbose=FALSE}{
       This maps a gene set from gene identifiers represented by the
@@ -66,13 +66,12 @@
   The following methods are defined for \code{what=GeneColorSet}. These methods
   map gene- and phenotype color appropriately, and fail if coloring of
   gene identifiers involved in several-to-1 mappings conflict.
-  The following methods are defined on \code{what="GeneSet"}:
   \describe{
     \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "missing", verbose=FALSE}{
       This method will re-dispatch to a method with signature
       \code{signature(what=what, to=to, from=geneIdType(what))}, and is
       present so that a user can call \code{mapIdentifiers} without providing an
-      explicit argument to \code{from}.}
+      explicit \code{from} argument.}
 
     \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "NullIdentifier", verbose=FALSE}{
       This maps a gene set from gene identifiers represented by the

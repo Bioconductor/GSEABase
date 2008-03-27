@@ -1,6 +1,6 @@
-idConstructors <- names(getSubclasses(getClass("CollectionIdType")))
+idConstructors <- names(slot(getClass("CollectionIdType"), "subclasses"))
 simpleConstructors <- local({
-    idTypes <- names(getSubclasses(getClass("CollectionType")))
+    idTypes <- names(slot(getClass("CollectionType"), "subclasses"))
     idTypes[!idTypes %in% c("CollectionIdType", idConstructors)]
 })
 constructors <- c(simpleConstructors, idConstructors)

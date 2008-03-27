@@ -180,6 +180,7 @@ test_GS_incidence <- function() {
 }
 
 test_GS_uniqueSetIdentifier <- function() {
+    checkTrue(require(Ruuid))
     gs <- GeneSet(letters[1:3], setName="A")
 
     checkTrue(setIdentifier(gs) !=

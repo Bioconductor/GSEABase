@@ -104,7 +104,7 @@ The identifier type of gene sets created from expression sets is
 \Sexpr{as.character(class(geneIdType(egs)))}. Additional predefined
 identifiers are available:
 <<GeneIdentifierTypes>>=
-names(getSubclasses(getClass("GeneIdentifierType")))
+names(slot(getClass("GeneIdentifierType"), "subclasses"))
 @ 
 %% 
 It is possible to map between identifier types (provided the
@@ -134,7 +134,7 @@ GeneSet(EntrezIdentifier(), geneIds=as.character(eids))
 The \Rmethod{collectionType} of a gene set provides additional
 information about a gene set. Available collection types are
 <<CollectionType>>=
-names(getSubclasses(getClass("CollectionType")))
+names(slot(getClass("CollectionType"), "subclasses"))
 @ 
 %% 
 Collection types are most important when creating gene sets. For

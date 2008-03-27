@@ -250,6 +250,78 @@ setMethod("incidence",
                          lapply(args, setName))
           })
 
+## mapIdentifiers
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="missing"),
+          function(what, to, from, ..., verbose=FALSE) {
+              callGeneric(what, to, from=geneIdType(what), ...,
+                          verbose=verbose)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="NullIdentifier"),
+          function(what, to, from, ..., verbose=FALSE) {
+              initialize(what, geneIdType=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="NullIdentifier",
+            from="GeneIdentifierType"),
+          function(what, to, from, ..., verbose=FALSE) {
+              initialize(what, geneIdType=to)
+          })
+          
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="GeneIdentifierType"),
+          function(what, to, from, ..., verbose=FALSE) {
+              type <- .mapIdentifiers_normalize(from, to)
+              if (.mapIdentifiers_isNullMap(type[[1]], type[[2]],
+                                            verbose))
+                  return(what)
+              ids <- geneIds(what)
+              ids <- .mapIdentifiers_map(ids, type[[1]], type[[2]],
+                                         verbose)
+              initialize(what, geneIds=ids, geneIdType=type[[2]])
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="environment"),
+          function(what, to, from, ..., verbose=FALSE) {
+              doMap <- .mapIdentifiers_doWithMap
+              ids <- doMap(geneIds(what), from,
+                           "environment", "user-supplied environment",
+                           verbose=verbose)
+              initialize(what, geneIds=ids, geneIdType=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneSet",
+            to="GeneIdentifierType",
+            from="AnnDbBimap"),
+          function(what, to, from, ..., verbose=FALSE) {
+              doMap <- .mapIdentifiers_doWithMap
+              ids <- doMap(geneIds(what), from,
+                           deparse(substitute(from)),
+                           "user-supplied AnnDbBimap", verbose=verbose)
+              initialize(what, geneIds=ids, geneIdType=to)
+          })
+
 ## show / description
 
 .showGeneSet <- function(object) {

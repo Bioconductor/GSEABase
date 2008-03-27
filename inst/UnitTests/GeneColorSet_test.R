@@ -258,3 +258,66 @@ test_GCS_subset2 <- function() {
 
     checkIdentical(expected, do.call("$",list(gcs, geneIds(gcs)[[2]])))
 }
+
+test_GCS_mapIdentifiers <- function() {
+    f <- GSEABase:::.mapIdentifiers_map
+    ai <- AnnotationIdentifier("hgu95av2")
+    si <- SymbolIdentifier("hgu95av2")
+    gi <- GenenameIdentifier("hgu95av2")
+    ## 1:1 annotations
+    gcs <- GeneColorSet(geneIds=c("XPO1", "LBR"),
+                        geneIdType=si,
+                        phenotype="pheno data",
+                        geneColor = factor(c("increase","increase")),
+                        phenotypeColor = factor(c("B","A")))
+    gcs1 <- mapIdentifiers(gcs, ai)
+    checkTrue(validObject(gcs1))
+    checkEquals(f(geneIds(gcs), si, ai), geneIds(gcs1))
+    checkEquals(geneColor(gcs), geneColor(gcs1))
+    checkEquals(phenotypeColor(gcs), phenotypeColor(gcs1))
+    ## 0 annotations for TYMP
+    gcs <- GeneColorSet(geneIds=c("TYMP", "XPO1", "LBR"),
+                        geneIdType=si,
+                        phenotype="pheno data",
+                        geneColor = factor(c("increase","increase","increase")),
+                        phenotypeColor = factor(c("A","B","A")))
+    gcs1 <- mapIdentifiers(gcs, ai)
+    checkTrue(validObject(gcs1))
+    checkEquals(f(geneIds(gcs), si, ai), geneIds(gcs1))
+    checkEquals(geneColor(gcs)[2:3], geneColor(gcs1))
+    checkEquals(phenotypeColor(gcs)[2:3], phenotypeColor(gcs1))
+    ## 5 annotations for MAP2
+    gcs <- initialize(gcs, geneIds=c("MAP2", "XPO1", "LBR"))
+    gcs1 <- mapIdentifiers(gcs, ai)
+    checkTrue(validObject(gcs1))
+    checkEquals(f(geneIds(gcs), si, ai), geneIds(gcs1))
+    checkEquals(phenotypeColor(gcs)[c(rep(1,5), 2:3)], phenotypeColor(gcs1))
+    checkEquals(geneColor(gcs)[c(rep(1,5), 2:3)], geneColor(gcs1))
+    ## 2-step map; ends up being 1:1
+    gcs1 <- mapIdentifiers(gcs, gi)
+    checkTrue(validObject(gcs1))
+    checkEquals(f(geneIds(gcs), si, gi), geneIds(gcs1))
+    checkEquals(phenotypeColor(gcs), phenotypeColor(gcs1))
+    checkEquals(geneColor(gcs), geneColor(gcs1))
+}
+
+test_GCS_mapIdentifiers_NullIdentifier <- function() {
+    si <- SymbolIdentifier("hgu95av2")
+    ni <- NullIdentifier()
+    gcs <- GeneColorSet(geneIds=c("XPO1", "LBR"),
+                        geneIdType=si,
+                        phenotype="pheno data",
+                        geneColor = factor(c("increase","increase")),
+                        phenotypeColor = factor(c("B","A")))
+    gcs1 <- mapIdentifiers(gcs, ni)
+    checkTrue(validObject(gcs1))
+    checkEquals(geneIds(gcs), geneIds(gcs1))
+    checkEquals(geneColor(gcs), geneColor(gcs1))
+    checkEquals(phenotypeColor(gcs), phenotypeColor(gcs))
+    
+    gcs <- mapIdentifiers(gcs1, si)
+    checkTrue(validObject(gcs1))
+    checkEquals(geneIds(gcs), geneIds(gcs1))
+    checkEquals(geneColor(gcs), geneColor(gcs1))
+    checkEquals(phenotypeColor(gcs), phenotypeColor(gcs))
+}

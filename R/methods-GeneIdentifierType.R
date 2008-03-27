@@ -183,7 +183,7 @@ setMethod("show",
           .warningf("map '%s' had %d 'NA' values",
                     .mapString(from, to), sum(sapply(vals, isNA)))
     }
-    uvals <- unique(unlist(vals))
+    uvals <- unique(unlist(vals, use.names=FALSE))
     if (verbose && (length(uvals) != length(keys)))
       .warningf("map '%s' is %d:%d (not 1:1)",
                 .mapString(from, to), length(keys), length(uvals))
@@ -203,76 +203,19 @@ setMethod("show",
     }
 }
 
-## Methods
+.mapIdentifiers_doRevMap <- function(keys, map)
+    revmap(mget(keys, map, ifnotfound=NA_character_))
 
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="missing"),
-          function(what, to, from, ..., verbose=FALSE) {
-              callGeneric(what, to, from=geneIdType(what), ...,
-                          verbose=verbose)
-          })
+.mapIdentifiers_revMap <- function(ids, from, to) {
+    doMap <- .mapIdentifiers_doWithMap
+    doRevMap <- .mapIdentifiers_doRevMap
+    map <- .mapIdentifiers_selectMaps(from, to)
+    if (length(map)==1) doRevMap(ids, map[[1]])
+    else {
+        rmap1 <- doRevMap(ids, map[[1]])
+        rmap2 <- doRevMap(names(rmap1), map[[2]])
+        lapply(rmap2, function(elt) unique(unlist(rmap1[elt])))
+    }
+}
 
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="NullIdentifier"),
-          function(what, to, from, ..., verbose=FALSE) {
-              ## always valid
-              initialize(what, geneIdType=to)
-          })
-
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="NullIdentifier",
-            from="GeneIdentifierType"),
-          function(what, to, from, ..., verbose=FALSE) {
-              ## always valid
-              initialize(what, geneIdType=to)
-          })
-          
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="GeneIdentifierType"),
-          function(what, to, from, ..., verbose=FALSE) {
-              type <- .mapIdentifiers_normalize(from, to)
-              if (.mapIdentifiers_isNullMap(type[[1]], type[[2]],
-                                            verbose))
-                  return(what)
-              ids <- geneIds(what)
-              ids <- .mapIdentifiers_map(ids, type[[1]], type[[2]],
-                                         verbose)
-              initialize(what, geneIds=ids, geneIdType=type[[2]])
-          })
-
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="environment"),
-          function(what, to, from, ..., verbose=FALSE) {
-              doMap <- .mapIdentifiers_doWithMap
-              ids <- doMap(geneIds(what), from,
-                           "environment", "user-supplied environment",
-                           verbose=verbose)
-              initialize(what, geneIds=ids, geneIdType=to)
-          })
-
-setMethod("mapIdentifiers",
-          signature=signature(
-            what="GeneSet",
-            to="GeneIdentifierType",
-            from="AnnDbBimap"),
-          function(what, to, from, ..., verbose=FALSE) {
-              doMap <- .mapIdentifiers_doWithMap
-              ids <- doMap(geneIds(what), from,
-                           deparse(substitute(from)),
-                           "user-supplied AnnDbBimap", verbose=verbose)
-              initialize(what, geneIds=ids, geneIdType=to)
-          })
+## Methods: see GeneSet, GeneColorSet

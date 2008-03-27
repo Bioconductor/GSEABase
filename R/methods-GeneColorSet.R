@@ -286,7 +286,81 @@ setMethod("setdiff",
           signature=signature(
             x="GeneColorSet", y="GeneColorSet"),
           .geneColorSetSetdiff)
-        
+
+## mapIdentifiers,GeneColorSet,*-methods
+
+.mapIdentifier_GCS_initialize <- function(what, origIds, geneIds, type) {
+    chkColor <- function(geneIds, gidx, color) {
+        mcolor <- lapply(gidx, function(idx) unique(color[idx]))
+        ok <- sapply(mcolor, length) == 1
+        if (!all(ok))
+            .stopf("geneIds '%s' mapping to '%s' have inconsistent colors '%s'",
+                   paste(geneIds[!ok], collapse="', '"),
+                   paste(names(gidx)[!ok], collapse="', '"),
+                   paste(color[!ok], collapse="', '"))
+        unlist(mcolor, use.names=FALSE)
+    }
+    revMap <- .mapIdentifiers_revMap(origIds, type[[1]], type[[2]])
+    ## which original indicies map to geneIds?
+    gidx <- lapply(revMap[geneIds], match, origIds)
+    geneColor <- chkColor(geneIds, gidx, geneColor(what))
+    phenotypeColor <- chkColor(geneIds, gidx, phenotypeColor(what))
+    initialize(what, geneIds=geneIds, geneIdType=type[[2]],
+               geneColor=geneColor, phenotypeColor=phenotypeColor)
+}
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneColorSet",
+            to="GeneIdentifierType",
+            from="NullIdentifier"),
+          function(what, to, from, ..., verbose=FALSE) {
+              initialize(what, geneIdType=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneColorSet",
+            to="NullIdentifier",
+            from="GeneIdentifierType"),
+          function(what, to, from, ..., verbose=FALSE) {
+              initialize(what, geneIdType=to)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneColorSet",
+            to="GeneIdentifierType",
+            from="GeneIdentifierType"),
+          function(what, to, from, ..., verbose=FALSE) {
+              type <- .mapIdentifiers_normalize(from, to)
+              if (.mapIdentifiers_isNullMap(type[[1]], type[[2]],
+                                            verbose))
+                  return(what)
+              origIds <- geneIds(what)
+              geneIds <- .mapIdentifiers_map(origIds, type[[1]], type[[2]],
+                                             verbose)
+              .mapIdentifier_GCS_initialize(what, origIds, geneIds, type)
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneColorSet",
+            to="GeneIdentifierType",
+            from="environment"),
+          function(what, to, from, ..., verbose=FALSE) {
+              stop("mapIdentifiers,GeneIdentifierType,environment-method not (yet) available")
+          })
+
+setMethod("mapIdentifiers",
+          signature=signature(
+            what="GeneColorSet",
+            to="GeneIdentifierType",
+            from="AnnDbBimap"),
+          function(what, to, from, ..., verbose=FALSE) {
+              stop("mapIdentifiers,GeneIdentifierType,AnnDbBimap-method not (yet) available")
+          })
+
 ## other methods
 
 .showGeneColoring <- function(object) {

@@ -121,7 +121,11 @@
       the gene set, returning a named character vector of \code{gene,
         geneColor, phenotypeColor}. Provides partial matching into the
       list of genes.}
-  }  
+    \item{mapIdentifiers}{\code{signature(x="GeneColorSet", to="*", from="*")}: checks
+      that gene- and phenotype colors are consistent for mapped
+      identifiers, e.g., that two \code{AnnotationIdentifiers} mapping
+      to the same \code{SymbolIdentifier} are colored the same.}
+  }
 
   Logical (set) operations \code{&, |, setdiff} warn if
   the \code{phenotype} \code{geneColor}, or \code{phenotypeColor}

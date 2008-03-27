@@ -9,6 +9,13 @@
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,GeneIdentifierType-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,AnnDbBimap-method}
 \alias{mapIdentifiers,GeneSet,GeneIdentifierType,environment-method}
+
+\alias{mapIdentifiers,GeneColorSet,GeneIdentifierType,NullIdentifier-method}
+\alias{mapIdentifiers,GeneColorSet,NullIdentifier,GeneIdentifierType-method}
+\alias{mapIdentifiers,GeneColorSet,GeneIdentifierType,GeneIdentifierType-method}
+\alias{mapIdentifiers,GeneColorSet,GeneIdentifierType,AnnDbBimap-method}
+\alias{mapIdentifiers,GeneColorSet,GeneIdentifierType,environment-method}
+
 \alias{mapIdentifiers,GeneSetCollection,GeneIdentifierType,missing-method}
 \title{Methods for Function mapIdentifiers in Package `GSEABase'}
 \description{
@@ -22,6 +29,7 @@
   DBI-based annotation packages).
 }
 \section{Methods}{
+  The following methods are defined on \code{what="GeneSet"}:
   \describe{
 
     \item{what = "ANY", to = "ANY", from = "ANY", verbose=FALSE}{
@@ -53,10 +61,45 @@
     \item{what = "GeneSet", to = "GeneIdentifierType", from = "AnnDbBimap", verbose=FALSE}{
       Maps identifiers found in \code{what} to the type described by
       \code{to}, using the map (key-value pairs) found in \code{from}.}
+  }
 
+  The following methods are defined for \code{what=GeneColorSet}. These methods
+  map gene- and phenotype color appropriately, and fail if coloring of
+  gene identifiers involved in several-to-1 mappings conflict.
+  The following methods are defined on \code{what="GeneSet"}:
+  \describe{
+    \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "missing", verbose=FALSE}{
+      This method will re-dispatch to a method with signature
+      \code{signature(what=what, to=to, from=geneIdType(what))}, and is
+      present so that a user can call \code{mapIdentifiers} without providing an
+      explicit argument to \code{from}.}
+
+    \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "NullIdentifier", verbose=FALSE}{
+      This maps a gene set from gene identifiers represented by the
+      \code{NullIdentifier} type (i.e., no type associated with the genes) to
+      gene identifiers represent by any class derived from
+      \code{GeneIdentifierType}.}
+
+    \item{what = "GeneColorSet", to = "NullIdentifier", from = "GeneIdentifierType", verbose=FALSE}{ 
+      This maps a gene set from gene identifiers represented by any
+      \code{GeneIdentifierType} type to one represented by the
+      \code{NullIdentifier} (i.e., no type associated with the genes).}
+
+    \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "environment", verbose=FALSE}{
+      This method is not implemented, and exists to stop incorrect
+      application of the \code{GeneSet} method.}
+
+    \item{what = "GeneColorSet", to = "GeneIdentifierType", from = "AnnDbBimap", verbose=FALSE}{
+      This method is not implemented, and exists to stop incorrect
+      application of the \code{GeneSet} method.}
+  }
+
+  A method exists for \code{what="GeneSetCollection"}:
+  \describe{
     \item{what = "GeneSetCollection", to = "GeneIdentifierType", from = "missing", verbose = FALSE}{
       Map each gene set in \code{what} to gene identifier type
       \code{to}, using methods described above.}
-}}
+  }
+}
 \keyword{methods}
 

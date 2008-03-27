@@ -184,14 +184,14 @@ test_GeneIdentifierType_mapIdentifiers_selectMaps <- function() {
     chk1 <- function(map, id1, id2) {
         res <- f(id1, id2)
         checkTrue(length(res)==1)
-        checkIdentical(map, res[[1]])
+        all.equal(map, res[[1]])
     }
     ## two maps
     chk2 <- function(map1, map2, id1, id2) {
         res <- f(id1, id2)
         checkTrue(length(res)==2)
-        checkIdentical(map1, res[[1]])
-        checkIdentical(map2, res[[2]])
+        all.equal(map1, res[[1]])
+        all.equal(map2, res[[2]])
     }
 
     pkg <- "hgu95av2"
@@ -220,7 +220,7 @@ test_GeneIdentifierType_mapIdentifiers_selectMaps <- function() {
     chk2(revmap(org.Hs.egSYMBOL), org.Hs.egGENENAME, si, gi)
 }
 
-.test_GeneIdentifierType_mapIdentifiers_map <- function() {
+test_GeneIdentifierType_mapIdentifiers_map <- function() {
     f <- GSEABase:::.mapIdentifiers_map
     ## ids 300:310 of sample.ExpressionSet; not 1:1 maps below; These
     ## are hand-validated
@@ -255,6 +255,41 @@ test_GeneIdentifierType_mapIdentifiers_selectMaps <- function() {
     checkEquals(sids, f(eids, ei, si))
     checkEquals(eids[-8], f(sids, si, ei)) # one lost in translation
     checkEquals(gids, f(sids, si, gi))
+}
+
+test_GeneIdentifierType_mapIdentifiers_revMap <- function() {
+    f <- GSEABase:::.mapIdentifiers_revMap
+    pkg <- "hgu95av2"
+    si <- SymbolIdentifier(pkg)
+    ai <- AnnotationIdentifier(pkg)
+
+    ## no annotation for TYMP
+    sids <- c("TYMP", "XPO1", "LBR")
+    checkEquals(list("288_s_at" = "LBR", "37729_at" = "XPO1"),
+                f(sids, si, ai))
+    ## Multiple annotations for MAP2
+    sids <- c("MAP2", "XPO1", "LBR")
+    checkEquals(list("183_at" = "MAP2", "1972_s_at" = "MAP2",
+                     "219_i_at" = "MAP2", "220_r_at" = "MAP2",
+                     "288_s_at" = "LBR", "35422_at" = "MAP2",
+                     "37729_at" = "XPO1"),
+                f(sids, si, ai))
+    ## "35422_at"  "220_r_at" map to same sym
+    aids <- c("35422_at", "220_r_at", "41229_at")
+    checkEquals(list(MAP2 = c("35422_at", "220_r_at"), NFIB = "41229_at"),
+                f(aids, ai, si))
+
+    ## two-step maps
+    gi <- GenenameIdentifier(pkg)
+    sids <- c("TYMP", "XPO1", "LBR")
+    checkEquals(list("exportin 1 (CRM1 homolog, yeast)" = "XPO1",
+                     "lamin B receptor" = "LBR"),
+                f(sids, si, gi))
+    sids <- c("MAP2", "XPO1", "LBR")
+    checkEquals(list("exportin 1 (CRM1 homolog, yeast)" = "XPO1",
+                     "lamin B receptor" = "LBR",
+                     "microtubule-associated protein 2" = "MAP2"),
+                f(sids, si, gi))
 }
 
 ## edge cases

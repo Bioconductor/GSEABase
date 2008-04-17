@@ -158,7 +158,7 @@ setMethod("show",
     .checkCode(ontology, c("CC", "MF", "BP", "ANY", NA))
 }
 
-.GOFilterIds <- function(ids, ontology, err=TRUE) {
+.GOFilterIds <- function(ids, ontology, err=FALSE) {
     terms <- mget(ids, getAnnMap("TERM", "GO"), ifnotfound=NA_character_)
     termsOk <- !is.na(terms)
     if (err && !all(termsOk))
@@ -176,10 +176,10 @@ setMethod("show",
 
 GOCollection <- function(ids=character(0),
                          evidenceCode="ANY",
-                         ontology="ANY", ...) {
+                         ontology="ANY", ..., err=FALSE) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
     ontology <- .checkGOOntologyCode(ontology)
-    ids <- .GOFilterIds(ids, ontology)
+    ids <- .GOFilterIds(ids, ontology, err=err)
     new("GOCollection", ids=ids, ...,
         evidenceCode=evidenceCode, ontology=ontology)
 }

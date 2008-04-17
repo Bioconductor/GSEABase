@@ -13,7 +13,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     from, e.g., EntrezIdentifier("hgu95av2.db") indicates that the
     EntrezId's are from the hgu95av2.db package.
 
-    o GOCollection now tracks ontology as well as evidenceCode
+    o GOCollection now tracks ontology as well as evidenceCode.
 
     o Add ComputedCollection class to describe gene set collections
     resulting from computations.
@@ -24,6 +24,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     functions to retrieve OBO collections from the internet
     (getOBOCollectoin) and convert OBOCollections to and from graphNEL
     objects.
+
+    o GeneSets constructed from GOCollections require a geneIdType
+    with an appropriate (i.e., GO to identifier) mapping, e.g.,
+    geneIdType=EntrezIdentifier("org.Hs.eg.db")
 
 NEW FEATURES
 

@@ -144,6 +144,7 @@ from two terms, including all genes with a particular evidence code.
 <<GOCollection>>=
 GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
                      evidenceCode="IDA"),
+        geneIdType=EntrezIdentifier("org.Hs.eg.db"),
         setName="Sample GO Collection")
 @ 
 %% 

@@ -36,7 +36,7 @@ OMIMCollection(ids,...)
 PMIDCollection(ids,...)
 PfamCollection(ids, ...)
 PrositeCollection(ids, ...)
-GOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
+GOCollection(ids=character(0), evidenceCode="ANY", ontology="ANY", ..., err=FALSE)
 OBOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
 BroadCollection(category, subCategory=NA, ...)
 }
@@ -57,6 +57,8 @@ BroadCollection(category, subCategory=NA, ...)
     included, or "ANY" (any identifier; the default). Unlike evidence
     code, ontology membership is enforced when GOCollection gene sets
     are constructed.}
+  \item{err}{(Optional) logical scalar indicating whether non-existent
+    GO terms signal an error (\code{TRUE}), or are silently ignored (\code{FALSE}).}
   \item{...}{Additional arguments, usually none but see specific
     \code{linkS4class{CollectionType}} classes  for possibilities.}
 }

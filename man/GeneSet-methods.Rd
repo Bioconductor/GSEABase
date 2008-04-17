@@ -54,10 +54,12 @@ GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
       derived from \code{experimentData}.}
 
     \item{
-      \code{signature(type = "GOCollection", ..., geneIdType = EntrezIdentifier(), setIdentifier=.uniqueIdentifier())}}{
-      Use genes contained in \code{type} to
-      create a \code{GeneSet }. The default \code{geneIdType} assumes
-      that the identifiers are Entrez ids.}
+      \code{signature(type = "GOCollection", ..., geneIdType, setIdentifier=.uniqueIdentifier())}}{
+      Use genes contained in \code{type} to create a \code{GeneSet
+      }. The required arugment \code{geneIdType} must include a package
+      for which an appropriate map (to GO) exists, e.g.,
+      \code{EntrezIdentifier('org.Hs.eg.db')}.
+    }
     
     \item{
       \code{signature(type = "BroadCollection", ..., urls = character(0), setIdentifier=.uniqueIdentifier())}}{

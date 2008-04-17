@@ -79,13 +79,11 @@
 
         ## GOCollection
         f <- function() {
-            .checkRequired(REQUIRED, names(match.call()))
-            if (!.requireQ("GO"))
-                stop("library(GO) required but not available")
-            ## look for geneIdType; default is EntrezId
-            idType <- geneIdType(geneIdType)
-            lookup <- get(paste("GO", toupper(idType),sep=""))
-            ids <- mget(ids(type), lookup, ifnotfound=NA_character_)
+            .checkRequired(c(REQUIRED, "geneIdType"), names(match.call()))
+            if (!nzchar(annotation(geneIdType)))
+                .stopf("'annotation(geneIdType)' must have non-zero number of characters")
+            map <- getAnnMap("GO", annotation(geneIdType))
+            ids <- mget(ids(type), map, ifnotfound=NA_character_)
             ids <- lapply(ids,
                           function(x, codes) x[names(x) %in% codes],
                           evidenceCode(type))
@@ -98,7 +96,7 @@
                       OARGS))
         }
         formals(f) <- c(IARGS[-length(IARGS)],
-                        geneIdType=quote(EntrezIdentifier()),
+                        alist(geneIdType=),
                         IARGS[length(IARGS)])
         setMethod(CLASS,
                   signature=signature(type="GOCollection"), f)

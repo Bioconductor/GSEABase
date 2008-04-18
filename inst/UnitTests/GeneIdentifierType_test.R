@@ -230,7 +230,7 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     eids <- c("3604", "54735", "2312", "58503", "2299", "6222",
               "6141", "6805", "141", "4142")
     sids <- c("TNFRSF9", "HSHUR7SEQ", "FLG", "PROL1", "FOXI1",
-              "RPS18", "RPL18", "ADPRH", "MAS1")
+              "RPS18", "RPL18", "FAM75C2", "ADPRH", "MAS1")
     gids <- c("tumor necrosis factor receptor superfamily, member 9",
               "UV-B repressed sequence, HUR 7", "filaggrin",
               "proline rich, lacrimal 1", "forkhead box I1",
@@ -248,6 +248,8 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     checkEquals(sids, f(f(aids, ai, ei), ei, si))
 
     pkg <- "org.Hs.eg.db"
+    sids <- c("TNFRSF9", "HSHUR7SEQ", "FLG", "PROL1", "FOXI1",
+              "RPS18", "RPL18", "ADPRH", "MAS1")
     ei <- EntrezIdentifier(pkg)
     si <- SymbolIdentifier(pkg)
     gi <- GenenameIdentifier(pkg)
@@ -263,8 +265,8 @@ test_GeneIdentifierType_mapIdentifiers_revMap <- function() {
     si <- SymbolIdentifier(pkg)
     ai <- AnnotationIdentifier(pkg)
 
-    ## no annotation for TYMP
-    sids <- c("TYMP", "XPO1", "LBR")
+    ## no annotation for IMAGINARY
+    sids <- c("IMAGINARY", "XPO1", "LBR")
     checkEquals(list("288_s_at" = "LBR", "37729_at" = "XPO1"),
                 f(sids, si, ai))
     ## Multiple annotations for MAP2
@@ -281,7 +283,7 @@ test_GeneIdentifierType_mapIdentifiers_revMap <- function() {
 
     ## two-step maps
     gi <- GenenameIdentifier(pkg)
-    sids <- c("TYMP", "XPO1", "LBR")
+    sids <- c("IMAGINARY", "XPO1", "LBR")
     checkEquals(list("exportin 1 (CRM1 homolog, yeast)" = "XPO1",
                      "lamin B receptor" = "LBR"),
                 f(sids, si, gi))

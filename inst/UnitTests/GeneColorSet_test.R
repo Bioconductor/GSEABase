@@ -275,8 +275,8 @@ test_GCS_mapIdentifiers <- function() {
     checkEquals(f(geneIds(gcs), si, ai), geneIds(gcs1))
     checkEquals(geneColor(gcs), geneColor(gcs1))
     checkEquals(phenotypeColor(gcs), phenotypeColor(gcs1))
-    ## 0 annotations for TYMP
-    gcs <- GeneColorSet(geneIds=c("TYMP", "XPO1", "LBR"),
+    ## 0 annotations for IMAGINARY
+    gcs <- GeneColorSet(geneIds=c("IMAGINARY", "XPO1", "LBR"),
                         geneIdType=si,
                         phenotype="pheno data",
                         geneColor = factor(c("increase","increase","increase"),

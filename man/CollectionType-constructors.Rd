@@ -43,7 +43,7 @@ BroadCollection(category, subCategory=NA, ...)
 
 \arguments{
   \item{category}{(Required) Broad category, one of "c1" (postitional), "c2"
-    (curated), "c3" (motif), "c4" (computational).}
+    (curated), "c3" (motif), "c4" (computational), "c5" (GO).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
   \item{ids}{(Optional) Character vector of identifiers (e.g., GO, KEGG,
     or PMID terms).}

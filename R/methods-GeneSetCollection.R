@@ -204,7 +204,7 @@ setMethod("GeneSetCollection",
             idType="AnnotationIdentifier",
             setType="GOCollection"),
           function(object, ..., idType, setType) {
-              genes <- as.list(getAnnMap("GO2PROBE", idType))
+              genes <- as.list(getAnnMap("GO2PROBE", annotation(idType)))
               .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 

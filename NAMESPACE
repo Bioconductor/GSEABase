@@ -5,6 +5,12 @@ importFrom(XML, getNodeSet, free, saveXML,
 
 importMethodsFrom(AnnotationDbi, revmap, mget, exists, as.list)
 
+importMethodsFrom(Biobase, annotation, description, pubMedIds,
+                  updateObject, "annotation<-", "description<-",
+                  "pubMedIds<-")
+
+importMethodsFrom(annotate, organism)
+
 importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 importClassesFrom(AnnotationDbi, AnnDbBimap)

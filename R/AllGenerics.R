@@ -1,5 +1,7 @@
 ## many generics are constructed in code; see AAA.R and methods-* 
 
+## union generic from graph
+
 ## GeneIdentifierType
 
 setGeneric("mapIdentifiers",
@@ -37,9 +39,6 @@ setGeneric("geneIdType<-",
 
 setGeneric("intersect",
            function(x, y) standardGeneric("intersect"))
-
-setGeneric("union",
-           function(x, y) standardGeneric("union"))
 
 setGeneric("setdiff",
            function(x, y) standardGeneric("setdiff"))

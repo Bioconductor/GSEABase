@@ -15,6 +15,8 @@ importClassesFrom(Biobase, ScalarCharacter, Versions)
 
 importClassesFrom(AnnotationDbi, AnnDbBimap)
 
+importFrom(graph, union)
+
 importClassesFrom(graph, graphNEL)
 
 exportClasses(## GeneIdentifierType

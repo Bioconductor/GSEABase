@@ -141,7 +141,7 @@ test_GCS_intersectDifferentColors <- function() {
 test_GCS_union <- function() {
     gcss <- .colorBroadSets()
 
-    res <- GSEABase::union(gcss[[1]], gcss[[2]])
+    res <- union(gcss[[1]], gcss[[2]])
     checkTrue(validObject(res, complete=TRUE))
     checkIdentical(length(geneIds(res)),
                    sum(sapply(gcss,
@@ -154,7 +154,7 @@ test_GCS_union <- function() {
                    levels(phenotypeColor(res)))
     checkTrue(all(urls(res) %in% unlist(sapply(gcss, urls))))
 
-    res <- GSEABase::union(gcss[[1]], gcss[[1]])
+    res <- union(gcss[[1]], gcss[[1]])
     checkTrue(validObject(res))
     checkIdentical(geneIds(res), geneIds(gcss[[1]]))
     checkIdentical(geneColor(res), geneColor(gcss[[1]]))

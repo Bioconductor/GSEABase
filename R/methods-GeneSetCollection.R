@@ -498,6 +498,15 @@ setMethod("incidence",
                          lapply(args, setName))
           })
 
+## toGmt
+
+setMethod("toGmt",
+          signature=signature(
+            x="GeneSetCollection"),
+          function(x, con=stdout(), ...) {
+              writeLines(sapply(x, .toGmtRow), con, ...)
+          })
+
 ## show
 
 setMethod("show",

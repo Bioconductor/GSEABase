@@ -322,6 +322,15 @@ setMethod("mapIdentifiers",
               initialize(what, geneIds=ids, geneIdType=to)
           })
 
+## toGmt
+
+setMethod("toGmt",
+          signature=signature(
+            x="GeneSet"),
+          function(x, con=stdout(), ...) {
+              writeLines(.toGmtRow(x), con, ...)
+          })
+
 ## show / description
 
 .showGeneSet <- function(object) {

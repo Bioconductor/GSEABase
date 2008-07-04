@@ -89,6 +89,7 @@ export(## IdentifierType
 
        ## XML
        asBroadUri, getBroadSets, toBroadXML,
+       getGmt, toGmt,
 
        ## OBO
        getOBOCollection)

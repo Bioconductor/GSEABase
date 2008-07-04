@@ -27,6 +27,13 @@ setGeneric("goSlim",
            standardGeneric("goSlim"),
            signature=c("idSrc", "slimCollection"))
 
+## toGmt
+
+setGeneric("toGmt",
+           function(x, con=stdout(), ...)
+           standardGeneric("toGmt"),
+           signature=c("x"))
+
 ## GeneSet
 
 setGeneric("details",

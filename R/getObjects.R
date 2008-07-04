@@ -128,3 +128,28 @@ toBroadXML <- function(geneSet, con = stdout(), ...) {
                conditionMessage(err))
     })
 }
+
+## gmt
+
+.toGmtRow <- function(set)
+    paste(setName(set), description(set),
+          paste(geneIds(set), collapse="\t"),
+          sep="\t")
+
+getGmt <- function(con,
+                   geneIdType=NullIdentifier(),
+                   collectionType=NullCollection(), sep="\t", ...) {
+    lines <- strsplit(readLines(con, ...), sep)
+    if (any(sapply(lines, length)<2))
+        .stopf("all records in the GMT file must have >= 2 fields",
+               "\n  first invalid line:  ",
+               lines[sapply(lines, length)<2][[1]],
+               "\n")
+    GeneSetCollection(lapply(lines, function(line) {
+        GeneSet(unlist(line[-(1:2)]),
+                geneIdType=geneIdType,
+                collectionType=collectionType,
+                setName=line[[1]],
+                shortDescription=line[[2]])
+    }))
+}

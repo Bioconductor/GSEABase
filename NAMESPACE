@@ -92,4 +92,9 @@ export(## IdentifierType
        getGmt, toGmt,
 
        ## OBO
-       getOBOCollection)
+       getOBOCollection,
+
+       "geneIds",
+       "geneIds<-",
+       "ontology"
+       )

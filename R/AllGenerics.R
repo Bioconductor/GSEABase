@@ -36,6 +36,15 @@ setGeneric("toGmt",
 
 ## GeneSet
 
+setGeneric("geneIds",
+           function(object, ...) standardGeneric("geneIds"))
+
+setGeneric("geneIds<-",
+           function(object, value) standardGeneric("geneIds<-"))
+
+setGeneric("ontology",
+           function(object) standardGeneric("ontology"))
+
 setGeneric("details",
            function(object) standardGeneric("details"))
 
@@ -71,13 +80,3 @@ setGeneric("GeneSetCollection",
 
 setGeneric("subsets",
            function(object, ...)  standardGeneric("subsets"))
-
-
-
-
-setGeneric("geneIds",
-           function(object, ...) standardGeneric("geneIds"))
-setGeneric("geneIds<-",
-           function(object, value) standardGeneric("geneIds<-"))
-setGeneric("ontology",
-           function(object) standardGeneric("ontology"))

@@ -19,6 +19,7 @@
 \alias{intersect,GeneSetCollection,ANY-method}
 \alias{setdiff,ANY,GeneSetCollection-method}
 \alias{setdiff,GeneSetCollection,ANY-method}
+\alias{toGmt,GeneSetCollection-method}
 \alias{union,ANY,GeneSetCollection-method}
 \alias{union,GeneSetCollection,ANY-method}
 
@@ -158,6 +159,8 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
 
     \item{incidence}{Summarize shared membership in genes across gene
       sets. See \code{\link{incidence-methods}}.}
+
+    \item{toGmt}{Export to 'GMT' format file. See \code{\link{toGmt}}.}
 
     \item{show}{\code{signature(object="GeneSetCollection")}: provide a
       compact representation of \code{object}.}

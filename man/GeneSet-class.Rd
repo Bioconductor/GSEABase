@@ -41,6 +41,7 @@
 \alias{setVersion<-,GeneSet,Versions-method}
 \alias{setVersion,GeneSet-method}
 \alias{show,GeneSet-method}
+\alias{toGmt,GeneSet-method}
 \alias{union,GeneSet,GeneSet-method}
 \alias{urls<-,GeneSet,character-method}
 \alias{urls,GeneSet-method}
@@ -89,7 +90,7 @@
   (locally or on the internet; see \code{getBroadSets})
 }
 \section{Slots}{
-	 \describe{
+  \describe{
     \item{\code{setName}:}{Object of class \code{"ScalarCharacter"}
       containing a short name (single word is best) to identify the set.}
     \item{\code{setIdentifier}:}{Object of class
@@ -227,6 +228,7 @@
       \code{\linkS4class{GeneIdentifierType}} for additional detail.}
     \item{incidence}{Summarize shared membership in genes across gene
       sets. See \code{\link{incidence-methods}}.}
+    \item{toGmt}{Export to 'GMT' format file. See \code{\link{toGmt}}.}
     \item{show}{\code{signature(object = "GeneSet")}: display a short
       summary of the gene set.}
     \item{details}{\code{signature(object = "GeneSet")}: display

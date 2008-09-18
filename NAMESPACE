@@ -21,9 +21,10 @@ importClassesFrom(graph, graphNEL)
 
 exportClasses(## GeneIdentifierType
               GeneIdentifierType,
-              NullIdentifier, AnnotationIdentifier, EntrezIdentifier,
-              EnzymeIdentifier, GenenameIdentifier, RefseqIdentifier,
-              SymbolIdentifier, EntrezIdentifier, UnigeneIdentifier,
+              NullIdentifier, AnnotationIdentifier,
+              ENSEMBLIdentifier, EntrezIdentifier, EnzymeIdentifier,
+              GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
+              EntrezIdentifier, UnigeneIdentifier,
 
               ## CollectionType
               CollectionType, NullCollection, ExpressionSetCollection,
@@ -77,9 +78,9 @@ exportMethods(show, coerce, details, initialize, intersect, union,
               GeneSetCollection, updateObject, names, "[", "[[")
 
 export(## IdentifierType
-       NullIdentifier, EnzymeIdentifier, GenenameIdentifier,
-       RefseqIdentifier, SymbolIdentifier, UnigeneIdentifier,
-       EntrezIdentifier, AnnotationIdentifier,
+       NullIdentifier, ENSEMBLIdentifier, EnzymeIdentifier,
+       GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
+       UnigeneIdentifier, EntrezIdentifier, AnnotationIdentifier,
 
        ## CollectionType
        NullCollection, ExpressionSetCollection, ComputedCollection,

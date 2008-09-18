@@ -38,7 +38,7 @@
 
     ## Straight derivation from GeneIdentifierType
     annoIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq", "Symbol",
-                         "Unigene")
+                         "Unigene", "ENSEMBL")
     for (class in annoIdentifiers)
       setSimpleClass(class, "GeneIdentifierType")
     ## More complicated derviation from GeneIdentifierType:

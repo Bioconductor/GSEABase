@@ -18,6 +18,7 @@
 \alias{SymbolIdentifier-class}
 \alias{UnigeneIdentifier-class}
 \alias{EntrezIdentifier-class}
+\alias{ENSEMBLIdentifier-class}
 
 \title{Class "GeneIdentifierType"}
 
@@ -39,6 +40,7 @@
       annotation packages.}
     \item{EntrezIdentifier}{\sQuote{Entrez} identifiers.}
     \item{EnzymeIdentifier}{\sQuote{EC} identifiers.}
+    \item{ENSEMBLIdentifier}{\sQuote{ENSEMBL} identifiers.}
     \item{GenenameIdentifier}{Curated and ad hoc descriptive gene names.}
     \item{RefseqIdentifier}{\sQuote{Prosite} identifiers.}
     \item{SymbolIdentifier}{\sQuote{Symbol} identifiers.}

@@ -3,6 +3,7 @@
 
 \alias{NullIdentifier}
 \alias{EnzymeIdentifier}
+\alias{ENSEMBLIdentifier}
 \alias{GenenameIdentifier}
 \alias{RefseqIdentifier}
 \alias{SymbolIdentifier}
@@ -19,7 +20,8 @@
 }
 \usage{
 NullIdentifier(annotation, ...)
-EnzymeIdentifier(annotation,...)
+EnzymeIdentifier(annotation, ...)
+ENSEMBLIdentifier(annotation, ...)
 GenenameIdentifier(annotation,...)
 RefseqIdentifier(annotation,...)
 SymbolIdentifier(annotation,...)

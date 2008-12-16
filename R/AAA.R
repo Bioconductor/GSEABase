@@ -22,7 +22,7 @@
                 GSEABase:::.checkRequired(REQUIRED, args)
                 miss <- OPTIONAL[!OPTIONAL %in% args]
                 oargs <- OARGS[!names(OARGS) %in% miss]
-                do.call("new", c(CLASS, oargs))
+                do.call(new, c(CLASS, oargs))
             }
             formals(f) <- IARGS
             assign(CONSTRUCTOR, f, envir=WHERE)
@@ -55,7 +55,7 @@
         ## missing
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, OARGS))
+            do.call(new, c(CLASS, OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "missing"), f)
@@ -63,7 +63,7 @@
         ## character
         f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, list(geneIds=type), OARGS))
+            do.call(new, c(CLASS, list(geneIds=type), OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS, signature = signature(type = "character"), f)
@@ -71,7 +71,7 @@
         ## GeneIdentifierType
         f <- function(){
             .checkRequired(REQUIRED, names(match.call()))
-            do.call("new", c(CLASS, geneIdType=type, OARGS))
+            do.call(new, c(CLASS, geneIdType=type, OARGS))
         }
         formals(f) <- IARGS
         setMethod(CLASS,
@@ -88,7 +88,7 @@
                           function(x, codes) x[names(x) %in% codes],
                           evidenceCode(type))
             geneIds <- unique(unlist(ids, use.names=FALSE))
-            do.call("new",
+            do.call(new,
                     c(CLASS,
                       geneIdType=geneIdType,
                       collectionType=type,
@@ -112,7 +112,7 @@
                     else
                         ""
                 }, error=function(err) "")
-            do.call("new",
+            do.call(new,
                     c(CLASS,
                       geneIdType = AnnotationIdentifier(annotation(type)),
                       list(geneIds = featureNames(type)),

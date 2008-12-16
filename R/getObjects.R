@@ -66,7 +66,7 @@
                      longDescription=attrs[["DESCRIPTION_FULL"]],
                      TAGS=NULL, MESH=NULL, CHIP=NULL, MEMBERS=NULL)
         args <- args[!sapply(args, is.null)]
-        do.call("GeneSet", args)
+        do.call(GeneSet, args)
     }
 }
 

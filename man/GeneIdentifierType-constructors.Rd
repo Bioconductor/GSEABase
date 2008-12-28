@@ -41,7 +41,7 @@ AnnotationIdentifier(annotation, ...)
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
-  \code{\linkS4class{GeneIdentifierType}} for a description of the
+  \code{\linkS4class{GeneIdentifierType}}-class for a description of the
   classes and methods using these objects.
 }
 \examples{

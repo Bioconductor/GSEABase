@@ -117,7 +117,7 @@ GeneSetCollection(object, ..., idType, setType)
   }
 }
 \seealso{
-  \code{\linkS4class{GeneSetCollection}}
+  \code{\linkS4class{GeneSetCollection}}-class
 }
 \examples{
 gs1 <- GeneSet(setName="set1", setIdentifier="101")
@@ -134,5 +134,16 @@ try(GeneSetCollection(gs1, gs1))
 data(sample.ExpressionSet)
 gsc <- GeneSetCollection(sample.ExpressionSet[200:250],
                          setType = GOCollection())
+
+\dontrun{
+## from KEGG identifiers, for example
+library(KEGG.db)
+lst <- head(as.list(KEGGEXTID2PATHID))
+gsc <- GeneSetCollection(mapply(function(geneIds, keggId) {
+    GeneSet(geneIds, geneIdType=EntrezIdentifier(),
+            collectionType=KEGGCollection(keggId),
+            setName=keggId)
+}, lst, names(lst)))
+}
 }
 \keyword{methods}

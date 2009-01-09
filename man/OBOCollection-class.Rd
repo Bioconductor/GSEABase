@@ -56,7 +56,7 @@
     \item{subsets}{\code{signature(object="OBOCollection",
         display="named")}: return a character vector of subsets present
       in \code{object}. Valid values for \code{display} are
-      \sQuote(named) (a named character vector, with names equal to the
+      \sQuote{named} (a named character vector, with names equal to the
       names of the subsets and values the descriptions), \sQuote{full}
       (a character vector of name and description, with each pair
       formated into a single entry as \dQuote{name (description)}),

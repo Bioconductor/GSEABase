@@ -17,7 +17,7 @@
 
   \code{toGmt} converts \code{GeneSetColletion} objects to a character
   vector representing the gene set collection in GMT
-  format. \code{fromGmt} reads a file or other character vector into a
+  format. \code{getGmt} reads a file or other character vector into a
   \code{GeneSetColletion}.
 }
 \usage{

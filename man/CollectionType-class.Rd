@@ -125,6 +125,48 @@
   \describe{
     \item{\code{evidenceCode}:}{Object of class \code{"character"},
       containing GO evidence codes used to construct the gene set.}
+	\item{ontology}{Object of class \code{"character"} vector of GO
+	  ontology terms used to filter GO terms in the GO Collection.}
+  }
+  The values of \code{evidenceCode} are
+  \describe{
+	\item{Experimental Evidence Codes}{
+	  \describe{
+		\item{EXP}{Inferred from Experiment}
+		\item{IDA}{Inferred from Direct Assay}
+		\item{IPI}{Inferred from Physical Interaction}
+		\item{IMP}{Inferred from Mutant Phenotype}
+		\item{IGI}{Inferred from Genetic Interaction}
+		\item{IEP}{Inferred from Expression Pattern}
+	  }
+	}
+	\item{Computational Analysis Evidence Codes}{
+	  \describe{
+		\item{ISS}{Inferred from Sequence or Structural Similarity}
+		\item{ISO}{Inferred from Sequence Orthology}
+		\item{ISA}{Inferred from Sequence Alignment}
+		\item{ISM}{Inferred from Sequence Model}
+		\item{IGC}{Inferred from Genomic Context}
+		\item{RCA}{inferred from Reviewed Computational Analysis}
+	  }
+	}
+	\item{Author Statement Evidence Codes}{
+	  \describe{
+		\item{TAS}{Traceable Author Statement}
+		\item{NAS}{Non-traceable Author Statement}
+	  }
+	}
+	\item{Curator Statement Evidence Codes}{
+	  \describe{
+		\item{IC}{Inferred by Curator}
+		\item{ND}{No biological Data available}
+	  }
+	}
+	\item{Automatically-assigned Evidence Codes}{
+	  \describe{
+		\item{IEA}{Inferred from Electronic Annotation}
+	  }
+	}
   }
 
   \code{OBOCollection} extends \code{GOCollection}; see
@@ -161,16 +203,18 @@
     \item{[}{\code{signature(object="CollectionIdType", i="missing",
         j="missing", ..., ids=ids(object))}: return a subset of
       \code{object} containing only ids in \code{ids}}
-    \item{|, &, intersect, union, setdiff}{\code{signature(e1="CollectionIdType",
-        e2="CollectionIdType")}: always return \code{ComputedCollection}.}
+    \item{|, &, intersect, union, setdiff}{
+	  \code{signature(e1="CollectionIdType", e2="CollectionIdType")}:
+	  always return \code{ComputedCollection}.}
   }
 
   \code{GOCollection} inherits \code{CollectionIdType} methods, and has
   in addition:
   \describe{
     \item{evidenceCode}{Retrieve the evidence codes of the GO
-      collection. Evidence codes are summarize in, e.g.,
-      \code{\link[GO]{GOENTREZID}}.}
+      collection.}
+    \item{ontology}{Retrieve the ontology terms of the GO
+      collection.}
     \item{[}{\code{signature(object="CollectionIdType", i="missing",
         j="missing", ..., evidenceCode=evidenceCode(object),
         ontology=ontology(object))}: return a subset of

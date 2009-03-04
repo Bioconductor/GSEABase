@@ -45,7 +45,7 @@ setMethod("GeneSetCollection",
            function(ids) do.call(collType, list(ids=ids)))
 }
 
-.GSC_CollectionType <- function(genes, idType, collTypes) {
+.GSC_CollectionType <- function(genes, idType, collTypes, ...) {
     organism <- getAnnMap("ORGANISM", annotation(idType))
     gss <- mapply(GeneSet,
                   genes,
@@ -54,7 +54,26 @@ setMethod("GeneSetCollection",
                   MoreArgs=list(
                     geneIdType=idType,
                     organism=organism))
-    GeneSetCollection(gss)
+    GeneSetCollection(gss, ...)
+}
+
+.GSC_Pfam_helper <-
+    function(ids, ..., idType, setType, which) # object: eSet
+{
+    map <- getAnnMap(toupper(collectionType(setType)), annotation(idType))
+    lst <- as.list(map[ids])
+    len <- sapply(lst, length)
+    keys <- rep(names(lst), len)
+    values <-
+        switch(which,
+               PfamId=unlist(lapply(lst, as.vector), use.names=FALSE),
+               IpiId=unlist(lapply(lst, function(elt) {
+                   nms <- names(elt)
+                   if (is.null(nms)) NA else nms
+               }), use.names=FALSE))
+    sets <- lapply(split(keys, values), unique)
+    collTypes <- .GSC_CollectionIdTypes(sets, setType)
+    .GSC_CollectionType(sets, idType, collTypes, ...)
 }
 
 setMethod("GeneSetCollection",
@@ -85,6 +104,46 @@ setMethod("GeneSetCollection",
 
 setMethod("GeneSetCollection",
           signature=signature(
+            object="character",
+            idType="AnnotationIdentifier",
+            setType="PfamCollection"),
+          function(object, ..., idType, setType)
+{
+    .GSC_Pfam_helper(object, ..., idType=idType, setType=setType,
+                     which="PfamId")
+})
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="character",
+            idType="AnnotationIdentifier",
+            setType="PrositeCollection"),
+          function(object, ..., idType, setType)
+{
+    .GSC_Pfam_helper(object, ..., idType=idType, setType=setType,
+                     which="IpiId")
+})
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="character",
+            idType="AnnotationIdentifier",
+            setType="ChrlocCollection"),
+          function(object, ..., idType, setType)
+{
+    map <- getAnnMap(toupper(collectionType(setType)), annotation(idType))
+    elts <- Filter(function(elt) !(length(elt) ==1 &&  is.na(elt[[1]])),
+                   mget(object, map))
+    ids <- rep(names(elts), sapply(elts, length))
+    chrloc <- paste(unlist(lapply(elts, names)),
+                    unlist(lapply(elts, as.vector)), sep=":")
+    sets <- lapply(split(ids, chrloc), unique)
+    collTypes <- lapply(names(sets), ChrlocCollection)
+    .GSC_CollectionType(sets, idType, collTypes, ...)
+})
+
+setMethod("GeneSetCollection",
+          signature=signature(
             object="ExpressionSet",
             idType="missing",
             setType="CollectionType"),
@@ -94,6 +153,42 @@ setMethod("GeneSetCollection",
               collTypes <- lapply(names(genes), setType)
               .GSC_CollectionType(genes, idType, collTypes)
           })
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="ExpressionSet",
+            idType="missing",
+            setType="PfamCollection"),
+          function(object, ..., idType, setType)
+{
+    callGeneric(featureNames(object), ...,
+                idType=AnnotationIdentifier(annotation(object)),
+                setType=setType)
+})
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="ExpressionSet",
+            idType="missing",
+            setType="PrositeCollection"),
+          function(object, ..., idType, setType) 
+{
+    callGeneric(featureNames(object), ...,
+                idType=AnnotationIdentifier(annotation(object)),
+                setType=setType)
+})
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="ExpressionSet",
+            idType="missing",
+            setType="ChrlocCollection"),
+          function(object, ..., idType, setType) 
+{
+    callGeneric(featureNames(object), ...,
+                idType=AnnotationIdentifier(annotation(object)),
+                setType=setType)
+})
 
 setMethod("GeneSetCollection",
           signature=signature(

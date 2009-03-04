@@ -71,7 +71,8 @@ test_GSC_ExpressionSet_constructor <- function() {
     checkEquals(table(sapply(reverseSplit(kids), length)),
                 table(sapply(lapply(gss, geneIds), length)))
 
-    gss <- GeneSetCollection(sample.ExpressionSet[200:220], setType=GOCollection())
+    gss <- GeneSetCollection(sample.ExpressionSet[200:220,],
+                             setType=GOCollection())
     checkTrue(is(collectionType(gss[[1]]), "GOCollection"))
     checkTrue(is(geneIdType(gss[[1]]), "AnnotationIdentifier"))
 

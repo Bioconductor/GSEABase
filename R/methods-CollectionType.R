@@ -150,8 +150,9 @@ setMethod("show",
 }
 
 .checkGOEvidenceCodes <- function(evidenceCode) {
-    codes <- c("IMP", "IPI", "TAS", "ISS", "IDA", "NAS", "IEA", "IGI",
-               "RCA", "IEP", "IC", "NR", "ND", "ANY", NA)
+    codes <- c("EXP", "IDA", "IPI", "IMP", "IGI", "IEP", "ISS", "ISO",
+               "ISA", "ISM", "IGC", "RCA", "TAS", "NAS", "IC", "ND",
+               "IEA", "ANY", NA)
     .checkCode(evidenceCode, codes)
 }
 

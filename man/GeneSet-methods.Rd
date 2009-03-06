@@ -92,9 +92,9 @@ gs3 <- GeneSet(geneIds)
 is(geneIdType(gs3), "NullIdentifier") == TRUE
 ## update set type to match encoding of identifiers
 geneIdType(gs2)
-geneIdType(gs3) <- EntrezIdentifier()
+geneIdType(gs3) <- SymbolIdentifier()
 ## other ways of accomplishing the same
-gs4 <- GeneSet(geneIds, geneIdType=EntrezIdentifier())
-gs5 <- GeneSet(EntrezIdentifier(), geneIds=geneIds)
+gs4 <- GeneSet(geneIds, geneIdType=SymbolIdentifier())
+gs5 <- GeneSet(SymbolIdentifier(), geneIds=geneIds)
 }
 \keyword{methods}

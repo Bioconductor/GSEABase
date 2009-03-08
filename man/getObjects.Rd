@@ -17,8 +17,9 @@
 
   \code{toGmt} converts \code{GeneSetColletion} objects to a character
   vector representing the gene set collection in GMT
-  format. \code{getGmt} reads a file or other character vector into a
+  format. \code{getGmt} reads a GMT file or other character vector into a
   \code{GeneSetColletion}.
+
 }
 \usage{
 getBroadSets(uri, ...)
@@ -97,8 +98,14 @@ names(gss)
 gss[[1]]
 
 \dontrun{
-## Download from the Broad
-getBroadSets(asBroadUri(c('chr16q', 'GNF2_ZAP70')))
+## Download 'msigdb_v2.5.xml' or 'c3.all.v2.5.symbols.gmt' from the
+## Broad, http://www.broad.mit.edu/gsea/downloads.jsp#msigdb, then
+gsc <- getBroadSets("/path/to/msigdb_v.2.5.xml")
+types <- sapply(gsc, function(elt) bcCategory(collectionType(elt)))
+c3gsc1 <- gsc[types == "c3"]
+c3gsc2 <- getGmt("/path/to/c3.all.v2.5.symbols.gmt",
+                 collectionType=BroadCollection(category="c3"),
+                 geneIdType=SymbolIdentifier())
 }
 
 fl <- tempfile()

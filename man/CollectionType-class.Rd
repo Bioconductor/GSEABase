@@ -234,7 +234,8 @@
 
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{
-  \code{\link{CollectionType}} consturctors.
+  \code{\link{CollectionType}} consturctors; \code{\link{getBroadSets}}
+  for importing collections from the Broad (and sources).
 }
 \examples{
 names(getClass("CollectionType")@subclasses)
@@ -242,14 +243,12 @@ names(getClass("CollectionType")@subclasses)
 ## Create a CollectionType and ask for its type
 collectionType(ExpressionSetCollection())
 
-\dontrun{
 ## Read two GeneSets from a Broad XML file into a list, verify that
 ## they are both BroadCollection's. Category / subcategory information
 ## is unique to Broad collections.
 fl <- system.file("extdata", "Broad.xml", package="GSEABase")
 sets <- getBroadSets(fl)
 sapply(sets, collectionType)
-}
 
 ## ExpressionSets are tagged with ExpressionSetCollection; there is no
 ## 'category' information.

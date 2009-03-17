@@ -45,6 +45,13 @@ NEW FEATURES
 
 BUG FIXES
 
+    o GO evidenceCodes updated to current codes available as defined
+    in GO
+    
+    o GeneSetCollection,ExpressionSet,(Pfam|Prosite|Chrloc)Collection-method
+    now correctly navigate the underlying annotations and create gene
+    set collections
+
     o A GeneSetCollection constructed with a named list could
     incorrectly propagate the set names.
 

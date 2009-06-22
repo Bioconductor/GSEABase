@@ -1,15 +1,15 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.7.0
+Version: 1.7.1
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Biocore Team c/o BioC user list <bioconductor@stat.math.ethz.ch>
 Description: This package provides classes and methods to support
              Gene Set Enrichment Analysis (GSEA).
 License: Artistic-2.0
-Depends: R (>= 2.6.0), methods, AnnotationDbi, Biobase, annotate, graph
+Depends: R (>= 2.6.0), Biobase, annotate, methods, graph
 Suggests: Ruuid, hgu95av2.db, GO.db, org.Hs.eg.db
-Imports: methods, XML
+Imports: annotate, AnnotationDbi, Biobase, graph, methods, XML
 LazyLoad: yes
 biocViews: Infrastructure, Bioinformatics
 Collate: utilities.R
@@ -24,4 +24,3 @@ Collate: utilities.R
          methods-GeneSet.R
          methods-GeneSetCollection.R
          methods-OBOCollection.R
-         zzz.R

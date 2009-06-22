@@ -126,6 +126,7 @@ informed when the map between identifier types is not 1:1.
 A gene set can be created with different types of identifier, e.g., to
 create a gene set with Entrez IDs, use
 <<GeneSet_Identifiers>>=
+library(annotate)                       # getEG
 eids <- unique(getEG(geneIds(egs), "hgu95av2"))
 eids <- eids[!is.na(eids)]
 GeneSet(EntrezIdentifier(), geneIds=as.character(eids))

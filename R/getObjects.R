@@ -117,7 +117,7 @@ getBroadSets <- function(uri, ...) {
     GeneSetCollection(geneSets)
 }
 
-toBroadXML <- function(geneSet, con = stdout(), ...) {
+toBroadXML <- function(geneSet, con = NULL, ...) {
     if (!is(collectionType(geneSet), "BroadCollection"))
         .stopf("toBroadXML requires 'BroadCollection', got '%s'",
                class(collectionType(geneSet)))

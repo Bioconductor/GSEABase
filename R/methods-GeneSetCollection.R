@@ -264,8 +264,7 @@ setMethod("GeneSetCollection",
     genes <- mapply("[", genes, eviOk)
     ugenes <- lapply(genes, unique)
     ugenes <- ugenes[sapply(ugenes, length) != 0]
-
-    organism <- getAnnMap("ORGANISM", annotation(idType))
+    organism <- organism(idType)
     gss <- mapply(function(ids, setName, collectionType, ...) {
         GeneSet(ids,
                 setName=setName,
@@ -280,6 +279,8 @@ setMethod("GeneSetCollection",
                                 organism=organism, ...))
     GeneSetCollection(gss)
 }
+
+
 
 setMethod("GeneSetCollection",
           signature=signature(
@@ -303,7 +304,31 @@ setMethod("GeneSetCollection",
               .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
+##Later for Tony, I will just overload GeneSetCollection to also generate (of yet another setType) on an incidence matrix.
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="GOAllFrame",
+            idType="missing",
+            setType="GOCollection"),
+          function(object, ..., idType, setType) {
+            idType <- GOAllFrameIdentifier(object)
+            frame = getGOFrameData(object)
+            gene = as.character(frame[,3])
+            names(gene) = as.character(frame[,2])
+            genes = split(gene, as.character(frame[,1]))
+            .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
+          })
+
+
+
+
+
+
+
+
+
 ## updateObject
+
 
 setMethod("updateObject",
           signature=signature(

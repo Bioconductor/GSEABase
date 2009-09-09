@@ -19,6 +19,7 @@
 \alias{UnigeneIdentifier-class}
 \alias{EntrezIdentifier-class}
 \alias{ENSEMBLIdentifier-class}
+\alias{GOAllFrameIdentifier-class}
 
 \title{Class "GeneIdentifierType"}
 

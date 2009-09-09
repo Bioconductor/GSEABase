@@ -58,6 +58,12 @@
 
 .IdentifierClasses(topenv())
 
+## Special class of Identifier for GOAllFrames
+setClass("GOAllFrameIdentifier",
+         contains="GeneIdentifierType",
+         representation=representation(organism="ScalarCharacter"))  
+
+
 ## CollectionType
 .CollectionClasses <- function(where) {
     setSimpleCollection <- function(class, contains) {

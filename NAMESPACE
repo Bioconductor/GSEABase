@@ -39,7 +39,7 @@ exportClasses(## GeneIdentifierType
               NullIdentifier, AnnotationIdentifier,
               ENSEMBLIdentifier, EntrezIdentifier, EnzymeIdentifier,
               GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
-              EntrezIdentifier, UnigeneIdentifier,
+              EntrezIdentifier, UnigeneIdentifier, GOAllFrameIdentifier,
 
               ## CollectionType
               CollectionType, NullCollection, ExpressionSetCollection,
@@ -96,6 +96,7 @@ export(## IdentifierType
        NullIdentifier, ENSEMBLIdentifier, EnzymeIdentifier,
        GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
        UnigeneIdentifier, EntrezIdentifier, AnnotationIdentifier,
+       GOAllFrameIdentifier,
 
        ## CollectionType
        NullCollection, ExpressionSetCollection, ComputedCollection,

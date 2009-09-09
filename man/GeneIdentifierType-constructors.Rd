@@ -10,7 +10,8 @@
 \alias{UnigeneIdentifier}
 \alias{EntrezIdentifier}
 \alias{AnnotationIdentifier}
-
+\alias{GOAllFrameIdentifier}
+  
 \title{Gene Identifier Class Constructors}
 \description{
   Gene identifier classes and functions are used to indicate what the

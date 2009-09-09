@@ -28,6 +28,8 @@
 \alias{longDescription,GeneSet-method}
 \alias{organism<-,GeneSet,character-method}
 \alias{organism,GeneSet-method}
+\alias{organism,GeneIdentifierType-method}
+\alias{organism,GOAllFrameIdentifier-method}
 \alias{pubMedIds<-,GeneSet,character-method}
 \alias{pubMedIds,GeneSet-method}
 \alias{setdiff,GeneSet,GeneSet-method}

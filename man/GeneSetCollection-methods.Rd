@@ -20,6 +20,7 @@
 \alias{GeneSetCollection,missing,AnnotationIdentifier,CollectionIdType-method}
 \alias{GeneSetCollection,missing,AnnotationIdentifier,KEGGCollection-method}
 \alias{GeneSetCollection,missing,AnnotationIdentifier,GOCollection-method}
+\alias{GeneSetCollection,GOAllFrame,missing,GOCollection-method}
 \title{Methods to construct GeneSetCollection instances}
 \description{
   Use \code{GeneSetCollection} to construct a collection of gene sets
@@ -176,10 +177,15 @@ GeneSetCollection(object, ..., idType, setType)
     \item{
       \code{signature(object="missing", idType="AnnotationIdentifier", setType="GOCollection")}
     }{
+    }
+    \item{
+      \code{signature(object="GOAllFrame", idType="missing", setType="GOCollection")}
+    }{      
       Construct a gene set collection containing all GO pathways
-      referenced in the annotation package of \code{idType}. See the
-      \code{signature(object="ExpressionSet", idType="missing",
-        setType="GOCollection")} method for details.
+      referenced in the \code{GOALLFrame} provided. Each gene set only
+      those \code{Identifiers} found in \code{GOALLFrame}. The
+      \code{ontology} of each \code{GOALLFrame} GO ID will be included
+      in the gene Set of that GO ID .      
     }
   }
 }

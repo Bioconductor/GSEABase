@@ -1,15 +1,20 @@
 ## constructor for GOAllFrameIdentifier and method for organism()
 GOAllFrameIdentifier <- function (object){
   if(class(object)=="GOAllFrame"){
-    new("GOAllFrameIdentifier", organism=new("ScalarCharacter", object@organism))
+    new("GOAllFrameIdentifier",
+        organism=new("ScalarCharacter", object@organism))
   }else{
     stop("The Frame Object MUST be a GOAllFrame")
   }
 }
 
-setMethod("organism", "GeneIdentifierType", function(object){ getAnnMap("ORGANISM", annotation(object)) }) 
+setMethod("organism", "GeneIdentifierType",
+          function(object){
+            getAnnMap("ORGANISM", annotation(object))
+          }) 
 
-setMethod("organism", "GOAllFrameIdentifier", function(object){object@organism}) 
+setMethod("organism", "GOAllFrameIdentifier",
+          function(object){object@organism}) 
 
 
 

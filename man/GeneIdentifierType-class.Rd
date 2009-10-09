@@ -20,6 +20,7 @@
 \alias{EntrezIdentifier-class}
 \alias{ENSEMBLIdentifier-class}
 \alias{GOAllFrameIdentifier-class}
+\alias{KEGGFrameIdentifier-class}
 
 \title{Class "GeneIdentifierType"}
 

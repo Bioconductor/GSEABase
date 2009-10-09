@@ -21,6 +21,7 @@
 \alias{GeneSetCollection,missing,AnnotationIdentifier,KEGGCollection-method}
 \alias{GeneSetCollection,missing,AnnotationIdentifier,GOCollection-method}
 \alias{GeneSetCollection,GOAllFrame,missing,GOCollection-method}
+\alias{GeneSetCollection,KEGGFrame,missing,KEGGCollection-method}
 \title{Methods to construct GeneSetCollection instances}
 \description{
   Use \code{GeneSetCollection} to construct a collection of gene sets

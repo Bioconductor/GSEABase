@@ -63,6 +63,11 @@ setClass("GOAllFrameIdentifier",
          contains="GeneIdentifierType",
          representation=representation(organism="ScalarCharacter"))  
 
+## Special class of Identifier for KEGGFrames
+setClass("KEGGFrameIdentifier",
+         contains="GeneIdentifierType",
+         representation=representation(organism="ScalarCharacter"))  
+
 
 ## CollectionType
 .CollectionClasses <- function(where) {

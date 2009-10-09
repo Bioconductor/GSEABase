@@ -18,6 +18,20 @@ setMethod("organism", "GOAllFrameIdentifier",
 
 
 
+KEGGFrameIdentifier <- function (object){
+  if(class(object)=="KEGGFrame"){
+    new("KEGGFrameIdentifier",
+        organism=new("ScalarCharacter", object@organism))
+  }else{
+    stop("The Frame Object MUST be a KEGGFrame")
+  }
+}
+
+setMethod("organism", "KEGGFrameIdentifier",
+          function(object){object@organism}) 
+
+
+
 
 ## constructors in AllClasses.R
 

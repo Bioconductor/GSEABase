@@ -11,6 +11,7 @@
 \alias{EntrezIdentifier}
 \alias{AnnotationIdentifier}
 \alias{GOAllFrameIdentifier}
+\alias{KEGGFrameIdentifier}
   
 \title{Gene Identifier Class Constructors}
 \description{

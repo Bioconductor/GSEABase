@@ -46,7 +46,7 @@ setMethod("GeneSetCollection",
 }
 
 .GSC_CollectionType <- function(genes, idType, collTypes, ...) {
-    organism <- getAnnMap("ORGANISM", annotation(idType))
+    organism <- organism(idType)
     gss <- mapply(GeneSet,
                   genes,
                   setName=names(genes),
@@ -257,6 +257,28 @@ setMethod("GeneSetCollection",
               .GSC_CollectionType(genes, idType, collTypes, ...)
           })
 
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="KEGGFrame",  ##Add to AnnotDbi for dispatch and checking
+            idType="missing",
+            setType="KEGGCollection"),
+##           function(object, ..., idType, setType) {
+##               genes <- as.list(getAnnMap("PATH2PROBE", annotation(idType)))
+##               if (length(ids(setType)) > 0)
+##                   genes <- genes[names(genes) %in% ids(setType)]
+##               collTypes <- .GSC_CollectionIdTypes(genes, setType)
+##               .GSC_CollectionType(genes, idType, collTypes, ...)
+          function(object, ..., idType, setType) {
+            idType <- KEGGFrameIdentifier(object)
+            frame = getKEGGFrameData(object)  ##define KEGGFrame and getKEGGFrameData() for this
+            gene = as.character(frame[,2])
+            genes = split(gene, as.character(frame[,1]))
+            collTypes <- .GSC_CollectionIdTypes(genes, setType)
+            .GSC_CollectionType(genes, idType, collTypes, ...)             
+          })
+
+
 .GSC_GO_helper <- function(genes, idType, setType, ...) {
     ## filter on evidence codes
     evidenceCode <- evidenceCode(setType)
@@ -304,7 +326,6 @@ setMethod("GeneSetCollection",
               .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
-##Later for Tony, I will just overload GeneSetCollection to also generate (of yet another setType) on an incidence matrix.
 setMethod("GeneSetCollection",
           signature=signature(
             object="GOAllFrame",
@@ -318,6 +339,30 @@ setMethod("GeneSetCollection",
             genes = split(gene, as.character(frame[,1]))
             .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
+
+
+
+## Later for Tony, I will just overload GeneSetCollection to also generate (of
+## yet another setType) on an incidence matrix. I will want to just convert
+## these relationships into an annotation object so that we can calculate the
+## relationships between these.
+## setMethod("GeneSetCollection",
+##           signature=signature(
+##             object="matrix",
+##             ##needs to be incidence matrix - find out what exactly - well
+##             ##CRAP, it looks like its an ordinary matrix... so NOT safe to
+##             ##dispatch on...  We need to make an incidence matrix as a class
+##             ##or else use a graph object...
+##             idType="missing",
+##             setType="GOCollection"),
+##           function(object, ..., idType, setType) {
+##             idType <- GOAllFrameIdentifier(object)
+##             frame = getGOFrameData(object)
+##             gene = as.character(frame[,3])
+##             names(gene) = as.character(frame[,2])
+##             genes = split(gene, as.character(frame[,1]))
+##             .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
+##           })
 
 
 

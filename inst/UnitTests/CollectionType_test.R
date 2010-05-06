@@ -42,22 +42,34 @@ test_CollectionType_PfamCollection_ESet <-
 {
     data(sample.ExpressionSet)
     eset <- sample.ExpressionSet
-    gsc <- GeneSetCollection(eset[200:220,], setType=PfamCollection())
-    checkIdentical(18L, length(gsc))
-    checkIdentical(15L, length(unique(unlist(geneIds(gsc)))))
+    idx <- 200:220
+    map <- getAnnMap("PFAM", annotation(eset))
+    tbl <- toTable(map[featureNames(eset)[idx]])
+    tbl <- tbl[!is.na(tbl$PfamId),]
+
+    gsc <- GeneSetCollection(eset[idx,], setType=PfamCollection())
+    checkIdentical(length(unique(tbl$PfamId)), length(gsc))
+    x <- with(tbl, lapply(split(probe_id, PfamId), unique))
+    checkIdentical(x[sort(names(x))],
+                   geneIds(gsc)[order(names(gsc))])
 }
 
 test_CollectionType_PrositeCollection_ESet <-
     function()
 {
     data(sample.ExpressionSet)
-    eset <- sample.ExpressionSet
-    gsc <- GeneSetCollection(eset[200:220,], setType=PrositeCollection())
-    checkIdentical(97L, length(gsc))
-    checkIdentical(16L, length(unique(unlist(geneIds(gsc)))))
-    checkIdentical(c("IPI00002903", "IPI00003325", "IPI00008359",
-                     "IPI00008524", "IPI00009984", "IPI00018230"),
-                     head(unique(names(gsc))))
+    idx <- 200:220
+    eset <- sample.ExpressionSet[idx,]
+    map <- getAnnMap("PROSITE", annotation(eset))
+    tbl <- toTable(map[featureNames(eset)])
+    tbl <- tbl[!is.na(tbl$ipi_id),]
+
+    gsc <- GeneSetCollection(eset, setType=PrositeCollection())
+
+    checkIdentical(length(unique(tbl$ipi_id)), length(gsc))
+    x <- with(tbl, lapply(split(probe_id, ipi_id), unique))
+    checkIdentical(x[sort(names(x))],
+                   geneIds(gsc)[order(names(gsc))])
 }
 
 test_CollectionType_ChrlocCollection_ESet <-
@@ -65,57 +77,70 @@ test_CollectionType_ChrlocCollection_ESet <-
 {
     data(sample.ExpressionSet)
     eset <- sample.ExpressionSet
-    gsc <- GeneSetCollection(eset[200:220,], setType=ChrlocCollection())
-    checkIdentical(17L, length(gsc))
-    checkIdentical(14L, length(unique(unlist(geneIds(gsc)))))
-    checkIdentical(c("11:-46655207", "1:-153201397", "12:-51448205",
-                     "12:55018929", "1:-25561326", "1:47674275",
-                     "18:-38577189", "19:-47917633", "19:59777068",
-                     "19:59796924", "21:-35081967", "21:-35115443",
-                     "4:71261081", "5:133478300", "5:133479214",
-                     "5:133479325", "8:-101784319" ), names(gsc))
+    idx <- 200:220
+    map <- getAnnMap("CHRLOC", annotation(eset))
+    tbl <- toTable(map[featureNames(eset)[idx]])
+
+    gsc <- GeneSetCollection(eset[idx,], setType=ChrlocCollection())
+
+    checkIdentical(nrow(unique(tbl[,2:3])), length(gsc))
+    checkIdentical(length(unique(tbl[[1]])),
+                   length(unique(unlist(geneIds(gsc)))))
+    checkIdentical(sort(do.call(paste, c(unique(tbl[,3:2]), sep=":"))),
+                   sort(names(gsc)))
 }
 
 test_CollectionType_PfamCollection_org <-
     function()
 {
-    ids <- ls(org.Hs.egPFAM[1:10])
+    idx <- 1:10
+    map <- getAnnMap("PFAM", "org.Hs.eg")[idx]
+    ids <- ls(map)
+    tbl <- toTable(map)
+
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=PfamCollection())
-    checkIdentical(10L, length(gsc))
-    checkIdentical(6L, length(unique(unlist(geneIds(gsc)))))
-    checkIdentical(c("1000", "1", "10000", "10000", "10000", "10",
-                     "100", "1000", "100008586", "1000"),
-                     unlist(lapply(gsc, geneIds)))
+    checkIdentical(length(ids), length(gsc))
+    gids <- unique(tbl[!is.na(tbl$PfamId),"gene_id"])
+    x <- with(tbl, lapply(split(gene_id, PfamId), unique))
+    checkIdentical(x[order(names(x))],
+                   geneIds(gsc)[order(names(gsc))])
 }
 
 test_CollectionType_PrositeCollection_org <-
     function()
 {
-    ids <- ls(org.Hs.egPFAM[1:10])
+    idx <- 1:10
+    map <- getAnnMap("PROSITE", "org.Hs.eg")[idx]
+    ids <- ls(map)
+    tbl <- toTable(map)
+    tbl <- tbl[!is.na(tbl[["ipi_id"]]),]
+
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=PrositeCollection())
-    checkIdentical(19L, length(gsc))
-    checkIdentical(6L, length(unique(unlist(geneIds(gsc)))))
-    checkIdentical(c("10", "100008586", "1", "10000", "10000", "1000",
-                     "100", "100008586", "1", "1", "1000", "1",
-                     "1000", "10", "1000", "1000", "100", "10000",
-                     "10000"), unlist(lapply(gsc, geneIds)))
+
+    checkIdentical(length(unique(tbl[["ipi_id"]])), length(gsc))
+    x <- with(tbl, lapply(split(gene_id, ipi_id), unique))
+    checkIdentical(x[order(names(x))],
+                   geneIds(gsc)[order(names(gsc))])
 }
 
 test_CollectionType_ChrlocCollection_org <-
     function()
 {
-    ids <- ls(org.Hs.egPFAM[1:100])
+    idx <- 1:10
+    map <- getAnnMap("CHRLOC", "org.Hs.eg")[idx]
+    ids <- ls(map)
+    tbl <- toTable(map)
+
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=ChrlocCollection())
-    checkIdentical(12L, length(gsc))
-    checkIdentical(9L, length(unique(unlist(geneIds(gsc)))))
-    checkIdentical(c("10003", "10000", "10000", "10001", "10002",
-                     "1000", "1", "100", "10", "100008586",
-                     "100008586", "100008586"), unlist(lapply(gsc,
-                     geneIds)))
+    checkIdentical(nrow(unique(tbl[,2:3])), length(gsc))
+    grp <- do.call(paste, c(tbl[3:2], sep=":"))
+    x <- with(tbl, lapply(split(gene_id, grp), unique))
+    checkIdentical(x[sort(names(x))],
+                   geneIds(gsc)[order(names(gsc))])
 }

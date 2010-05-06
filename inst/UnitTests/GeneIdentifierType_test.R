@@ -41,16 +41,22 @@ test_GeneIdentifierType_geneIdType <- function() {
                   setName="123", setIdentifier="456")
     opt <- options(warn=2)
     on.exit(options(opt))
-    checkException(geneIdType(gs, verbose=TRUE) <- EntrezIdentifier(), silent=TRUE)
+    checkException(geneIdType(gs, verbose=TRUE) <- EntrezIdentifier(),
+                   silent=TRUE)
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
-    gss <- getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
+    map <- getAnnMap("SYMBOL", "hgu95av2")
+
+    gss <- getBroadSets(system.file("extdata", "Broad.xml",
+                                    package="GSEABase"))
     suppressWarnings({
         res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2"))
     })
     checkTrue(validObject(res))
-    checkEquals(41, length(geneIds(res)))
+    gids <- mget(geneIds(gss[[1]]), revmap(map), ifnotfound=NA)
+    gids <- gids[!is.na(gids)]
+    checkEquals(sort(unique(unlist(gids))), sort(geneIds(res)))
     checkIdentical(res,
                    mapIdentifiers(res, AnnotationIdentifier()))
     checkIdentical(res,
@@ -60,13 +66,16 @@ test_GeneIdentifierType_mapIdentifiers_toAnnotation <- function() {
 }
 
 test_GeneIdentifierType_mapIdentifiers_toAnnotation_via_Dbi <- function()  {
-    gss <- getBroadSets(system.file("extdata", "Broad.xml", package="GSEABase"))
+    map <- getAnnMap("SYMBOL", "hgu95av2")
+    gss <- getBroadSets(system.file("extdata", "Broad.xml",
+                                    package="GSEABase"))
     suppressMessages(suppressWarnings({
         res <- mapIdentifiers(gss[[1]], AnnotationIdentifier("hgu95av2.db"))
     }))
-    detach("package:hgu95av2.db")
     checkTrue(validObject(res))
-    checkEquals(41, length(geneIds(res)))
+    gids <- mget(geneIds(gss[[1]]), revmap(map), ifnotfound=NA)
+    gids <- gids[!is.na(gids)]
+    checkEquals(sort(unique(unlist(gids))), sort(geneIds(res)))
 }
 
 test_GeneIdentifierType_mapIdentifiers_from_to_Annotation <- function() {
@@ -99,21 +108,24 @@ test_GeneIdentifierType_mapIdentifiers_from_Annotation <- function() {
                    silent=TRUE)
 }
 
-test_GeneIdentifierType_mapIdentifiers_AnDbBimap <- function() {
+test_GeneIdentifierType_mapIdentifiers_AnnDbBimap <- function() {
     library(org.Hs.eg.db)
-    on.exit(detach("package:org.Hs.eg.db"))
-    gs <- mapIdentifiers(GeneSet("4214"), SymbolIdentifier(), org.Hs.egSYMBOL)
+    gs <- mapIdentifiers(GeneSet("4214"), SymbolIdentifier(),
+                         org.Hs.egSYMBOL)
     checkIdentical("MAP3K1", geneIds(gs))
     checkIdentical(mkScalar("Symbol"), geneIdType(geneIdType(gs)))
 }
 
-test_GeneIdentifierType_mapIdentifiers_verbose_warnings <- function() {
+test_GeneIdentifierType_mapIdentifiers_verbose_warnings <-
+    function()
+{
     ## duplicate gene names exception
     gs <- GeneSet(sample.ExpressionSet[100:200],
                   setName="123", setIdentifier="456")
     opt <- options(warn=2)
     on.exit(options(opt))
-    checkException(mapIdentifiers(gs,  EntrezIdentifier(), verbose=TRUE), silent=TRUE)
+    checkException(mapIdentifiers(gs,  EntrezIdentifier(), verbose=TRUE),
+                   silent=TRUE)
 }
 
 
@@ -224,17 +236,22 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     f <- GSEABase:::.mapIdentifiers_map
     ## ids 300:310 of sample.ExpressionSet; not 1:1 maps below; These
     ## are hand-validated
+
     aids <- c("31539_r_at", "31540_at", "31541_at", "31542_at",
               "31543_at", "31544_at", "31545_at", "31546_at",
               "31547_at", "31548_at", "31549_at")
-    eids <- c("3604", "54735", "2312", "58503", "2299", "6222",
-              "6141", "6805", "141", "4142")
-    sids <- c("TNFRSF9", "HSHUR7SEQ", "FLG", "PROL1", "FOXI1",
-              "RPS18", "RPL18", "FAM75C2", "ADPRH", "MAS1")
+
+    eids <- c("3604", "5275", "2312", "58503", "2299", "6222", "6141",
+              "141", "4142")
+
+    sids <- c("TNFRSF9", "SERPINB13", "FLG", "PROL1", "FOXI1",
+              "RPS18", "RPL18", "ADPRH", "MAS1")
+
     gids <- c("tumor necrosis factor receptor superfamily, member 9",
-              "UV-B repressed sequence, HUR 7", "filaggrin",
-              "proline rich, lacrimal 1", "forkhead box I1",
-              "ribosomal protein S18", "ribosomal protein L18",
+              "serpin peptidase inhibitor, clade B (ovalbumin), member 13",
+              "filaggrin", "proline rich, lacrimal 1",
+              "forkhead box I1", "ribosomal protein S18",
+              "ribosomal protein L18",
               "ADP-ribosylarginine hydrolase", "MAS1 oncogene" )
 
     pkg <- "hgu95av2"
@@ -248,14 +265,14 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     checkEquals(sids, f(f(aids, ai, ei), ei, si))
 
     pkg <- "org.Hs.eg.db"
-    sids <- c("TNFRSF9", "HSHUR7SEQ", "FLG", "PROL1", "FOXI1",
+    sids <- c("TNFRSF9", "SERPINB13", "FLG", "PROL1", "FOXI1",
               "RPS18", "RPL18", "ADPRH", "MAS1")
     ei <- EntrezIdentifier(pkg)
     si <- SymbolIdentifier(pkg)
     gi <- GenenameIdentifier(pkg)
 
     checkEquals(sids, f(eids, ei, si))
-    checkEquals(eids[-8], f(sids, si, ei)) # one lost in translation
+    checkEquals(eids, f(sids, si, ei))
     checkEquals(gids, f(sids, si, gi))
 }
 

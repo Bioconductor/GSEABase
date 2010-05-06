@@ -251,33 +251,29 @@ setMethod("GeneSetCollection",
             setType="KEGGCollection"),
           function(object, ..., idType, setType) {
               genes <- as.list(getAnnMap("PATH2PROBE", annotation(idType)))
+              genes <- genes[!is.na(genes)]
               if (length(ids(setType)) > 0)
                   genes <- genes[names(genes) %in% ids(setType)]
               collTypes <- .GSC_CollectionIdTypes(genes, setType)
               .GSC_CollectionType(genes, idType, collTypes, ...)
           })
 
-
 setMethod("GeneSetCollection",
           signature=signature(
-            object="KEGGFrame",  ##Add to AnnotDbi for dispatch and checking
+            object="KEGGFrame",  ##Add to AnnotDbi for dispatch and
+                                 ##checking
             idType="missing",
             setType="KEGGCollection"),
-##           function(object, ..., idType, setType) {
-##               genes <- as.list(getAnnMap("PATH2PROBE", annotation(idType)))
-##               if (length(ids(setType)) > 0)
-##                   genes <- genes[names(genes) %in% ids(setType)]
-##               collTypes <- .GSC_CollectionIdTypes(genes, setType)
-##               .GSC_CollectionType(genes, idType, collTypes, ...)
           function(object, ..., idType, setType) {
             idType <- KEGGFrameIdentifier(object)
-            frame = getKEGGFrameData(object)  ##define KEGGFrame and getKEGGFrameData() for this
+            frame = getKEGGFrameData(object)  ##define KEGGFrame and
+                                              ##getKEGGFrameData() for
+                                              ##this
             gene = as.character(frame[,2])
             genes = split(gene, as.character(frame[,1]))
             collTypes <- .GSC_CollectionIdTypes(genes, setType)
             .GSC_CollectionType(genes, idType, collTypes, ...)             
           })
-
 
 .GSC_GO_helper <- function(genes, idType, setType, ...) {
     ## filter on evidence codes
@@ -301,8 +297,6 @@ setMethod("GeneSetCollection",
                                 organism=organism, ...))
     GeneSetCollection(gss)
 }
-
-
 
 setMethod("GeneSetCollection",
           signature=signature(
@@ -340,8 +334,6 @@ setMethod("GeneSetCollection",
             .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
           })
 
-
-
 ## Later for Tony, I will just overload GeneSetCollection to also generate (of
 ## yet another setType) on an incidence matrix. I will want to just convert
 ## these relationships into an annotation object so that we can calculate the
@@ -364,16 +356,7 @@ setMethod("GeneSetCollection",
 ##             .GSC_GO_helper(genes, idType=idType, setType=setType, ...)
 ##           })
 
-
-
-
-
-
-
-
-
 ## updateObject
-
 
 setMethod("updateObject",
           signature=signature(
@@ -400,7 +383,9 @@ setMethod("geneIds",
           signature=signature(
             object="GeneSetCollection"),
           function(object) {
-              lapply(object, geneIds)
+              result <- lapply(object, geneIds)
+              names(result) <- names(object)
+              result
           })
 
 setMethod("names",

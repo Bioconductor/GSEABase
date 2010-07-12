@@ -24,7 +24,8 @@ importMethodsFrom(XML, free, saveXML)
 
 importFrom(annotate, getAnnMap, getEG, organism)
 
-importFrom(Biobase, mkScalar, selectSome, subListExtract, annotation,
+importFrom(Biobase, mkScalar, selectSome, subListExtract, 
+           abstract, annotation,
            "annotation<-", description, "description<-",
            pubMedIds, "pubMedIds<-", updateObject)
 

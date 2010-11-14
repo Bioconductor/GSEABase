@@ -50,13 +50,22 @@
                      collectionType={
                          categories <-
                              .mkSplit(attrs[["CATEGORY_CODE"]])
+                         subcategories <-
+                             .mkSplit(attrs[["SUB_CATEGORY_CODE"]])
                          category <- subcategory <- as.character(NA)
                          if (length(categories)>=1)
                              category <- tolower(categories[[1]])
-                         if (length(categories)>=2)
+                         if (length(subcategories) >= 1)
+                             subcategory <- subcategories[[1]]
+                         else if (length(categories)>=2)
                              subcategory <- categories[[2]]
-                         if (length(categories)>2)
-                             warning("Broad 'CATEGORY_CODE' too long; using first two elements")
+                         if (length(categories) > 2 ||
+                             (length(categories) > 1 &&
+                              length(subcategories) != 0)) {
+                             fmt <- "Broad 'CATEGORY_CODE' too long: '%s'"
+                             txt <- paste(categories, collapse="' '")
+                             warning(sprintf(fmt, txt))
+                         }
                          BroadCollection(category=mkScalar(category),
                                          subCategory=mkScalar(subcategory))
                      },

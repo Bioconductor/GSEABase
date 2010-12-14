@@ -20,9 +20,7 @@ GeneSet(type, ..., setIdentifier=.uniqueIdentifier())
   \item{type}{An argument determining how the gene set will be created,
     as described in the Methods section.}
   \item{setIdentifier}{A \code{ScalarCharacter} or length-1 character
-    vector uniquely identifying the set. The default attempts to use
-    \code{Ruuid} to generate a unique identifier, or if \code{Ruuid} is
-    not avaiable assigns \code{NA}.}
+    vector uniquely identifying the set.}
   \item{...}{Additional arguments for gene set construction. 
     Methods have required arguments, as outlined below; additional
     arguments correspond to slot names \code{\linkS4class{GeneSet}}.}

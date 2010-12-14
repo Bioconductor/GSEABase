@@ -1,8 +1,8 @@
 ## Placeholder 'till something appropriate decided
 .uniqueIdentifier <- function()
-    if (.requireQ("Ruuid")) {
-        as.character(getuuid())
-    } else as.character(NA)
+{
+    paste(Sys.info()['nodename'], Sys.getpid(), Sys.time(), sep=":")
+}
 
 ## simplified unique for vectors, preserving attributes
 .unique <- function(x, y) c(x, y[!(y %in% x)])

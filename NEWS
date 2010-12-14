@@ -5,6 +5,10 @@ NEW FEATURES
 
     o Parse Broad gene set sub-categories.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o An ad-hoc identifier replaces the Ruuid-based one.
+
 CHANGES IN VERSION 1.5
 ----------------------
 

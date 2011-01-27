@@ -60,7 +60,7 @@ BroadCollection(category, subCategory=NA, ...)
   \item{err}{(Optional) logical scalar indicating whether non-existent
     GO terms signal an error (\code{TRUE}), or are silently ignored (\code{FALSE}).}
   \item{...}{Additional arguments, usually none but see specific
-    \code{linkS4class{CollectionType}} classes  for possibilities.}
+    \code{\linkS4class{CollectionType}} classes  for possibilities.}
 }
 
 \value{

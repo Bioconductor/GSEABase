@@ -27,7 +27,9 @@ importFrom(annotate, getAnnMap, getEG, organism)
 importFrom(Biobase, mkScalar, selectSome, subListExtract, 
            abstract, annotation,
            "annotation<-", description, "description<-",
-           pubMedIds, "pubMedIds<-", updateObject)
+           pubMedIds, "pubMedIds<-")
+
+importFrom(BiocGenerics, updateObject)
 
 importFrom(methods, "@<-", as, callGeneric, callNextMethod, getClass,
            getSlots, is, new, prototype, representation, setClass,

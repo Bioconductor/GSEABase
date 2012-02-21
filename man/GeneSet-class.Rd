@@ -298,7 +298,7 @@ unlink(tmp)
 toBroadXML(gs9) # no connection --> character vector
 ## list of geneIds --> vector of Broad GENESET XML
 gs10 <- getBroadSets(fl) # two sets
-entries <- sapply(gs10, function(x) toBroadXML(x)[[2]])
+entries <- sapply(gs10, function(x) toBroadXML(x))
 
 ## list mapIdentifiers available for GeneSet
 showMethods("mapIdentifiers", classes="GeneSet", inherit=FALSE)

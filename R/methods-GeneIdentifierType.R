@@ -191,13 +191,21 @@ setMethod("show",
         length(grep("^org\\.", annotation(x)))==1
     }
     if (is(from, "AnnotationIdentifier")) {
-        ## one map: AnnotationIdentifier --> to
-        first <- getAnnMap(toupper(geneIdType(to)), annotation(from))
+        first <- if (is(to, "EntrezIdentifier")) {
+            NULL                        # identity map
+        } else {
+            ## one map: AnnotationIdentifier --> to
+            getAnnMap(toupper(geneIdType(to)), annotation(from))
+        }
         second <- NULL
     } else if (is(to, "AnnotationIdentifier")) {
-        ## one map: revmap(AnnotationIdentifier --> from)
-        map <- getAnnMap(toupper(geneIdType(from)), annotation(to))
-        first <- revmap(map)
+        first <- if (is(from, "EntrezIdentifier")) {
+            NULL                        # identity map
+        } else {
+            ## one map: revmap(AnnotationIdentifier --> from)
+            map <- getAnnMap(toupper(geneIdType(from)), annotation(to))
+            revmap(map)
+        }
         second <- NULL
     } else if (is(from, "EntrezIdentifier") && isOrg(from)) {
         ## one map: EntrezIdentifier --> to
@@ -243,7 +251,8 @@ setMethod("show",
 .mapIdentifiers_map <- function(ids, from, to, verbose=FALSE) {
     doMap <- .mapIdentifiers_doWithMap  # abbrevation; nothing fancy
     map <- .mapIdentifiers_selectMaps(from, to)
-    if (length(map)==1) doMap(ids, map[[1]], from, to, verbose)
+    if (length(map)==0) ids
+    else if (length(map)==1) doMap(ids, map[[1]], from, to, verbose)
     else {
         key <- doMap(ids, map[[1]], from, to, verbose)
         doMap(key, map[[2]], from, to, verbose)

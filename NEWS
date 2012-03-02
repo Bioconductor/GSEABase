@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.18
+-----------------------
+
+BUG FIXES
+
+    o Allow for idempotent maps between Entrez- and
+    AnnotationIdentifiers
+
 CHANGES IN VERSION 1.13
 -----------------------
 

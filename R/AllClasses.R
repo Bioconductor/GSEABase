@@ -58,6 +58,19 @@
 
 .IdentifierClasses(topenv())
 
+AnnoOrEntrezIdentifier <-
+    function(annotation, ...)
+{
+    nm <- annPkgName(annotation)
+    .requireQ(nm)
+    cls <- tryCatch(class(get(nm)), error=function(...) "unknown")
+    fun <- switch(cls, ChipDb=AnnotationIdentifier,
+                  OrgDb=EntrezIdentifier,
+                  ## default is original behavior
+                  AnnotationIdentifier)
+    fun(annotation, ...)
+}
+
 ## Special class of Identifier for GOAllFrames
 setClass("GOAllFrameIdentifier",
          contains="GeneIdentifierType",

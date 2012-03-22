@@ -22,7 +22,7 @@ importMethodsFrom(methods, coerce, initialize, Logic, show)
 
 importMethodsFrom(XML, free, saveXML)
 
-importFrom(annotate, getAnnMap, getEG, organism)
+importFrom(annotate, getAnnMap, annPkgName, getEG, organism)
 
 importFrom(Biobase, mkScalar, selectSome, subListExtract, 
            abstract, annotation,
@@ -99,7 +99,7 @@ export(## IdentifierType
        NullIdentifier, ENSEMBLIdentifier, EnzymeIdentifier,
        GenenameIdentifier, RefseqIdentifier, SymbolIdentifier,
        UnigeneIdentifier, EntrezIdentifier, AnnotationIdentifier,
-       GOAllFrameIdentifier,
+       AnnoOrEntrezIdentifier, GOAllFrameIdentifier,
 
        ## CollectionType
        NullCollection, ExpressionSetCollection, ComputedCollection,

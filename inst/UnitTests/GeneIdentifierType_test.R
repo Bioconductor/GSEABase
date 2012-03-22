@@ -325,13 +325,11 @@ test_GeneIdentifierType_mapIdentifiers_nullAmbiguity <- function() {
     checkTrue(validObject(gs))
 }
 
-test_GeneIdentifierType_mapIdentifiers_idempotent <- function() {
-    ei <- EntrezIdentifier("org.Hs.eg.db")
-    ai <- AnnotationIdentifier("org.Hs.eg.db")
-    eids <- c("3604", "5275", "2312", "58503", "2299", "6222", "6141",
-              "141", "4142")
-
-    gs <- GeneSet(EntrezIdentifier(), geneIds=eids)
-    checkIdentical(eids, geneIds(mapIdentifiers(gs, ai)))
-    checkIdentical(eids, geneIds(mapIdentifiers(gs, ei)))
+test_GeneIdentifierType_AnnoOrEntrez <- function() {
+    checkIdentical(AnnotationIdentifier("hgu95av2.db"),
+                   AnnoOrEntrezIdentifier("hgu95av2.db"))
+    checkIdentical(AnnotationIdentifier("hgu95av2"),
+                   AnnoOrEntrezIdentifier("hgu95av2"))
+    checkIdentical(EntrezIdentifier("org.Hs.eg.db"),
+                   AnnoOrEntrezIdentifier("org.Hs.eg.db"))
 }

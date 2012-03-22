@@ -10,6 +10,7 @@
 \alias{UnigeneIdentifier}
 \alias{EntrezIdentifier}
 \alias{AnnotationIdentifier}
+\alias{AnnoOrEntrezIdentifier}
 \alias{GOAllFrameIdentifier}
 \alias{KEGGFrameIdentifier}
   
@@ -30,6 +31,7 @@ SymbolIdentifier(annotation,...)
 UnigeneIdentifier(annotation,...)
 EntrezIdentifier(annotation,...)
 AnnotationIdentifier(annotation, ...)
+AnnoOrEntrezIdentifier(annotation, ...)
 }
 \arguments{
   \item{annotation}{An optional character string identifying  the
@@ -38,8 +40,15 @@ AnnotationIdentifier(annotation, ...)
   \item{\dots}{Additional arguments, usually none.}
 }
 \value{
-  An object of the same class as the function name, initialized as
-  appropriate for the identifier.
+
+  For all but \code{AnnoOrEntrezIdentifier}, An object of the same class
+  as the function name, initialized as appropriate for the identifier.
+
+  For \code{AnnoOrEntrezIdentifier}, either an
+  \code{AnnotationIdentifier} or \code{EntrezIdentifier} depending on
+  the argument. This requires that the corresponding chip- or organism
+  package be loaded, hence installed on the user's system.
+
 }
 \author{Martin Morgan <mtmorgan@fhcrc.org>}
 \seealso{

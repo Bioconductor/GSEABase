@@ -114,7 +114,7 @@
                 }, error=function(err) "")
             do.call(new,
                     c(CLASS,
-                      geneIdType = AnnotationIdentifier(annotation(type)),
+                      geneIdType = AnnoOrEntrezIdentifier(annotation(type)),
                       list(geneIds = featureNames(type)),
                       shortDescription = experimentData(type)@title,
                       longDescription = abstract(type),

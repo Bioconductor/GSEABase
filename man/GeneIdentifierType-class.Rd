@@ -19,6 +19,7 @@
 \alias{UnigeneIdentifier-class}
 \alias{EntrezIdentifier-class}
 \alias{ENSEMBLIdentifier-class}
+\alias{UniprotIdentifier-class}
 \alias{GOAllFrameIdentifier-class}
 \alias{KEGGFrameIdentifier-class}
 
@@ -47,6 +48,7 @@
     \item{RefseqIdentifier}{\sQuote{Prosite} identifiers.}
     \item{SymbolIdentifier}{\sQuote{Symbol} identifiers.}
     \item{UnigeneIdentifier}{\sQuote{Unigene} identifiers.}
+    \item{UniprotIdentifier}{\sQuote{Uniprot} identifiers.}
     \item{GeneIdentifierType}{A virtual Class: No objects may be created
       from it; all classes listed above are subclasses of
       \code{GeneIdentifierType}.}

@@ -37,8 +37,8 @@
     .setters("GeneIdentifierType", "annotation", where=where)
 
     ## Straight derivation from GeneIdentifierType
-    annoIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq", "Symbol",
-                         "Unigene", "ENSEMBL")
+    annoIdentifiers <- c("Null", "Enzyme", "Genename", "Refseq",
+                         "Symbol", "Unigene", "Uniprot", "ENSEMBL")
     for (class in annoIdentifiers)
       setSimpleClass(class, "GeneIdentifierType")
     ## More complicated derviation from GeneIdentifierType:

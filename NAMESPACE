@@ -25,11 +25,12 @@ importMethodsFrom(XML, free, saveXML)
 importFrom(annotate, getAnnMap, annPkgName, getEG, organism)
 
 importFrom(Biobase, mkScalar, selectSome, subListExtract, 
-           abstract, annotation,
-           "annotation<-", description, "description<-",
+           abstract,
+           description, "description<-",
            pubMedIds, "pubMedIds<-")
 
-importFrom(BiocGenerics, updateObject)
+importFrom(BiocGenerics, updateObject,
+           annotation, "annotation<-")
 
 importFrom(methods, "@<-", as, callGeneric, callNextMethod, getClass,
            getSlots, is, new, prototype, representation, setClass,

@@ -201,10 +201,29 @@ test_GSC_logic <- function() {
 
 test_GSC_mapIdentifiers <- function() {
     data(sample.ExpressionSet)
-    gsc <- GeneSetCollection(sample.ExpressionSet[200:205], setType=GOCollection())
+    gsc <- GeneSetCollection(sample.ExpressionSet[200:205],
+                             setType=GOCollection())
     gsc1 <- mapIdentifiers(gsc, EntrezIdentifier())
     checkTrue(is(gsc1, "GeneSetCollection"))
     checkEquals(length(gsc), length(gsc1))
-    checkTrue(all(sapply(gsc1, function(x) is(geneIdType(x), "EntrezIdentifier"))))
+    checkTrue(all(sapply(gsc1, function(x) {
+        is(geneIdType(x), "EntrezIdentifier")
+    })))
     checkEquals(length(unlist(geneIds(gsc))), length(unlist(geneIds(gsc1))))
+}
+
+test_GSC_GOCollection_ontology <- function() {
+    idType <- AnnotationIdentifier("org.Hs.eg.db")
+    eids <- as.character(1:2)
+    setType <- GOCollection()
+    gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
+    checkIdentical(length(gsc), 21L)
+    tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
+    checkIdentical(as.integer(tbl), c(9L, 4L, 8L))
+
+    setType <- GOCollection(ontology="BP")
+    gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
+    checkIdentical(length(gsc), 9L)
+    tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
+    checkIdentical(as.integer(tbl), 9L)
 }

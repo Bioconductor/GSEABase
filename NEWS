@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.21
+-----------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o GeneSetCollection,*,*,GOCollection-method respects evidenceCode
+    and ontology
+
 CHANGES IN VERSION 1.19
 -----------------------
 

@@ -27,33 +27,32 @@ setMethod("GeneSetCollection",
     genes[sapply(genes, length) != 0]
 }
 
-.GSC_genes_helper <- function(idType, setType) {
-    mapEnv <- revmap(getAnnMap(toupper(collectionType(setType)),
-                               annotation(idType)))
-    lapply(as.list(mapEnv), unique)
+.GSC_genes_helper <- function(idType, setType, object) {
+    map <- getAnnMap(toupper(collectionType(setType)), annotation(idType))
+    if (!missing(object)) {
+        object <- object[object %in% mappedLkeys(map)]
+        map <- map[object]
+    }
+    mapEnv <- revmap(map)
+    lapply(as.list(mapEnv[mappedRkeys(map)]), unique)
 }
 
 .GSC_ExpressionSet_helper <- function(object, idType, setType) {
-    .GSC_filter_by_probe(.GSC_genes_helper(idType, setType),
-                        featureNames(object))
+    .GSC_genes_helper(idType, setType, featureNames(object))
 }
 
 .GSC_CollectionIdTypes <- function(genes, setType) {
-    collType <- paste(collectionType(setType), "Collection",
-                      sep="")
-    lapply(names(genes),
-           function(ids) do.call(collType, list(ids=ids)))
+    ## copy constructor
+    lapply(names(genes), function(id) initialize(setType, ids=id))
 }
 
 .GSC_CollectionType <- function(genes, idType, collTypes, ...) {
-    organism <- organism(idType)
-    gss <- mapply(GeneSet,
-                  genes,
-                  setName=names(genes),
-                  collectionType=collTypes,
-                  MoreArgs=list(
-                    geneIdType=idType,
-                    organism=organism))
+    gss <- if (length(genes)) {
+        organism <- organism(idType)
+        gs <- selectMethod(GeneSet, class(genes[[1]])) # avoid method lookup
+        mapply(gs, genes, setName=names(genes), collectionType=collTypes,
+               MoreArgs=list(geneIdType=idType, organism=organism))
+    } else list()
     GeneSetCollection(gss, ...)
 }
 
@@ -82,8 +81,7 @@ setMethod("GeneSetCollection",
             idType="AnnotationIdentifier",
             setType="CollectionType"),
           function(object, ..., idType, setType) {
-              helper <- .GSC_genes_helper(idType, setType)
-              genes <- .GSC_filter_by_probe(helper, object)
+              genes <- .GSC_genes_helper(idType, setType, object)
               collTypes <- .GSC_CollectionIdTypes(genes, setType)
               .GSC_CollectionType(genes, idType, collTypes)
           })
@@ -94,10 +92,32 @@ setMethod("GeneSetCollection",
             idType="AnnotationIdentifier",
             setType="CollectionIdType"),
           function(object, ..., idType, setType) {
-              helper <- .GSC_genes_helper(idType, setType)
-              genes <- .GSC_filter_by_probe(helper, object)
+              genes <- .GSC_genes_helper(idType, setType, object)
               if (length(ids(setType)) > 0)
                   genes <- genes[names(genes) %in% ids(setType)]
+              collTypes <- .GSC_CollectionIdTypes(genes, setType)
+              .GSC_CollectionType(genes, idType, collTypes)
+          })
+
+setMethod("GeneSetCollection",
+          signature=signature(
+            object="character",
+            idType="AnnotationIdentifier",
+            setType="GOCollection"),
+          function(object, ..., idType, setType) {
+              genes <- .GSC_genes_helper(idType, setType, object)
+              map <- getAnnMap("GO", annotation(idType))
+              object <- object[object %in% mappedLkeys(map)]
+              df <- toTable(map[object])
+              ids <- ids(setType)
+              if (!length(ids)) {
+                  ids <- with(df, {
+                      eidx <- ((Evidence %in% evidenceCode(setType)) &
+                               (Ontology %in% ontology(setType)))
+                      go_id[eidx]
+                  })
+              }
+              genes <- genes[names(genes) %in% ids]
               collTypes <- .GSC_CollectionIdTypes(genes, setType)
               .GSC_CollectionType(genes, idType, collTypes)
           })

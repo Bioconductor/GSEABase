@@ -75,7 +75,7 @@ test_obo_subset <- function() {
 
 test_obo_as_graphNEL_empty_obj <- function() {
     validObject(as(OBOCollection(), "graphNEL"))
-    validObject(as(new("graphNEL"), "OBOCollection"))
+    validObject(as(graphNEL(), "OBOCollection"))
 }
 
 test_obo_as_graphNEL <- function() {

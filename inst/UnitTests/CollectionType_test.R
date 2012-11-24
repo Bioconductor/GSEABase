@@ -101,11 +101,11 @@ test_CollectionType_PfamCollection_org <-
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=PfamCollection())
-    checkIdentical(length(ids), length(gsc))
+    len <- with(tbl, length(unique(PfamId[!is.na(PfamId)])))
+    checkIdentical(len, length(gsc))
     gids <- unique(tbl[!is.na(tbl$PfamId),"gene_id"])
-    x <- with(tbl, lapply(split(gene_id, PfamId), unique))
-    checkIdentical(x[order(names(x))],
-                   geneIds(gsc)[order(names(gsc))])
+    x <- with(tbl, split(gene_id, PfamId))
+    checkTrue(all(mapply(setequal, x, geneIds(gsc)[names(x)])))
 }
 
 test_CollectionType_PrositeCollection_org <-

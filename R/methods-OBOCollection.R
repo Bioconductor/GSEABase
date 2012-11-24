@@ -202,16 +202,17 @@ setAs("graphNEL", "OBOCollection",
       function(from) {
           ids <- nodes(from)
           obo <- OBOCollection(ids)
+          kv <- .kv(obo)
 
           iedge <- inEdges(from)
           nedge <- sapply(iedge, length)
-          value <- unlist(mapply(rep, names(iedge), nedge,
-                                 USE.NAMES=FALSE))
-          stanza_id <- unlist(iedge, use.names=FALSE)
-
-          kv <- .kv(obo)
-          kv <- rbind(.kv(obo),
-                      data.frame(stanza_id, key="is_a", value))
+          value <- mapply(rep, names(iedge), nedge, USE.NAMES=FALSE)
+          if (length(value)){
+              value <- unlist(value)
+              stanza_id <- unlist(iedge, use.names=FALSE)
+              kv <- rbind(.kv(obo),
+                          data.frame(stanza_id, key="is_a", value))
+          }
           new("OBOCollection", obo, .kv=kv)
       })
 
@@ -286,7 +287,8 @@ setMethod("goSlim",
           signature=signature(
             idSrc="ExpressionSet",
             slimCollection="GOCollection"),
-          function(idSrc, slimCollection, ontology, evidenceCode="ANY", ..., verbose=FALSE) {
+          function(idSrc, slimCollection, ontology, evidenceCode="ANY", ...,
+                   verbose=FALSE) {
               map <- .getAnnMap(idSrc, "GO")
               res <- mget(featureNames(sample.ExpressionSet), map)
               res <- res[!is.na(res)]

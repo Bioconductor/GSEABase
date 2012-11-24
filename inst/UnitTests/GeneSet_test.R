@@ -180,13 +180,10 @@ test_GS_incidence <- function() {
 }
 
 test_GS_uniqueSetIdentifier <- function() {
-    checkTrue(require(Ruuid))
     gs <- GeneSet(letters[1:3], setName="A")
 
-    checkTrue(setIdentifier(gs) !=
-              setIdentifier(GeneSet(letters[1:2])))
-    checkTrue(setIdentifier(gs) !=
-              setIdentifier(gs["b"]))
+    checkTrue(setIdentifier(gs) != setIdentifier(GeneSet(letters[1:2])))
+    checkTrue(setIdentifier(gs) != setIdentifier(gs["b"]))
 
     setters <- GSEABase:::.nameAll(GSEABase:::.SETTERS_GeneSet)
     for (s in names(setters)) {

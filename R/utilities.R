@@ -1,7 +1,8 @@
 ## Placeholder 'till something appropriate decided
 .uniqueIdentifier <- function()
 {
-    paste(Sys.info()['nodename'], Sys.getpid(), Sys.time(), sep=":")
+    paste(Sys.info()['nodename'], Sys.getpid(), Sys.time(),
+          sample(.Machine$integer.max, 1), sep=":")
 }
 
 ## simplified unique for vectors, preserving attributes

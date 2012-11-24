@@ -1,37 +1,31 @@
 ## constructor for GOAllFrameIdentifier and method for organism()
-GOAllFrameIdentifier <- function (object){
-  if(class(object)=="GOAllFrame"){
-    new("GOAllFrameIdentifier",
-        organism=new("ScalarCharacter", object@organism))
-  }else{
-    stop("The Frame Object MUST be a GOAllFrame")
-  }
+.mkFrameIdentifier <-
+    function(object, class, classId)
+{
+    if (missing(object)) {
+        new(classId)
+    } else if (is(object, class)) {
+        new(classId, organism=mkScalar(organism(object)))
+    } else {
+        stop("'object' must be a '", classId, "' instance")
+    }
 }
 
-setMethod("organism", "GeneIdentifierType",
-          function(object){
-            getAnnMap("ORGANISM", annotation(object))
-          }) 
-
-setMethod("organism", "GOAllFrameIdentifier",
-          function(object){object@organism}) 
-
-
-
-KEGGFrameIdentifier <- function (object){
-  if(class(object)=="KEGGFrame"){
-    new("KEGGFrameIdentifier",
-        organism=new("ScalarCharacter", object@organism))
-  }else{
-    stop("The Frame Object MUST be a KEGGFrame")
-  }
+GOAllFrameIdentifier <- function(object) {
+    .mkFrameIdentifier(object, "GOAllFrame", "GOAllFrameIdentifier")
 }
 
-setMethod("organism", "KEGGFrameIdentifier",
-          function(object){object@organism}) 
+setMethod("organism", "GeneIdentifierType", function(object) {
+    getAnnMap("ORGANISM", annotation(object))
+})
 
+setMethod("organism", "GOAllFrameIdentifier", function(object) object@organism)
 
+KEGGFrameIdentifier <- function (object) {
+    .mkFrameIdentifier(object, "KEGGFrame", "KEGGFrameIdentifier")
+}
 
+setMethod("organism", "KEGGFrameIdentifier", function(object) object@organism)
 
 ## constructors in AllClasses.R
 

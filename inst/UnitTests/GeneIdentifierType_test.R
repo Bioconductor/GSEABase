@@ -1,17 +1,20 @@
 constructors <- local({
     idTypes <- names(slot(getClass("GeneIdentifierType"), "subclasses"))
-    idTypes[idTypes != "AnnotationIdentifier"]
+    idTypes[!idTypes %in% c("AnnotationIdentifier", "KEGGFrameIdentifier")]
 })
 
 test_GeneIdentifierType_Constructors <- function() {
     ## do they exist and return the correct class?
+    frameIds <- paste0("GOAll", "FrameIdentifier")
     for (i in seq_along(constructors)) {
         res <- do.call(constructors[[i]], list())
         checkTrue(validObject(res))
         checkTrue(is(res, constructors[[i]]))
-        res <- do.call(constructors[[i]], list("foo"))
-        checkTrue(validObject(res))
-        checkTrue(is(res, constructors[[i]]))
+        if (!constructors[[i]] %in% frameIds) {
+            res <- do.call(constructors[[i]], list("foo"))
+            checkTrue(validObject(res))
+            checkTrue(is(res, constructors[[i]]))
+        }
     }
 
     ## Required slot for AnnotationIdentifier

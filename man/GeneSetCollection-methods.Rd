@@ -6,6 +6,7 @@
 \alias{GeneSetCollection,list,missing,missing-method}
 \alias{GeneSetCollection,character,AnnotationIdentifier,CollectionType-method}
 \alias{GeneSetCollection,character,AnnotationIdentifier,CollectionIdType-method}
+\alias{GeneSetCollection,character,AnnotationIdentifier,GOCollection-method}
 \alias{GeneSetCollection,character,AnnotationIdentifier,PfamCollection-method}
 \alias{GeneSetCollection,character,AnnotationIdentifier,PrositeCollection-method}
 \alias{GeneSetCollection,character,AnnotationIdentifier,ChrlocCollection-method}
@@ -59,79 +60,103 @@ GeneSetCollection(object, ..., idType, setType)
     }
 
     \item{
-      \code{signature(object="missing", idType="AnnotationIdentifier", setType="CollectionType")},
-      \code{signature(object="missing", idType="AnnotationIdentifier", setType="CollectionIdType")}
+      \code{signature(object="missing", idType="AnnotationIdentifier",
+	setType="CollectionType")}}{{}}
+    \item{
+      \code{signature(object="missing", idType="AnnotationIdentifier",
+	setType="CollectionIdType")}
     }{
-      Construct a gene set collection of \code{CollectionType} entities (e.g., pathways for
-      \code{KEGGCollection}, protein families for \code{PfamCollection})
-      implied by the map found in \code{annotation(idType)}. If \code{setType} is a
+
+      Construct a gene set collection of \code{CollectionType} entities
+      (e.g., pathways for \code{KEGGCollection}, protein families for
+      \code{PfamCollection}) implied by the map found in
+      \code{annotation(idType)}. If \code{setType} is a
       \code{CollectionIdType} and \code{length(ids(setType))>0}, the
       gene set collection is filtered to contain only those sets implied
       by the ids.
+
     }
 
     \item{
-      \code{signature(object="character", idType="AnnotationIdentifier", setType="CollectionType")},
-      \code{signature(object="character", idType="AnnotationIdentifier", setType="CollectionIdType")}
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="CollectionType")}}{{}}
+    \item{
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="CollectionIdType")}}{{}}
+    \item{
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="GOCollection")}
     }{
-      Construct a gene set collection of \code{CollectionType} entities (e.g., pathways for
-      \code{KEGGCollection}, protein families for \code{PfamCollection})
-      implied by the map found in \code{annotation(idType)}. Use only
-      those identifiers in \code{object}. If \code{setType} is a
-      \code{CollectionIdType} and \code{length(ids(setType))>0}, the
-      gene set collection is filtered to contain only those sets implied
-      by the ids.
+      
+      Construct a gene set collection of \code{CollectionType} entities
+      (e.g., pathways for \code{KEGGCollection}, protein families for
+      \code{PfamCollection}) implied by the map found in
+      \code{annotation(idType)}. Use only those identifiers in
+      \code{object}. If \code{setType} is a \code{CollectionIdType} and
+      \code{length(ids(setType))>0}, the gene set collection is filtered
+      to contain only those sets implied by the ids.
+
     }
 
     \item{
-      \code{signature(object="character", idType="AnnotationIdentifier", setType="PfamCollection")}
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="PfamCollection")}
     }{
 
-	  Construct a gene set collection by mapping all values in
+      Construct a gene set collection by mapping all values in
       \code{object} to \code{PfamIds} found in the \code{PFAM} map
       implied by \code{idType}.
 
     }
 
     \item{
-      \code{signature(object="character", idType="AnnotationIdentifier", setType="PrositeCollection")}
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="PrositeCollection")}
     }{
 
-	  Construct a gene set collection by mapping all values in
+      Construct a gene set collection by mapping all values in
       \code{object} to \code{ipi_ids} found in the \code{PFAM} map
       implied by \code{idType}.
 
-	}
+    }
 
     \item{
-      \code{signature(object="character", idType="AnnotationIdentifier", setType="ChrlocCollection")}
+      \code{signature(object="character", idType="AnnotationIdentifier",
+	setType="ChrlocCollection")}
     }{
 
-	  Construct a gene set collection by mapping all values in
+      Construct a gene set collection by mapping all values in
       \code{object} to chromosome, strand, and position information
       found in the map implied by \code{idType}.
 
     }
 
     \item{
-      \code{signature(object="ExpressionSet", idType="missing", setType="CollectionType")},
-      \code{signature(object="ExpressionSet", idType="missing", setType="CollectionIdType")}
+      \code{signature(object="ExpressionSet", idType="missing",
+	setType="CollectionType")}}{{}}
+    \item{
+      \code{signature(object="ExpressionSet", idType="missing",
+	setType="CollectionIdType")}
     }{
+
       Construct a gene set collection using the \code{annotation} and
-      \code{featureNames} of \code{object} to identify elements for 
+      \code{featureNames} of \code{object} to identify elements for
       \code{CollectionType} gene sets (e.g., pathways for
       \code{KEGGCollection}, protein families for \code{PfamCollection})
-      implied by \code{object}. The gene set
-      collection contains only those \code{AnnotationIdentifiers} found
-      in \code{featureNames(object)}; if \code{setType} is a
+      implied by \code{object}. The gene set collection contains only
+      those \code{AnnotationIdentifiers} found in
+      \code{featureNames(object)}; if \code{setType} is a
       \code{CollectionIdType} and \code{length(ids(setType))>0}, the
       gene set collection is further filtered to contain only those sets
       implied by the ids.
+
     }
 
     \item{
-      \code{signature(object="ExpressionSet", idType="missing", setType="GOCollection")}
+      \code{signature(object="ExpressionSet", idType="missing",
+	setType="GOCollection")}
     }{
+      
       Construct a gene set collection using the \code{annotation} and
       \code{featureNames} of \code{object} to identify 
       \code{GO} pathways implied by \code{object}. The map between
@@ -145,7 +170,8 @@ GeneSetCollection(object, ..., idType, setType)
     }
 
     \item{
-      \code{signature(object="ExpressionSet", idType="missing", setType="PfamCollection")}
+      \code{signature(object="ExpressionSet", idType="missing",
+	setType="PfamCollection")}
     }{
       
 	  Construct a gene set collection by mapping all values in

@@ -5,7 +5,7 @@
     if (missing(object)) {
         new(classId)
     } else if (is(object, class)) {
-        new(classId, organism=mkScalar(organism(object)))
+        new(classId, organism=mkScalar(object@organism))
     } else {
         stop("'object' must be a '", classId, "' instance")
     }

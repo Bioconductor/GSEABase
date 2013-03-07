@@ -9,7 +9,7 @@ Description: This package provides classes and methods to support
 License: Artistic-2.0
 Depends: R (>= 2.6.0), BiocGenerics (>= 0.3.2), Biobase (>= 2.17.8), annotate, 
          methods, graph (>= 1.37.2)
-Suggests: hgu95av2.db, GO.db, org.Hs.eg.db, Rgraphviz
+Suggests: hgu95av2.db, GO.db, org.Hs.eg.db, Rgraphviz, ReportingTools
 Imports: BiocGenerics, annotate, AnnotationDbi, Biobase, graph, methods, XML
 LazyLoad: yes
 biocViews: Infrastructure, Bioinformatics

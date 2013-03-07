@@ -2,13 +2,15 @@
 % likely to be overwritten.
 %
 %\VignetteIndexEntry{An introduction to GSEABase}
-%\VignetteDepends{hgu95av2.db,GO.db}
+%\VignetteDepends{hgu95av2.db,GO.db, ReportingTools}
 %\VignetteKeywords{Gene Set Enrichment Analysis}
 %\VignettePackage{GSEABase}
 \documentclass[]{article}
 
+\usepackage[usenames,dvipsnames]{color}
 \usepackage{times}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
+  citecolor=Blue]{hyperref}
 
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -17,9 +19,13 @@
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
 \newcommand{\Rcode}[1]{{\texttt{#1}}}
+\newcommand\Biocpkg[1]{%
+  {\href{http://bioconductor.org/packages/release/bioc/html/#1.html}%
+    {\textsl{#1}}}}
+
 
 \newcommand{\R}{\textsf{R}}
-\newcommand{\GSEABase}{\Rpackage{GSEABase}}
+\newcommand{\GSEABase}{\Biocpkg{GSEABase}}
 \newcommand{\GeneSet}{\Rclass{GeneSet}}
 \newcommand{\GeneColorSet}{\Rclass{GeneColorSet}}
 \newcommand{\GeneSetCollection}{\Rclass{GeneSetCollection}}
@@ -59,7 +65,7 @@ descriptive information about the set, and information about how the
 gene set was constructed. To construct a gene set, use
 \Rfunction{GeneSet}. For example, to create a gene set from the
 identifiers in a subset of the sample \Robject{ExpressionSet} in the
-Biobase package (see \Rpackage{Biobase} documentation for a
+Biobase package (see \Biocpkg{Biobase} documentation for a
 description of expression sets) use
 <<GeneSet>>=
 data(sample.ExpressionSet) # from Biobase
@@ -310,7 +316,27 @@ gsc[["GO:0005737"]]
 @ 
 %% 
 
+A convenient way to visualize a \GeneSetCollection{} is with the
+\Biocpkg{ReportingTools} package.
+<<ReportingTools>>=
+## 'interesting' gene sets
+idx <- sapply(gsc, function(x) length(geneIds(x))) > 2
+
+library(ReportingTools)
+gscReport <- HTMLReport(
+    shortName="gsc_example",
+    title="GSEABase Vignette GeneSetCollection",
+    reportDirectory=tempdir(), baseUrl="")
+publish(gsc[idx], gscReport, annotation.db="org.Hs.eg")
+finish(gscReport)
+@ 
+%% 
+The report can be viewed with
+<<ReportingTools-view, eval=FALSE>>=
+browseURL(path(gscReport))
+@ 
+
 This concludes a brief tour of gene sets and gene set collections
-available in the \Rpackage{GSEABase} package.
+available in the \GSEABase{} package.
 
 \end{document}

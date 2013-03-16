@@ -326,14 +326,14 @@ library(ReportingTools)
 gscReport <- HTMLReport(
     shortName="gsc_example",
     title="GSEABase Vignette GeneSetCollection",
-    reportDirectory=tempdir(), baseUrl="")
+    basePath=tempdir())
 publish(gsc[idx], gscReport, annotation.db="org.Hs.eg")
-finish(gscReport)
+url <- finish(gscReport)
 @ 
 %% 
 The report can be viewed with
 <<ReportingTools-view, eval=FALSE>>=
-browseURL(path(gscReport))
+browseURL(url)
 @ 
 
 This concludes a brief tour of gene sets and gene set collections

@@ -43,7 +43,7 @@
         args <- list(symbolId,
                      setName=attrs[["STANDARD_NAME"]],
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
-                     geneIds=.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]]),
+                     geneIds=unique(.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]])),
                      organism=attrs[["ORGANISM"]],
                      urls= c(getBroadSet=url,
                        .mkSplit(attrs[["EXTERNAL_DETAILS_URL"]])),
@@ -154,6 +154,17 @@ getGmt <- function(con,
                "\n  first invalid line:  ",
                lines[sapply(lines, length)<2][[1]],
                "\n")
+    dups <- new.env(parent=emptyenv())
+    lines <- lapply(lines, function(elt, dups) {
+        if (any(d <- duplicated(elt[-(1:2)]))) {
+            dups[[elt[[1]]]] <- unique(elt[-(1:2)][d])
+            elt <- c(elt[1:2], unique(elt[-(1:2)]))
+        }
+        elt
+    }, dups)
+    if (length(dups))
+        .warningf("%d record(s) contain duplicate ids: %s",
+                  length(dups), selectSome(sort(ls(dups))))
     GeneSetCollection(lapply(lines, function(line) {
         GeneSet(unlist(line[-(1:2)]),
                 geneIdType=geneIdType,

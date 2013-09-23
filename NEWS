@@ -5,6 +5,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Support 'c7' broad set
 
+    o Warn or remove duplicate geneIds when parsing GMT or Broad XML
+
 CHANGES IN VERSION 1.21
 -----------------------
 

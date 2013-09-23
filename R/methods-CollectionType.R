@@ -70,7 +70,7 @@ setMethod("setdiff",
 
 BroadCollection <- function(category="c1", subCategory=NA, ...) {
     if (length(category)!=1 ||
-        !(category %in% c("c1", "c2", "c3", "c4", "c5", "c6")))
+        !(category %in% c("c1", "c2", "c3", "c4", "c5", "c6", "c7")))
         stop(sprintf("invalid BroadCollection category: '%s'",
                      paste(category, collapse="', '")))
     new("BroadCollection",
@@ -94,7 +94,8 @@ setMethod("show",
                          c3="c3 (Motif)",
                          c4="c4 (Computational)",
                          c5="c5 (GO)", 
-                         c6="c6 (Oncogenic Pathway Activation Modules)"), "\n",
+                         c6="c6 (Oncogenic Pathway Activation Modules)",
+                         c7="c7 (Immunologic Signatures)"), "\n",
                   "  bcSubCategory:  ", bcSubCategory(object), "\n", sep="")
           })
 

@@ -92,8 +92,7 @@ AnnotationIdFactory <- function(classPrefix,
                  contains = "AnnotationIdentifier",
                  prototype = prototype(type=TYPE),
                  where = WHERE)
-        GSEABase:::.constructors_Simple(CLASS,
-                                        required="annotation", where=WHERE)
+        .constructors_Simple(CLASS, required="annotation", where=WHERE)
         setMethod("initialize",
                   signature=signature(.Object=CLASS),
                   function(.Object, .Template=.Object, ...,

@@ -19,7 +19,7 @@
         eval(substitute({
             f <- function() {
                 args <- names(match.call())[-1]
-                GSEABase:::.checkRequired(REQUIRED, args)
+                .checkRequired(REQUIRED, args)
                 miss <- OPTIONAL[!OPTIONAL %in% args]
                 oargs <- OARGS[!names(OARGS) %in% miss]
                 do.call(new, c(CLASS, oargs))

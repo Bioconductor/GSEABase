@@ -22,7 +22,7 @@
 
 }
 \usage{
-getBroadSets(uri, ...)
+getBroadSets(uri, ..., membersId=c("MEMBERS_SYMBOLIZED", "MEMBERS_EZID"))
 toBroadXML(geneSet, con, ...)
 asBroadUri(name,
            base="http://www.broad.mit.edu/gsea/msigdb/cards")
@@ -58,6 +58,9 @@ toGmt(x, con, ...)
   \item{\dots}{Further arguments passed to the underlying XML parser,
     particularly \code{file} used to specify an output \code{connection}
     for \code{toBroadXML}.}
+
+  \item{membersId}{XML field name from which \code{geneIds} are derived.
+    Choose one value; default \dQuote{MEMBERS_SYMBOLIZED}.}
 }
 \value{
   \code{getBroadSets} returns a \code{GeneSetCollection} of gene sets.

@@ -15,7 +15,7 @@
 ## Broad gene set, see http://www.broad.mit.edu/gsea/
 .BROAD_SEPARATOR = ","                  # not specficied in DTD
 
-.BroadXMLNodeToGeneSet_factory <- function(file) {
+.BroadXMLNodeToGeneSet_factory <- function(file, membersId="MEMBERS_SYMBOLIZED") {
     ## state
     .mkSplit <- function(x) {
         if (is.null(x)) character(0)
@@ -43,7 +43,7 @@
         args <- list(symbolId,
                      setName=attrs[["STANDARD_NAME"]],
                      setIdentifier=attrs[["SYSTEMATIC_NAME"]],
-                     geneIds=unique(.mkSplit(attrs[["MEMBERS_SYMBOLIZED"]])),
+                     geneIds=unique(.mkSplit(attrs[[membersId]])),
                      organism=attrs[["ORGANISM"]],
                      urls= c(getBroadSet=url,
                        .mkSplit(attrs[["EXTERNAL_DETAILS_URL"]])),
@@ -113,8 +113,12 @@ asBroadUri <- function(name,
     paste(base, "/", name, ".xml", sep="")
 }
 
-getBroadSets <- function(uri, ...) {
-    factories <- sapply(uri, .BroadXMLNodeToGeneSet_factory)
+getBroadSets <-
+    function(uri, ..., membersId=c("MEMBERS_SYMBOLIZED", "MEMBERS_EZID"))
+{
+    membersId <- match.arg(membersId)
+    factories <- sapply(uri, .BroadXMLNodeToGeneSet_factory,
+                        membersId=membersId)
     tryCatch({
         geneSets <- unlist(mapply(.fromXML, uri, "//GENESET", factories,
                                   SIMPLIFY=FALSE, USE.NAMES=FALSE))

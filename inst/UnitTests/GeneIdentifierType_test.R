@@ -304,11 +304,11 @@ test_GeneIdentifierType_mapIdentifiers_revMap <- function() {
     ## two-step maps
     gi <- GenenameIdentifier(pkg)
     sids <- c("IMAGINARY", "XPO1", "LBR")
-    checkEquals(list("exportin 1 (CRM1 homolog, yeast)" = "XPO1",
+    checkEquals(list("exportin 1" = "XPO1",
                      "lamin B receptor" = "LBR"),
                 f(sids, si, gi))
     sids <- c("MAP2", "XPO1", "LBR")
-    checkEquals(list("exportin 1 (CRM1 homolog, yeast)" = "XPO1",
+    checkEquals(list("exportin 1" = "XPO1",
                      "lamin B receptor" = "LBR",
                      "microtubule-associated protein 2" = "MAP2"),
                 f(sids, si, gi))

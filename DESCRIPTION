@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.27.0
+Version: 1.27.1
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
@@ -18,4 +18,4 @@ Collate: utilities.R AAA.R AllClasses.R AllGenerics.R getObjects.R
         methods-GeneColorSet.R methods-GeneIdentifierType.R
         methods-GeneSet.R methods-GeneSetCollection.R
         methods-OBOCollection.R
-biocViews: Infrastructure
+biocViews: GeneExpression, GeneSetEnrichment, GraphAndNetwork

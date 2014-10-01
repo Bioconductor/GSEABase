@@ -255,7 +255,8 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
               "filaggrin", "proline rich, lacrimal 1",
               "forkhead box I1", "ribosomal protein S18",
               "ribosomal protein L18",
-              "ADP-ribosylarginine hydrolase", "MAS1 oncogene" )
+              "ADP-ribosylarginine hydrolase",
+              "MAS1 proto-oncogene, G protein-coupled receptor")
 
     pkg <- "hgu95av2"
     ai <- AnnotationIdentifier(pkg)

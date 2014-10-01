@@ -59,18 +59,12 @@ setMethod("GeneSetCollection",
 .GSC_Pfam_helper <-
     function(ids, ..., idType, setType, which) # object: eSet
 {
-    map <- getAnnMap(toupper(collectionType(setType)), annotation(idType))
-    lst <- as.list(map[ids])
-    len <- sapply(lst, length)
-    keys <- rep(names(lst), len)
-    values <-
-        switch(which,
-               PfamId=unlist(lapply(lst, as.vector), use.names=FALSE),
-               IpiId=unlist(lapply(lst, function(elt) {
-                   nms <- names(elt)
-                   if (is.null(nms)) NA else nms
-               }), use.names=FALSE))
-    sets <- lapply(split(keys, values), unique)
+    which <- toupper(sub("Id$", "", which))
+    name <- annPkgName(annotation(idType))
+    map <- get(name, getNamespace(name))
+    values <- suppressWarnings(select(map, ids, which))
+    values <- values[!is.na(values[[2]]),, drop=FALSE]
+    sets <- lapply(split(values[[1]], values[[2]]), unique)
     collTypes <- .GSC_CollectionIdTypes(sets, setType)
     .GSC_CollectionType(sets, idType, collTypes, ...)
 }

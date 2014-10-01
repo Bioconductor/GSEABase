@@ -43,15 +43,17 @@ test_CollectionType_PfamCollection_ESet <-
     data(sample.ExpressionSet)
     eset <- sample.ExpressionSet
     idx <- 200:220
-    map <- getAnnMap("PFAM", annotation(eset))
-    tbl <- toTable(map[featureNames(eset)[idx]])
-    tbl <- tbl[!is.na(tbl$PfamId),]
+    tbl <- suppressWarnings({
+        require(annPkgName(annotation(eset)), character=TRUE)
+        select(get(annPkgName(annotation(eset))), featureNames(eset)[idx],
+               "PFAM")
+    })
+    tbl <- tbl[!is.na(tbl$PFAM),, drop=FALSE]
 
     gsc <- GeneSetCollection(eset[idx,], setType=PfamCollection())
-    checkIdentical(length(unique(tbl$PfamId)), length(gsc))
-    x <- with(tbl, lapply(split(probe_id, PfamId), unique))
-    checkIdentical(x[sort(names(x))],
-                   geneIds(gsc)[order(names(gsc))])
+    checkIdentical(length(unique(tbl$PFAM)), length(gsc))
+    x <- with(tbl, lapply(split(PROBEID, PFAM), unique))
+    checkIdentical(x[sort(names(x))], geneIds(gsc)[order(names(gsc))])
 }
 
 test_CollectionType_PrositeCollection_ESet <-
@@ -60,14 +62,17 @@ test_CollectionType_PrositeCollection_ESet <-
     data(sample.ExpressionSet)
     idx <- 200:220
     eset <- sample.ExpressionSet[idx,]
-    map <- getAnnMap("PROSITE", annotation(eset))
-    tbl <- toTable(map[featureNames(eset)])
-    tbl <- tbl[!is.na(tbl$ipi_id),]
+    tbl <- suppressWarnings({
+        require(annPkgName(annotation(eset)), character=TRUE)
+        select(get(annPkgName(annotation(eset))), featureNames(eset),
+               "IPI")
+    })
+    tbl <- tbl[!is.na(tbl$IPI),, drop=FALSE]
 
     gsc <- GeneSetCollection(eset, setType=PrositeCollection())
 
-    checkIdentical(length(unique(tbl$ipi_id)), length(gsc))
-    x <- with(tbl, lapply(split(probe_id, ipi_id), unique))
+    checkIdentical(length(unique(tbl$IPI)), length(gsc))
+    x <- with(tbl, lapply(split(PROBEID, IPI), unique))
     checkIdentical(x[sort(names(x))],
                    geneIds(gsc)[order(names(gsc))])
 }
@@ -94,17 +99,18 @@ test_CollectionType_PfamCollection_org <-
     function()
 {
     idx <- 1:10
-    map <- getAnnMap("PFAM", "org.Hs.eg")[idx]
-    ids <- ls(map)
-    tbl <- toTable(map)
+    map <- org.Hs.eg.db
+    ids <- keys(map)[idx]
+    tbl <- suppressWarnings(select(map, ids, "PFAM"))
+    tbl <- tbl[!is.na(tbl$PFAM),,drop=FALSE]
 
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=PfamCollection())
-    len <- with(tbl, length(unique(PfamId[!is.na(PfamId)])))
+    len <- with(tbl, length(unique(PFAM[!is.na(PFAM)])))
     checkIdentical(len, length(gsc))
-    gids <- unique(tbl[!is.na(tbl$PfamId),"gene_id"])
-    x <- with(tbl, split(gene_id, PfamId))
+    gids <- unique(tbl[!is.na(tbl$PFAM),"gene_id"])
+    x <- with(tbl, split(ENTREZID, PFAM))
     checkTrue(all(mapply(setequal, x, geneIds(gsc)[names(x)])))
 }
 
@@ -112,17 +118,17 @@ test_CollectionType_PrositeCollection_org <-
     function()
 {
     idx <- 1:10
-    map <- getAnnMap("PROSITE", "org.Hs.eg")[idx]
-    ids <- ls(map)
-    tbl <- toTable(map)
-    tbl <- tbl[!is.na(tbl[["ipi_id"]]),]
+    map <- org.Hs.eg.db
+    ids <- keys(map)[idx]
+    tbl <- suppressWarnings(select(map, ids, "IPI"))
+    tbl <- tbl[!is.na(tbl$IPI),,drop=FALSE]
 
     gsc <- GeneSetCollection(ids,
                              idType=AnnotationIdentifier("org.Hs.eg.db"),
                              setType=PrositeCollection())
 
-    checkIdentical(length(unique(tbl[["ipi_id"]])), length(gsc))
-    x <- with(tbl, lapply(split(gene_id, ipi_id), unique))
+    checkIdentical(length(unique(tbl[["IPI"]])), length(gsc))
+    x <- with(tbl, lapply(split(ENTREZID, IPI), unique))
     checkIdentical(x[order(names(x))],
                    geneIds(gsc)[order(names(gsc))])
 }

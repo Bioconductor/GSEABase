@@ -217,10 +217,16 @@
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER),
                            where = WHERE)
+            ## Ugly hack for "organism<-" (whose generic is defined in
+            ## BiocGenerics but not with the signature expected by the
+            ## code below). There must be a better way to deal with this.
+            ## Sorry for that! -- Herv\'e -- March 18, 2015
+            if (identical(SETTER, "organism<-"))
+                signature <- signature(object=CLASS)
+            else
+                signature <- signature(object=CLASS, value=VTYPE)
             setReplaceMethod(GENERIC,
-                             signature=signature(
-                               object=CLASS,
-                               value=VTYPE),
+                             signature=signature,
                              function(object, value) {
                                  slot(object, SLOT) <- VALUE
                                  `slot<-`(object, "setIdentifier",

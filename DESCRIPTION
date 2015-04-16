@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.30.0
+Version: 1.31.0
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>

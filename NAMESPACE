@@ -3,7 +3,7 @@
 
 #Imports: annotate, AnnotationDbi, Biobase, graph, methods, XML
 
-importClassesFrom(AnnotationDbi, AnnDbBimap)
+importClassesFrom(AnnotationDbi, AnnDbBimap, GOAllFrame, KEGGFrame)
 
 importClassesFrom(Biobase, ExpressionSet, ScalarCharacter, Versions)
 
@@ -12,7 +12,10 @@ importClassesFrom(graph, graphNEL)
 importClassesFrom(methods, ANY, character, data.frame, environment,
                   factor, list, logical, missing, numeric)
 
-importMethodsFrom(AnnotationDbi, as.list, mget, Ontology, revmap, Term)
+importMethodsFrom(AnnotationDbi, as.list, colnames, get,
+                  getGOFrameData, getKEGGFrameData, ls, mappedLkeys,
+                  mappedRkeys, mget, nrow, Ontology, revmap, sample,
+                  select, Term, toTable)
 
 importMethodsFrom(Biobase, featureNames)
 

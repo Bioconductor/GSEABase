@@ -87,7 +87,7 @@ test_obo_as_graphNEL <- function() {
     checkEquals(41, length(ids(x)))
     g1 <- as(x, "graphNEL")
     checkEquals(41, length(nodes(g1)))
-    checkEquals(28, length(unlist(edges(g1))))
+    checkEquals(30, length(unlist(edges(g1))))
     checkIdentical(g, g1)
     checkIdentical(x, as(g1, "OBOCollection"))
 }

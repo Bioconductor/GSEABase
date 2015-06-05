@@ -189,7 +189,7 @@ setAs("OBOCollection", "graphNEL",
           s <- .stanza(from)
           k <- .kv(from)
           nodes <- .OBOids(s)
-          edgeL <- rep(list(list(edges=numeric())), length(nodes))
+          edgeL <- rep(list(list(edges=integer())), length(nodes))
           names(edgeL) <- nodes
           df <- k[k$key=="is_a" & k$value %in% nodes,
                   !names(k)=="key",drop=FALSE]

@@ -1,1 +1,1 @@
-BiocGenerics:::testPackage("GSEABase", "UnitTests", "*_test.R")
+BiocGenerics:::testPackage("GSEABase")

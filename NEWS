@@ -1,10 +1,15 @@
 CHANGES IN VERSION 1.31
+-----------------------
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Support 'h' Broad set
 
------------------------
+BUG FIXES
+---------
+
+    o as(OBOCollection, "graphNEL") failed to include multiple
+    children
 
 CHANGES IN VERSION 1.23
 -----------------------

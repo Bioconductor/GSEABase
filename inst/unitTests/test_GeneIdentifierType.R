@@ -247,12 +247,12 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     eids <- c("3604", "5275", "2312", "58503", "2299", "6222", "6141",
               "141", "4142")
 
-    sids <- c("TNFRSF9", "SERPINB13", "FLG", "PROL1", "FOXI1",
+    sids <- c("TNFRSF9", "SERPINB13", "FLG", "OPRPN", "FOXI1",
               "RPS18", "RPL18", "ADPRH", "MAS1")
 
-    gids <- c("tumor necrosis factor receptor superfamily, member 9",
+    gids <- c("tumor necrosis factor receptor superfamily member 9",
               "serpin peptidase inhibitor, clade B (ovalbumin), member 13",
-              "filaggrin", "proline rich, lacrimal 1",
+              "filaggrin",  "opiorphin prepropeptide",
               "forkhead box I1", "ribosomal protein S18",
               "ribosomal protein L18",
               "ADP-ribosylarginine hydrolase",
@@ -269,7 +269,7 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     checkEquals(sids, f(f(aids, ai, ei), ei, si))
 
     pkg <- "org.Hs.eg.db"
-    sids <- c("TNFRSF9", "SERPINB13", "FLG", "PROL1", "FOXI1",
+    sids <- c("TNFRSF9", "SERPINB13", "FLG", "OPRPN", "FOXI1",
               "RPS18", "RPL18", "ADPRH", "MAS1")
     ei <- EntrezIdentifier(pkg)
     si <- SymbolIdentifier(pkg)
@@ -311,7 +311,7 @@ test_GeneIdentifierType_mapIdentifiers_revMap <- function() {
     sids <- c("MAP2", "XPO1", "LBR")
     checkEquals(list("exportin 1" = "XPO1",
                      "lamin B receptor" = "LBR",
-                     "microtubule-associated protein 2" = "MAP2"),
+                     "microtubule associated protein 2" = "MAP2"),
                 f(sids, si, gi))
 }
 

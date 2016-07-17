@@ -95,9 +95,9 @@ setMethod("show",
                          c4="c4 (Computational)",
                          c5="c5 (GO)",
                          c6="c6 (Oncogenic Pathway Activation Modules)",
-                         c7="c7 (Immunologic Signatures)"),
-                         h="h (Hallmark)", "\n",
-                  "  bcSubCategory:  ", bcSubCategory(object), "\n", sep="")
+                         c7="c7 (Immunologic Signatures)",
+                         h="h (Hallmark)"), "\n",
+                  "  bcSubCategory: ", bcSubCategory(object), "\n", sep="")
           })
 
 ## CollectionIdType

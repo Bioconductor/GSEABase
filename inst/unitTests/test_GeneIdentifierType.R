@@ -116,7 +116,7 @@ test_GeneIdentifierType_mapIdentifiers_AnnDbBimap <- function() {
     gs <- mapIdentifiers(GeneSet("4214"), SymbolIdentifier(),
                          org.Hs.egSYMBOL)
     checkIdentical("MAP3K1", geneIds(gs))
-    checkIdentical(mkScalar("Symbol"), geneIdType(geneIdType(gs)))
+    checkIdentical("Symbol", geneIdType(geneIdType(gs)))
 }
 
 test_GeneIdentifierType_mapIdentifiers_verbose_warnings <-

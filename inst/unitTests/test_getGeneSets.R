@@ -18,10 +18,8 @@ test_getBroadSets2 <- function() {
     checkIdentical(length(geneIds(gs)), 129L)
     checkTrue(geneIds(gs)[length(geneIds(gs))]=="TRAPPC2L")
     checkTrue(class(geneIdType(gs))=="SymbolIdentifier")
-    checkIdentical(collectionType(gs),
-                   new("BroadCollection",
-                       category=mkScalar("c1"),
-                       subCategory=mkScalar(as.character(NA))))
+    exp <- new("BroadCollection", category="c1", subCategory=NA_character_)
+    checkIdentical(collectionType(gs), exp)
     checkTrue(nchar(description(gs))==34)
     checkIdentical(description(gs), longDescription(gs))
     checkTrue(organism(gs)=="Human")

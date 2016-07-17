@@ -48,8 +48,8 @@ test_GS_MakeNoType <- function() {
                   contributor="A.U. Thor")
 
     ## Basic accessor testing
-    checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), setName(gs))
+    checkEquals("unique!", setIdentifier(gs))
+    checkEquals("TestSet", setName(gs))
 
     do_GeneSet_getter_check(gs)
     do_GeneSet_setter_check(gs)
@@ -66,8 +66,8 @@ test_GS_MakeString <- function() {
                   pubMedIds=c("1", "2"),
                   urls=c("http://bioconductor.org"),
                   contributor="A.U. Thor")
-    checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), setName(gs))
+    checkEquals("unique!", setIdentifier(gs))
+    checkEquals("TestSet", setName(gs))
 
     do_GeneSet_getter_check(gs)
     do_GeneSet_setter_check(gs)
@@ -85,8 +85,8 @@ test_GS_MakeType <- function() {
                   urls=c("http://bioconductor.org"),
                   contributor="A.U. Thor")
 
-    checkEquals(mkScalar("unique!"), setIdentifier(gs))
-    checkEquals(mkScalar("TestSet"), setName(gs))
+    checkEquals("unique!", setIdentifier(gs))
+    checkEquals("TestSet", setName(gs))
 
     do_GeneSet_getter_check(gs)
     do_GeneSet_setter_check(gs)
@@ -187,6 +187,8 @@ test_GS_uniqueSetIdentifier <- function() {
 
     setters <- GSEABase:::.nameAll(GSEABase:::.SETTERS_GeneSet)
     for (s in names(setters)) {
+        if (s == "setIdentifier")
+            next
         ss <- paste(s, "<-", sep="")
         obj <- do.call(ss,
                        list(gs, new(class(slot(gs, setters[[s]])))))

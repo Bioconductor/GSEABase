@@ -1,9 +1,17 @@
 ## Placeholder 'till something appropriate decided
-.uniqueIdentifier <- function()
-{
-    paste(Sys.info()['nodename'], Sys.getpid(), Sys.time(),
-          sample(.Machine$integer.max, 1), sep=":")
-}
+.uniqueIdentifier <- local({
+    node <- NULL
+    pid <- NULL
+    uid <- 0L
+    function() {
+        if (is.null(node)) {
+            node <<- Sys.info()['nodename']
+            pid <<- Sys.getpid()
+        }
+        uid <<- uid + 1L
+        base::paste(node, pid, date(), uid, sep=":")
+    }
+})
 
 ## simplified unique for vectors, preserving attributes
 .unique <- function(x, y) c(x, y[!(y %in% x)])

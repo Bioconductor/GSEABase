@@ -410,7 +410,7 @@ setMethod("names",
 ## [, [[
 
 .characterToIndex <- function(x, i) {
-    if (any(duplicated(i)))
+    if (anyDuplicated(i))
         .stopf("duplicate setNames not allowed: '%s'",
                paste(i[duplicated(i)], collapse="', '"))
     idx <- pmatch(i, names(x))
@@ -441,7 +441,7 @@ setMethod("[",
             x="GeneSetCollection",
             i="numeric"),
           function(x, i, j, ..., drop=TRUE) {
-              if (any(duplicated(i)))
+              if (anyDuplicated(i))
                   .stopf("duplicate index not allowed: '%s'",
                          paste(i[duplicated(i)], collapse="', '"))
               if (any(i > length(x)))

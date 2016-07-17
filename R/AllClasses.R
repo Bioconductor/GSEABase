@@ -22,16 +22,18 @@
         classId <- paste(class, "Identifier", sep="")
         setClass(classId,
                  contains = contains,
-                 prototype = prototype(
-                   type = new("ScalarCharacter", class)),
+                 prototype = prototype(type = mkScalar(class)),
                  where = where)
     }
 
     setClass("GeneIdentifierType",
              contains="VIRTUAL",
              representation=representation(
-               type = "ScalarCharacter",
-               annotation = "ScalarCharacter"),
+               type = "character",
+               annotation = "character"),
+             prototype=prototype(
+               type="",
+               annotation=""),
              where=where)
     .getters("GeneIdentifierType", c(geneIdType="type"), where=where)
     .setters("GeneIdentifierType", "annotation", where=where)
@@ -45,12 +47,12 @@
     setClass("AnnotationIdentifier",    # 'annotation' slot
              contains = c("GeneIdentifierType"),
              prototype = prototype(
-               type = new("ScalarCharacter", "Annotation")),
+                 type = mkScalar("Annotation")),
              where = where)
     setClass("EntrezIdentifier",        # special 'type'
              contains = "GeneIdentifierType",
              prototype = prototype(
-               type = new("ScalarCharacter", "EntrezId")),
+                 type = mkScalar("EntrezId")),
              where = where)
     idTypes <- names(slot(getClass("GeneIdentifierType"), "subclasses"))
     .constructors_Simple(idTypes, optional="annotation", where=where)
@@ -74,13 +76,14 @@ AnnoOrEntrezIdentifier <-
 ## Special class of Identifier for GOAllFrames
 setClass("GOAllFrameIdentifier",
          contains="GeneIdentifierType",
-         representation=representation(organism="ScalarCharacter"))  
+         representation=representation(organism="character"),
+         prototype=prototype(organism=mkScalar("")))
 
 ## Special class of Identifier for KEGGFrames
 setClass("KEGGFrameIdentifier",
          contains="GeneIdentifierType",
-         representation=representation(organism="ScalarCharacter"))  
-
+         representation=representation(organism="character"),
+         prototype=prototype(organism=mkScalar("")))
 
 ## CollectionType
 .CollectionClasses <- function(where) {
@@ -88,16 +91,15 @@ setClass("KEGGFrameIdentifier",
         classCollection <- paste(class, "Collection", sep="")
         setClass(classCollection,
                  contains = contains,
-                 prototype = prototype(
-                   type = new("ScalarCharacter", class)),
+                 prototype = prototype(type = mkScalar(class)),
                  where = where)
     }
 
     ## simple collections
     setClass("CollectionType",
              contains = "VIRTUAL",
-             representation = representation(
-               type = "ScalarCharacter"),
+             representation = representation(type = "character"),
+             prototype=prototype(type = mkScalar("")),
              where = where)
 
     simpleCollections <- c("Null", "ExpressionSet", "Computed")
@@ -123,7 +125,7 @@ setClass("KEGGFrameIdentifier",
                evidenceCode="character",
                ontology="character"),
              prototype = prototype(
-               type = new("ScalarCharacter", "GO"),
+               type = mkScalar("GO"),
                evidenceCode = NA_character_,
                ontology = NA_character_),
              where = where)
@@ -135,7 +137,7 @@ setClass("KEGGFrameIdentifier",
                .subset="data.frame",
                .kv="data.frame"),
              prototype=prototype(
-               type=new("ScalarCharacter", "OBO"),
+               type=mkScalar("OBO"),
                .stanza=data.frame(id=character(0),
                  value=character(0), row.names="id"),
                .subset=data.frame(id=character(0),
@@ -148,12 +150,12 @@ setClass("KEGGFrameIdentifier",
     setClass("BroadCollection",
              contains = "CollectionType",
              representation = representation(
-               category = "ScalarCharacter",
-               subCategory = "ScalarCharacter"),
+               category = "character",
+               subCategory = "character"),
              prototype = prototype(
-               type = new("ScalarCharacter", "Broad"),
-               category = new("ScalarCharacter", "c1"),
-               subCategory = new("ScalarCharacter", as.character(NA))),
+               type = mkScalar("Broad"),
+               category = mkScalar("c1"),
+               subCategory = mkScalar(NA_character_)),
              where = where)
 
     ## constructors / getters / setters
@@ -179,11 +181,11 @@ setClass("GeneSet",
            geneIdType = "GeneIdentifierType",
            geneIds = "character",
            ## Descriptive metadata
-           setName = "ScalarCharacter",
-           setIdentifier = "ScalarCharacter",
-           shortDescription = "ScalarCharacter",
-           longDescription = "ScalarCharacter",
-           organism = "ScalarCharacter",
+           setName = "character",
+           setIdentifier = "character",
+           shortDescription = "character",
+           longDescription = "character",
+           organism = "character",
            pubMedIds = "character",
            urls = "character",
            contributor = "character",
@@ -191,13 +193,16 @@ setClass("GeneSet",
            creationDate = "character",
            collectionType = "CollectionType"),
          prototype = prototype(
-           setName = new("ScalarCharacter", NA),
-           setIdentifier = new("ScalarCharacter", NA),
+           setName = mkScalar(NA_character_),
+           setIdentifier = mkScalar(NA_character_),
+           shortDescription = mkScalar(""),
+           longDescription = mkScalar(""),
+           organism = mkScalar(""),
            geneIdType = new("NullIdentifier"),
            version = new("Versions", "0.0.1"),
            collectionType = new("NullCollection")),
          validity = function(object) {
-             if (any(duplicated(geneIds(object))))
+             if (anyDuplicated(geneIds(object)))
                  "gene symbols must be unique"
              else
                  TRUE
@@ -206,9 +211,11 @@ setClass("GeneSet",
 setClass("GeneColorSet",
          contains = "GeneSet",
          representation = representation(
-           phenotype = "ScalarCharacter",
+           phenotype = "character",
            geneColor = "factor",
            phenotypeColor = "factor"),
+         prototype=prototype(
+           phenotype=mkScalar("")),
          validity = function(object) {
              msg <- NULL
              clen <- c(length(geneColor(object)),
@@ -233,7 +240,7 @@ setClass("GeneSetCollection",
              if (!all(sapply(object, is, "GeneSet")))
                  msg <- c(msg, "members must all be 'GeneSet' classes")
              tryCatch({
-                 if (any(duplicated(names(object))))
+                 if (anyDuplicated(names(object)))
                      msg <- c(msg, "each setName must be distinct")
                  }, error=function(err) {
                      msg <<- c(msg, conditionMessage(err))

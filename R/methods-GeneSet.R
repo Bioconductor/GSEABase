@@ -1,62 +1,5 @@
 .constructors_GeneSet("GeneSet", required=character(0))
 
-## Rationale: 'initialize' is always called with .Object, constructed
-## from the object prototype. The documentation for 'new' indicates
-## that an un-named argument will be 'from [a] class[es] that this
-## class extends', with the intention that unnamed arguments serve as
-## templates to over-ride prototypes, but be over-written by specific
-## named (slot) arguments.
-## 
-## Partial matching means that a named argument before ... without a
-## corresponding named argument in a call to 'new' will pick up the
-## template. To circumvent this partial matching, all named (slot)
-## arguments in initialize should come _after_ ...
-## 
-## Template slots are meant to over-ride default slots provided in the
-## prototype.  Named arguments requiring defaults need to capture
-## these values from the template, rather than from the
-## prototype. Providing a second argument before ..., called
-## .Template, captures the (first) template argument, and named
-## arguments after ... use this for defaults, rather than
-## .Object. Since the template may not always be provided, .Template
-## is in turn supplied with a default, i.e., .Object.
-## 
-## There are two additional outcomes of this scheme.
-## 
-## It is possible to use 'new' to update multiple slots, new('Obj',
-## <obj>, slot1=<>, slot2=<>). This can be an efficient way to update
-## many slots simultaneously, since 'new' is now relatively efficient
-## in slot assignments (avoiding most unnecessary copying).
-## 
-## This also provides a way to perform 'atomic' updates, so that it is
-## not necessary to construct invalid objects in the process of
-## complex transformations.
-## 
-## An alternative approach would use named arguments to capture any
-## incoming arguments before a .Object <- callNextMethod(.Object,
-## ...), followed by slot assignment to .Object. This implies copying
-## for each assignment, and precludes certain types of validity
-## checking (e.g., when a named argument is meant to be 'required')
-
-setMethod("initialize",
-          signature=signature(.Object="GeneSet"),
-          function(.Object, .Template=.Object, ...,
-                   ## additional args, manipulated by method
-                   setIdentifier=.uniqueIdentifier(),
-                   setName=.Template@setName,
-                   shortDescription=.Template@shortDescription,
-                   longDescription=.Template@longDescription,
-                   organism=.Template@organism,
-                   creationDate=date()) {
-              callNextMethod(.Object, .Template, ...,
-                             setIdentifier=mkScalar(setIdentifier),
-                             setName=mkScalar(setName),
-                             shortDescription=mkScalar(shortDescription),
-                             longDescription=mkScalar(longDescription),
-                             organism=mkScalar(organism),
-                             creationDate = creationDate)
-          })
-
 .GETTERS_GeneSet <- c("geneIdType", "geneIds", "setIdentifier",
                       "setName", description="shortDescription",
                       "longDescription", "organism", "pubMedIds", "urls",
@@ -103,7 +46,7 @@ setMethod("[",
           signature=signature(
             x="GeneSet", i="numeric"),
           function(x, i, j, ..., drop=TRUE) {
-              if (any(duplicated(i)))
+              if (anyDuplicated(i))
                   stop("duplicate index: ",
                        paste(i[duplicated(i)], collapse=" "))
               geneIds <- geneIds(x)[i]
@@ -168,7 +111,9 @@ setMethod("$",
         setName=.glue(setName(x), setName(y), " & "),
         urls=.unique(urls(x), urls(y)),
         geneIds=intersect(geneIds(x), geneIds(y)),
-        collectionType=intersect(collectionType(x), collectionType(y)))
+        collectionType=intersect(collectionType(x), collectionType(y)),
+        setIdentifier=.uniqueIdentifier(),
+        creationDate=date())
 }
 
 .geneSetUnion <- function(x, y) {
@@ -177,7 +122,9 @@ setMethod("$",
         setName=.glue(setName(x), setName(y), " | "),
         urls = .unique(urls(x), urls(y)),
         geneIds=union(geneIds(x), geneIds(y)),
-        collectionType=union(collectionType(x), collectionType(y)))
+        collectionType=union(collectionType(x), collectionType(y)),
+        setIdentifier=.uniqueIdentifier(),
+        creationDate=date())
 }
 
 setMethod("intersect",
@@ -198,7 +145,9 @@ setMethod("&",
               geneIds <- intersect(geneIds(e1), e2)
               new(class(e1), e1,
                   setName=.glue(setName(e1), "<character>", " & "),
-                  geneIds=geneIds)
+                  geneIds=geneIds,
+                  setIdentifier=.uniqueIdentifier(),
+                  creationDate=date())
           })
 
 setMethod("|",
@@ -211,7 +160,9 @@ setMethod("|",
               geneIds <- union(geneIds(e1), e2)
               new(class(e1), e1,
                   setName=.glue(setName(e1), "<character>", " | "),
-                  geneIds=geneIds)
+                  geneIds=geneIds,
+                  setIdentifier=.uniqueIdentifier(),
+                  creationDate=date())
           })
 
 setMethod("Logic",
@@ -226,7 +177,9 @@ setMethod("setdiff",
               new(class(x), x,
                   setName=.glue(setName(x), setName(y), " - "),
                   geneIds=setdiff(geneIds(x), geneIds(y)),
-                  collectionType=setdiff(collectionType(x), collectionType(y)))
+                  collectionType=setdiff(collectionType(x), collectionType(y)),
+                  setIdentifier=.uniqueIdentifier(),
+                  creationDate=date())
           })
 
 ## incidence
@@ -268,7 +221,9 @@ setMethod("mapIdentifiers",
             to="GeneIdentifierType",
             from="NullIdentifier"),
           function(what, to, from, ..., verbose=FALSE) {
-              initialize(what, geneIdType=to)
+              initialize(what, geneIdType=to,
+                         setIdentifier=.uniqueIdentifier(),
+                         creationDate=date())
           })
 
 setMethod("mapIdentifiers",
@@ -277,7 +232,9 @@ setMethod("mapIdentifiers",
             to="NullIdentifier",
             from="GeneIdentifierType"),
           function(what, to, from, ..., verbose=FALSE) {
-              initialize(what, geneIdType=to)
+              initialize(what, geneIdType=to,
+                         setIdentifier=.uniqueIdentifier(),
+                         creationDate=date())
           })
           
 setMethod("mapIdentifiers",
@@ -293,7 +250,9 @@ setMethod("mapIdentifiers",
               ids <- geneIds(what)
               ids <- .mapIdentifiers_map(ids, type[[1]], type[[2]],
                                          verbose)
-              initialize(what, geneIds=ids, geneIdType=type[[2]])
+              initialize(what, geneIds=ids, geneIdType=type[[2]],
+                         setIdentifier=.uniqueIdentifier(),
+                         creationDate=date())
           })
 
 setMethod("mapIdentifiers",
@@ -306,7 +265,10 @@ setMethod("mapIdentifiers",
               ids <- doMap(geneIds(what), from,
                            "environment", "user-supplied environment",
                            verbose=verbose)
-              initialize(what, geneIds=ids, geneIdType=to)
+              initialize(what, geneIds=ids, geneIdType=to,
+                         setIdentifier=.uniqueIdentifier(),
+                         creationDate=date())
+
           })
 
 setMethod("mapIdentifiers",
@@ -319,7 +281,9 @@ setMethod("mapIdentifiers",
               ids <- doMap(geneIds(what), from,
                            deparse(substitute(from)),
                            "user-supplied AnnDbBimap", verbose=verbose)
-              initialize(what, geneIds=ids, geneIdType=to)
+              initialize(what, geneIds=ids, geneIdType=to,
+                         setIdentifier=.uniqueIdentifier(),
+                         creationDate=date())
           })
 
 ## toGmt

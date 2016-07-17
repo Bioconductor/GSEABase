@@ -95,7 +95,7 @@ setMethod("[",
           signature=signature(
             x="GeneColorSet", i="numeric"),
           function(x, i, j, ..., drop=TRUE) {
-              if (any(duplicated(i)))
+              if (anyDuplicated(i))
                   stop("duplicate index: ",
                        paste(i[duplicated(i)], collapse=" "))
               geneIds <- geneIds(x)[i]

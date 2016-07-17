@@ -169,11 +169,10 @@ getGmt <- function(con,
     if (length(dups))
         .warningf("%d record(s) contain duplicate ids: %s",
                   length(dups), selectSome(sort(ls(dups))))
+    template <- GeneSet(geneIdType=geneIdType, collectionType=collectionType)
     GeneSetCollection(lapply(lines, function(line) {
-        GeneSet(unlist(line[-(1:2)]),
-                geneIdType=geneIdType,
-                collectionType=collectionType,
-                setName=line[[1]],
-                shortDescription=line[[2]])
+        initialize(template, geneIds=unlist(line[-(1:2)]),
+                   setName=line[[1]], shortDescription=line[[2]],
+                   setIdentifier=.uniqueIdentifier())
     }))
 }

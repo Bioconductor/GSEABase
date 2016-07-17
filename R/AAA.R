@@ -1,3 +1,10 @@
+mkScalar <- function(x) {
+    if (length(x) != 1L)
+        stop("expected length 1, object has length ", length(x), ": ",
+             "\n  ", paste(head(x), collapse=", "))
+    x[1]
+}
+
 .checkRequired <- function(required, provided) {
     idx <- which(!(required %in% provided))
     if (length(idx) > 0)
@@ -170,28 +177,15 @@
                 setGeneric(SETTER, function(object, value)
                            standardGeneric(SETTER),
                            where = WHERE)
-            if (getSlots(CLASS)[[SLOT]] == "ScalarCharacter")
-                setReplaceMethod(GENERIC,
-                                 signature=signature(
-                                   object=CLASS,
-                                   value="character"),
-                                 function(object, value) {
-                                     slot(object, SLOT) <- mkScalar(value)
-                                     validObject(object)
-                                     object
-                                 },
-                                 where = WHERE)
-            else
-                setReplaceMethod(GENERIC,
-                                 signature=signature(
-                                   object=CLASS,
-                                   value=getSlots(CLASS)[[SLOT]]),
-                                 function(object, value) {
-                                     slot(object, SLOT) <- value
-                                     validObject(object)
-                                     object
-                                 },
-                                 where = WHERE)
+            setReplaceMethod(GENERIC,
+                             signature=signature(
+                                 object=CLASS, value=getSlots(CLASS)[[SLOT]]),
+                             function(object, value) {
+                slot(object, SLOT) <- value
+                validObject(object)
+                object
+            },
+            where = WHERE)
         }, list(CLASS=klass,
                 GENERIC=names(slots)[[i]],
                 SETTER=paste(names(slots)[[i]], "<-", sep=""),
@@ -206,12 +200,7 @@
     slots <- .nameAll(slots)
     for (i in seq(along=slots)) {
         vtype <- getSlots(klass)[[ slots[[i]] ]]
-        if (vtype == "ScalarCharacter") {
-            vtype <- "character"
-            value <- quote(mkScalar(value))
-        } else {
-            value <- quote(value)
-        }
+        value <- quote(value)
         eval(substitute({
             if (!isGeneric(SETTER))
                 setGeneric(SETTER, function(object, value)

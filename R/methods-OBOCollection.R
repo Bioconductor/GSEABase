@@ -5,7 +5,7 @@ OBOCollection <- function(ids=character(0),
                           ontology="ANY", ...) {
     evidenceCode <- .checkGOEvidenceCodes(evidenceCode)
     ontology <- .checkGOOntologyCode(ontology)
-    if (any(duplicated(ids)))
+    if (anyDuplicated(ids))
         .stopf("OBO 'ids' contains duplicates: %s",
                paste(ids[duplicated(ids)], collapse=" "))
     .stanza <- data.frame(ids,
@@ -291,7 +291,7 @@ setMethod("goSlim",
           function(idSrc, slimCollection, ontology, evidenceCode="ANY", ...,
                    verbose=FALSE) {
               map <- .getAnnMap(idSrc, "GO")
-              res <- mget(featureNames(sample.ExpressionSet), map)
+              res <- mget(featureNames(idSrc), map)
               res <- res[!is.na(res)]
               gids <- unlist(lapply(res, subListExtract, "GOID"))
               ecode <- unlist(lapply(res, subListExtract, "Evidence"))

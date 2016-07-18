@@ -27,3 +27,16 @@ test_getBroadSets2 <- function() {
               urls(gs) == "http://genome.ucsc.edu/cgi-bin/hgTracks?position=16q24")
     checkTrue(contributor(gs) == "Broad Institute")
 }
+
+test_getGmt <- function() {
+    gmtText <- c(
+        "KEGG_GLYCOLYSIS_GLUCONEOGENESIS\thttp://www.broadinstitute.org/gsea/msigdb/cards/KEGG_GLYCOLYSIS_GLUCONEOGENESIS\tACSS2\tGCK\tPGK2\tPGK1",
+        "KEGG_CITRATE_CYCLE_TCA_CYCLE\thttp://www.broadinstitute.org/gsea/msigdb/cards/KEGG_CITRATE_CYCLE_TCA_CYCLE\tIDH3B\tDLST\tPCK2" )
+    gs <- getGmt(textConnection(gmtText))
+    checkIdentical(
+        c("KEGG_GLYCOLYSIS_GLUCONEOGENESIS", "KEGG_CITRATE_CYCLE_TCA_CYCLE"),
+        names(gs))
+    checkIdentical(
+        list(c("ACSS2", "GCK", "PGK2", "PGK1"), c("IDH3B", "DLST", "PCK2")),
+        lapply(gs, geneIds))
+}

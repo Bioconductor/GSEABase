@@ -297,18 +297,17 @@ setMethod("GeneSetCollection",
     ugenes <- lapply(genes, unique)
     ugenes <- ugenes[sapply(ugenes, length) != 0]
     organism <- organism(idType)
+    coll_template <- GOCollection(
+        evidenceCode=evidenceCode(setType),
+        ontology=ontology(setType))
+    gs_template <- GeneSet(geneIdType=idType, organism=organism)
     gss <- mapply(function(ids, setName, collectionType, ...) {
-        GeneSet(ids,
-                setName=setName,
-                collectionType=GOCollection(
-                  ids=setName,
-                  evidenceCode=evidenceCode(collectionType),
-                  ontology=ontology(collectionType)),
-                ...)
+        collectionType <- initialize(coll_template, ids=setName)
+        initialize(gs_template, setName=setName, geneIds=ids,
+                   collectionType=collectionType,
+                   setIdentifier=.uniqueIdentifier(), ...)
     }, ugenes, setName=names(ugenes), MoreArgs=list(
-                                collectionType=setType,
-                                geneIdType=idType,
-                                organism=organism, ...))
+                                          collectionType=setType, ...))
     GeneSetCollection(gss)
 }
 

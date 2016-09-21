@@ -35,10 +35,14 @@
     x
 }
 
-.stopf <- function(...)
-    stop(simpleError(sprintf(...),
-                     call=match.call(call=sys.call(sys.parent(1)))))
+.stopf <- function(...) {
+    call <- match.call(call=sys.call(sys.parent(1)))
+    msg <- paste(sprintf(...), collapse="\n")
+    stop(simpleError(msg, call=call))
+}
 
-.warningf <- function(...)
-    warning(simpleWarning(sprintf(...),
-                          call=match.call(call=sys.call(sys.parent(1)))))
+.warningf <- function(...) {
+    call <- match.call(call=sys.call(sys.parent(1)))
+    msg <- paste(sprintf(...), collapse="\n")
+    warning(simpleWarning(msg, call=call))
+}

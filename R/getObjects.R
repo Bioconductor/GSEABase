@@ -133,7 +133,7 @@ getBroadSets <-
 toBroadXML <- function(geneSet, con = NULL, ...) {
     if (!is(collectionType(geneSet), "BroadCollection"))
         .stopf("toBroadXML requires 'BroadCollection', got '%s'",
-               class(collectionType(geneSet)))
+               paste(class(collectionType(geneSet)), collapse=" "))
     tryCatch({
         .toXML(geneSet, .GeneSetToBroadXMLNode, con=con, ...)
     }, error=function(err) {
@@ -153,11 +153,12 @@ getGmt <- function(con,
                    geneIdType=NullIdentifier(),
                    collectionType=NullCollection(), sep="\t", ...) {
     lines <- strsplit(readLines(con, ...), sep)
-    if (any(sapply(lines, length)<2))
-        .stopf("all records in the GMT file must have >= 2 fields",
-               "\n  first invalid line:  ",
-               lines[sapply(lines, length)<2][[1]],
-               "\n")
+    if (any(sapply(lines, length)<2)) {
+        txt <- paste(
+            "all records in the GMT file must have >= 2 fields",
+            "\n  first invalid line:  %s\n", collpase="")
+        .stopf(txt, lines[sapply(lines, length)<2][[1]])
+    }
     dups <- new.env(parent=emptyenv())
     lines <- lapply(lines, function(elt, dups) {
         if (any(d <- duplicated(elt[-(1:2)]))) {
@@ -168,7 +169,8 @@ getGmt <- function(con,
     }, dups)
     if (length(dups))
         .warningf("%d record(s) contain duplicate ids: %s",
-                  length(dups), selectSome(sort(ls(dups))))
+                  length(dups),
+                  paste(selectSome(sort(ls(dups))), collapse=", "))
     template <- GeneSet(geneIdType=geneIdType, collectionType=collectionType)
     GeneSetCollection(lapply(lines, function(line) {
         initialize(template, geneIds=unlist(line[-(1:2)]),

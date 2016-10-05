@@ -217,13 +217,13 @@ test_GSC_GOCollection_ontology <- function() {
     eids <- as.character(1:2)
     setType <- GOCollection()
     gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
-    checkIdentical(length(gsc), 29L)
+    checkIdentical(length(gsc), 27L)
     tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
-    checkIdentical(as.integer(tbl), c(12L, 6L, 11L))
+    checkIdentical(as.integer(tbl), c(9L, 6L, 12L))
 
     setType <- GOCollection(ontology="BP")
     gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
-    checkIdentical(length(gsc), 12L)
+    checkIdentical(length(gsc), 9L)
     tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
-    checkIdentical(as.integer(tbl), 12L)
+    checkIdentical(as.integer(tbl), 9L)
 }

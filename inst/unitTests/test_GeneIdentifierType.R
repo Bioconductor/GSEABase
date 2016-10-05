@@ -250,8 +250,8 @@ test_GeneIdentifierType_mapIdentifiers_map <- function() {
     sids <- c("TNFRSF9", "SERPINB13", "FLG", "OPRPN", "FOXI1",
               "RPS18", "RPL18", "ADPRH", "MAS1")
 
-    gids <- c("tumor necrosis factor receptor superfamily member 9",
-              "serpin peptidase inhibitor, clade B (ovalbumin), member 13",
+    gids <- c("TNF receptor superfamily member 9",
+              "serpin family B member 13",
               "filaggrin",  "opiorphin prepropeptide",
               "forkhead box I1", "ribosomal protein S18",
               "ribosomal protein L18",

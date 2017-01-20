@@ -166,7 +166,7 @@ Class \code{"\link[Biobase:class.AssayData]{AssayData}"}, by class "list", dista
       compact representation of \code{object}.}
   }
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\linkS4class{GeneSet}}, \code{\linkS4class{GeneColorSet}}.
 }

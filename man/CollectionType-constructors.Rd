@@ -69,7 +69,7 @@ BroadCollection(category, subCategory=NA, ...)
   An object of the same class as the function name, initialized as
   appropriate for the collection.
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\linkS4class{CollectionType}}, 
 }

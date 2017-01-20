@@ -240,7 +240,7 @@
       internally during gene set construction.}
   }
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\linkS4class{GeneColorSet}}
   \code{\linkS4class{CollectionType}}

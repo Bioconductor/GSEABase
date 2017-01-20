@@ -83,7 +83,7 @@
   }
 }
 
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\link{OBOCollection}} constructor; 
   \code{\linkS4class{CollectionType}} classes.

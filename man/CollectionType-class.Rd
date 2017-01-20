@@ -232,7 +232,7 @@
   }
 }
 
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\link{CollectionType}} consturctors; \code{\link{getBroadSets}}
   for importing collections from the Broad (and sources).

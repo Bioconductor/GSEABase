@@ -132,7 +132,7 @@
   differs between sets; this implies coercion of factor levels, and the
   consequences should be carefully considered.
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>} 
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>} 
 \seealso{
   \code{\linkS4class{GeneSet}}.
 }

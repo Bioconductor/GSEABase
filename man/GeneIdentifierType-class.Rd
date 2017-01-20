@@ -99,7 +99,7 @@
       this object.}
   }
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
    The example below lists \code{GeneIdentifierType} classes defined in
    this package; See the help pages of these classes for specific information.

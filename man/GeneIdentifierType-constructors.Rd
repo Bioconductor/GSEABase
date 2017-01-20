@@ -52,7 +52,7 @@ AnnoOrEntrezIdentifier(annotation, ...)
   package be loaded, hence installed on the user's system.
 
 }
-\author{Martin Morgan <mtmorgan@fhcrc.org>}
+\author{Martin Morgan <Martin.Morgan@RoswellPark.org>}
 \seealso{
   \code{\linkS4class{GeneIdentifierType}}-class for a description of the
   classes and methods using these objects.

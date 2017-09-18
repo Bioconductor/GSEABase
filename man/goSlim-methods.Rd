@@ -16,10 +16,10 @@
 
   The resulting object is a data frame containing the terms of
   \code{slimCollection} as row labels, counts and frequencies of
-  identifiers calssified to each term, and an abbreviated term
+  identifiers classified to each term, and an abbreviated term
   description.
 
-  An identifier in \code{idSrc} can expand to serveral GO terms, and the
+  An identifier in \code{idSrc} can expand to several GO terms, and the
   GO terms in \code{slimCollection} can imply an overlapping hierarchy
   of terms. Thus the resulting summary can easily contain more counts
   than there are identifiers in \code{idSrc}.
@@ -33,11 +33,11 @@ goSlim(idSrc, slimCollection, ontology, ..., verbose=FALSE)
     terms, or another object (e.g., ExpressionSet) for which the method
     can extract GO terms.}
   \item{slimCollection}{An argument containing the GO slim terms.}
-  \item{ontology}{A character string nameing the ontology to be
-    consulted when identifing slim term hierarchies. One of \sQuote{MF}
+  \item{ontology}{A character string naming the ontology to be
+    consulted when identifying slim term hierarchies. One of \sQuote{MF}
     (molecular function), \sQuote{BP} (biological process), \sQuote{CC}
     (cellular compartment).}
-  \item{...}{Additional arguments passed to specific emthods.}
+  \item{...}{Additional arguments passed to specific methods.}
   \item{verbose}{Logical influencing whether messages (primarily missing
     GO terms arising during creation of the slim hierarchy) are reported.}
 }

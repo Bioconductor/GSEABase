@@ -256,11 +256,11 @@ setMethod("show",
     ## become values. Select the sampled offspring
     ids <- unique(ids)
     samp <- revmap(slim)[ids]
-    samp <- samp[!sapply(samp, is.null)]
+    samp <- samp[!vapply(samp, is.null, logical(1))]
     ## Count occurences of each slim
     cnt <- table(unlist(samp))
     ## Adjust for sample ids matching slim ids
-    idx <- table(ids[which(ids %in% names(slim))])
+    idx <- table(ids[ids %in% names(slim)])
     idx_n<- names(idx)
     cnt[idx_n] <- idx + ifelse(is.na(cnt[idx_n]), 0, cnt[idx_n])
 

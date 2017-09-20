@@ -240,7 +240,7 @@ setMethod("show",
                     paste(names(terms)[is.na(terms)], collapse=" "))
         terms <- terms[!is.na(terms)]
     }
-    terms <- terms[sapply(terms, Ontology)==GO_ontology]
+    terms <- terms[vapply(terms, Ontology, character(1)) == GO_ontology]
     GO_slim <- names(terms)
 
     ## Use GO_ontology to find the required offspring
@@ -265,15 +265,17 @@ setMethod("show",
     cnt[idx_n] <- idx + ifelse(is.na(cnt[idx_n]), 0, cnt[idx_n])
 
     ## Prepare a data frame for results
-    df <- data.frame(Slim=names(terms),
-                     Count=0L, Percent=0,
-                     Term=sprintf("%.35s%s",
-                       sapply(terms, Term, USE.NAMES=FALSE),
-                       ifelse(nchar(sapply(terms, Term))>35, "...", "")),
-                     row.names=1)
+    term <- vapply(terms, Term, character(1), USE.NAMES=FALSE)
+    trunc <- ifelse(nchar(term) > 35, "...", "")
+    df <- data.frame(
+        Slim=names(terms),
+        Count=0L, Percent=0,
+        Term=sprintf("%.35s%s", term, trunc),
+        row.names=1
+    )
     ## add our counts
-    df[names(cnt),c("Count", "Percent")] <- c(cnt, 100*cnt/sum(cnt))
-    df[order(row.names(df)),]
+    df[names(cnt), c("Count", "Percent")] <- c(cnt, 100 * cnt / sum(cnt))
+    df[order(row.names(df)),, drop=FALSE]
 }
 
 setMethod("goSlim",

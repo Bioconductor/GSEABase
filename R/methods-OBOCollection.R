@@ -261,7 +261,7 @@ setMethod("show",
     ## Adjust for sample ids matching slim ids
     idx <- table(ids[ids %in% names(slim)])
     idx_n<- names(idx)
-    cnt[idx_n] <- idx + ifelse(is.na(cnt[idx_n]), 0, cnt[idx_n])
+    cnt[idx_n] <- idx + ifelse(is.na(cnt[idx_n]), 0L, cnt[idx_n])
 
     ## Prepare a data frame for results
     term <- vapply(terms, Term, character(1), USE.NAMES=FALSE)
@@ -273,7 +273,7 @@ setMethod("show",
         row.names=1
     )
     ## add our counts
-    df[names(cnt), c("Count", "Percent")] <- c(cnt, 100 * cnt / sum(cnt))
+    df[names(cnt), c("Count", "Percent")] <- list(cnt, 100 * cnt / sum(cnt))
     df[order(row.names(df)),, drop=FALSE]
 }
 

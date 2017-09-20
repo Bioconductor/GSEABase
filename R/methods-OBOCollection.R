@@ -254,7 +254,6 @@ setMethod("show",
     slim <- slim[!is.na(slim)]
     ## Reverse the relationship: 'offspring' become keys, 'parents'
     ## become values. Select the sampled offspring
-    ids <- unique(ids)
     samp <- revmap(slim)[ids]
     samp <- samp[!sapply(samp, is.null)]
     ## Count occurences of each slim

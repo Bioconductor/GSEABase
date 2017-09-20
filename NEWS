@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.38.1
+-------------------------
+
+BUG FIXES
+
+    o goSlim() did not correctly count duplicate identifiers.
+    (https://support.bioconductor.org/p/100403/)
+
 CHANGES IN VERSION 1.35
 -----------------------
 

@@ -91,3 +91,15 @@ test_obo_as_graphNEL <- function() {
     checkIdentical(g, g1)
     checkIdentical(x, as(g1, "OBOCollection"))
 }
+
+test_goSlim <- function() {
+    id <- GOCollection("GO:0005618")
+    res <- goSlim(id, obo, "CC")
+    checkIdentical(27L, nrow(res))
+    checkIdentical(4L, sum(res$Count))
+
+    id <- GOCollection(rep("GO:0005618", 2))
+    res <- goSlim(id, obo, "CC")
+    checkIdentical(27L, nrow(res))
+    checkIdentical(8L, sum(res$Count))
+}

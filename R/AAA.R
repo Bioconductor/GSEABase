@@ -28,18 +28,12 @@ mkScalar <- function(x) {
                 args <- names(match.call())[-1]
                 .checkRequired(REQUIRED, args)
                 miss <- OPTIONAL[!OPTIONAL %in% args]
+                annotation <- as.character(annotation)
                 oargs <- OARGS[!names(OARGS) %in% miss]
                 do.call(new, c(CLASS, oargs))
             }
             formals(f) <- IARGS
             assign(CONSTRUCTOR, f, envir=WHERE)
-            .handle_src_organism <- function(src) {
-                org <- dplyr::tbl(src, "metadata_txdb") %>% filter(name == "Organism") %>% dplyr::pull(value)
-                org <- Organism.dplyr::supportedOrganisms() %>% filter(organism == org) %>% pull(OrgDb) %>% uninque
-                do.call(new, c(CLASS, list(annotation=org), list(...)))
-            }
-            setGeneric(CLASS, function(object, ...) standardGeneric(CLASS))
-            setMethod(CLASS, signature=signature("src_organism"), .handle_src_organism)
         }, list(CONSTRUCTOR = klassnames[[cl]],
                 CLASS = klasses[[cl]],
                 IARGS=iargs,
@@ -49,6 +43,12 @@ mkScalar <- function(x) {
                 WHERE=where)))
 }
 
+as.character.src_organism <-
+    function(annotation)
+{
+    org <- dplyr::tbl(annotation, "metadata_txdb") %>% filter(name == "Organism") %>% dplyr::pull(value)
+    Organism.dplyr::supportedOrganisms() %>% filter(organism == org) %>% pull(OrgDb) %>% unique
+}
 
 ## constructors for GeneSet and derived classes, with required fields.
 .constructors_GeneSet<- function(klass, required) {

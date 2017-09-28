@@ -36,9 +36,13 @@ importFrom(BiocGenerics, updateObject,
            annotation, "annotation<-",
            organism, "organism<-")
 
+importFrom(dplyr, filter, pull, tbl)
+
 importFrom(methods, as, callGeneric, callNextMethod, getClass,
            getSlots, is, new, prototype, representation, selectMethod,
            setClass, slot, "slot<-")
+
+importFrom(Organism.dplyr, supportedOrganisms)
 
 importFrom(utils, head)
 

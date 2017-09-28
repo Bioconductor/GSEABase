@@ -28,7 +28,8 @@ mkScalar <- function(x) {
                 args <- names(match.call())[-1]
                 .checkRequired(REQUIRED, args)
                 miss <- OPTIONAL[!OPTIONAL %in% args]
-                annotation <- as.character(annotation)
+                if (!is.null(optional) && optional == "annotation" && !missing(annotation))
+                    annotation <- as.character(annotation)
                 oargs <- OARGS[!names(OARGS) %in% miss]
                 do.call(new, c(CLASS, oargs))
             }
@@ -46,8 +47,9 @@ mkScalar <- function(x) {
 as.character.src_organism <-
     function(annotation)
 {
-    org <- dplyr::tbl(annotation, "metadata_txdb") %>% filter(name == "Organism") %>% dplyr::pull(value)
-    Organism.dplyr::supportedOrganisms() %>% filter(organism == org) %>% pull(OrgDb) %>% unique
+    org <- tbl(annotation, "metadata_txdb") %>% filter(name == "Organism") %>%
+        pull(value)
+    supportedOrganisms() %>% filter(organism == org) %>% pull(OrgDb) %>% unique
 }
 
 ## constructors for GeneSet and derived classes, with required fields.
@@ -84,7 +86,7 @@ as.character.src_organism <-
         setMethod(CLASS, signature = signature(type = "character"), f)
 
         ## GeneIdentifierType
-        f <- function(){
+        f <- function() {
             .checkRequired(REQUIRED, names(match.call()))
             do.call(new, c(CLASS, geneIdType=type, OARGS))
         }

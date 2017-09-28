@@ -40,9 +40,8 @@ AnnoOrEntrezIdentifier(annotation, ...)
     Bioconductor package from which the annotations are drawn, e.g.,
     \sQuote{hgu95av2}, \sQuote{org.Hs.eg.db}. Or an \sQuote{src_organism}
     object, e.g.
-    \sQuote{Organism.dplyr::src_organism(TxDb.Hsapiens.UCSC.hg38.knownGene).}
-  \item{\dots}{Additional arguments, usually none.}
-}
+    \sQuote{Organism.dplyr::src_organism(TxDb.Hsapiens.UCSC.hg38.knownGene)}.}
+  \item{\dots}{Additional arguments, usually none.}}
 \value{
 
   For all but \code{AnnoOrEntrezIdentifier}, An object of the same class

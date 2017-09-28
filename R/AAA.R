@@ -28,7 +28,9 @@ mkScalar <- function(x) {
                 args <- names(match.call())[-1]
                 .checkRequired(REQUIRED, args)
                 miss <- OPTIONAL[!OPTIONAL %in% args]
-                if (!is.null(optional) && optional == "annotation" && !missing(annotation))
+                test <- !is.null(optional) && optional == "annotation" &&
+                    !missing(annotation)
+                if (test)
                     annotation <- as.character(annotation)
                 oargs <- OARGS[!names(OARGS) %in% miss]
                 do.call(new, c(CLASS, oargs))

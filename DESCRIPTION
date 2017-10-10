@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.39.4
+Version: 1.39.5
 Author: Martin Morgan, Seth Falcon, Robert Gentleman
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
@@ -12,7 +12,7 @@ Depends: R (>= 2.6.0), BiocGenerics (>= 0.13.8), Biobase (>= 2.17.8),
         annotate (>= 1.45.3), methods, graph (>= 1.37.2)
 Suggests: hgu95av2.db, GO.db, org.Hs.eg.db, Rgraphviz, ReportingTools,
     testthat
-Imports: AnnotationDbi, dplyr, Organism.dplyr, XML
+Imports: AnnotationDbi, XML
 LazyLoad: yes
 Collate: utilities.R AAA.R AllClasses.R AllGenerics.R getObjects.R
         methods-CollectionType.R methods-ExpressionSet.R

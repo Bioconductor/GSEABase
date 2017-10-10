@@ -46,14 +46,6 @@ mkScalar <- function(x) {
                 WHERE=where)))
 }
 
-as.character.src_organism <-
-    function(annotation)
-{
-    org <- tbl(annotation, "metadata_txdb") %>% filter(name == "Organism") %>%
-        pull(value)
-    supportedOrganisms() %>% filter(organism == org) %>% pull(OrgDb) %>% unique
-}
-
 ## constructors for GeneSet and derived classes, with required fields.
 .constructors_GeneSet<- function(klass, required) {
     ## construct the arg list of symbols with no defaults

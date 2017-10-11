@@ -31,7 +31,7 @@ mkScalar <- function(x) {
                 test <- !is.null(optional) && optional == "annotation" &&
                     !missing(annotation)
                 if (test)
-                    annotation <- as.character(annotation)
+                    annotation <- orgPackageName(annotation)
                 oargs <- OARGS[!names(OARGS) %in% miss]
                 do.call(new, c(CLASS, oargs))
             }
@@ -45,6 +45,8 @@ mkScalar <- function(x) {
                 OPTIONAL=optional,
                 WHERE=where)))
 }
+
+setMethod("orgPackageName", "character", function(x) {x})
 
 ## constructors for GeneSet and derived classes, with required fields.
 .constructors_GeneSet<- function(klass, required) {

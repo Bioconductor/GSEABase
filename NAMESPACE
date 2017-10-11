@@ -14,8 +14,8 @@ importClassesFrom(methods, ANY, character, data.frame, environment,
 
 importMethodsFrom(AnnotationDbi, as.list, colnames, get,
                   getGOFrameData, getKEGGFrameData, ls, mappedLkeys,
-                  mappedRkeys, mget, nrow, Ontology, revmap, sample,
-                  select, Term, toTable)
+                  mappedRkeys, mget, nrow, Ontology, orgPackageName,
+                  revmap, sample, select, Term, toTable)
 
 importMethodsFrom(Biobase, featureNames)
 
@@ -26,6 +26,8 @@ importMethodsFrom(methods, coerce, initialize, Logic, show)
 importMethodsFrom(XML, free, saveXML)
 
 importFrom(annotate, getAnnMap, annPkgName, getEG)
+
+importFrom(AnnotationDbi, orgPackageName)
 
 importFrom(Biobase, mkScalar, selectSome, subListExtract, 
            abstract,

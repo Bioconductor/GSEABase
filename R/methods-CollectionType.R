@@ -154,9 +154,15 @@ setMethod("show",
 }
 
 .checkGOEvidenceCodes <- function(evidenceCode) {
-    codes <- c("EXP", "IDA", "IPI", "IMP", "IGI", "IEP", "ISS", "ISO",
-               "ISA", "ISM", "IGC", "IBA", "IBD", "IKR", "IRD", "RCA",
-               "TAS", "NAS", "IC", "ND", "IEA", "ANY", NA)
+    codes <- c(
+        "EXP", "IDA", "IPI", "IMP", "IGI", "IEP",
+        "HTP", "HDA", "HMP", "HGI", "HEP",
+        "ISS", "ISO", "ISA", "ISM", "IGC", "IBA", "IBD", "IKR", "IRD", "RCA",
+        "TAS", "NAS",
+        "IC", "ND",
+        "IEA",
+        "ANY", NA
+    )
     .checkCode(evidenceCode, codes)
 }
 

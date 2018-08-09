@@ -40,11 +40,7 @@ in gene set collections.
 
 Report issues on \url{https://github.com/Bioconductor/GSEABase/issues}
 
-\newpage
-
 \tableofcontents
-
-\newpage
 
 <<preliminaries, echo=FALSE>>=
 ## FIXME: <adjMat> adjacency matrix -- color w. +/- 1

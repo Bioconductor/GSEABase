@@ -232,7 +232,7 @@ Entrez ID, Gene Symbol, Expression level, Phenotype response
 #GCS, Increase, Resistant  - my notes say alpha-GCS - so which one?
 ##I only found gamma at PubMed as being related
 2730, GCLM, Increase, Resistant")
-tbl <- read.csv(conn, strip.white=TRUE, comment.char="#")
+tbl <- read.csv(conn, strip.white=TRUE, comment.char="#", stringsAsFactors = TRUE)
 close(conn) 
 unlink(conn)
 @

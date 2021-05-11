@@ -16,7 +16,6 @@
 \alias{GenenameIdentifier-class}
 \alias{RefseqIdentifier-class}
 \alias{SymbolIdentifier-class}
-\alias{UnigeneIdentifier-class}
 \alias{EntrezIdentifier-class}
 \alias{ENSEMBLIdentifier-class}
 \alias{UniprotIdentifier-class}
@@ -47,7 +46,6 @@
     \item{GenenameIdentifier}{Curated and ad hoc descriptive gene names.}
     \item{RefseqIdentifier}{\sQuote{Prosite} identifiers.}
     \item{SymbolIdentifier}{\sQuote{Symbol} identifiers.}
-    \item{UnigeneIdentifier}{\sQuote{Unigene} identifiers.}
     \item{UniprotIdentifier}{\sQuote{Uniprot} identifiers.}
     \item{GeneIdentifierType}{A virtual Class: No objects may be created
       from it; all classes listed above are subclasses of

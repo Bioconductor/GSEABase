@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.54
+-----------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o orgDb no longer provide Unigene information. Remove support.
+    
 CHANGES IN VERSION 1.39
 -----------------------
 

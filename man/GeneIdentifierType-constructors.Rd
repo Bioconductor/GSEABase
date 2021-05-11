@@ -7,7 +7,6 @@
 \alias{GenenameIdentifier}
 \alias{RefseqIdentifier}
 \alias{SymbolIdentifier}
-\alias{UnigeneIdentifier}
 \alias{UniprotIdentifier}
 \alias{EntrezIdentifier}
 \alias{AnnotationIdentifier}
@@ -29,7 +28,6 @@ ENSEMBLIdentifier(annotation, ...)
 GenenameIdentifier(annotation,...)
 RefseqIdentifier(annotation,...)
 SymbolIdentifier(annotation,...)
-UnigeneIdentifier(annotation,...)
 UniprotIdentifier(annotation,...)
 EntrezIdentifier(annotation,...)
 AnnotationIdentifier(annotation, ...)
@@ -83,7 +81,6 @@ uprotIds <- c("Q9Y6Q1", "A6NJZ7", "Q9BXI6", "Q15035", "A1X283",
               "P55957")
 gs4 <- GeneSet(uprotIds, geneIdType=UniprotIdentifier())
 geneIdType(gs4) # UniprotIdentifier
-geneIds(mapIdentifiers(gs4, UnigeneIdentifier(annotation="org.Hs.eg")))
 
 }
 \keyword{manip}

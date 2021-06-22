@@ -265,11 +265,10 @@ setMethod("show",
 
     ## Prepare a data frame for results
     term <- vapply(terms, Term, character(1), USE.NAMES=FALSE)
-    trunc <- ifelse(nchar(term) > 35, "...", "")
     df <- data.frame(
         Slim=names(terms),
         Count=0L, Percent=0,
-        Term=sprintf("%.35s%s", term, trunc),
+        Term=term,
         row.names=1
     )
     ## add our counts

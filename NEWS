@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.56
+-----------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o goSlim() does not truncate Terms
+    (https://github.com/Bioconductor/GSEABase/issues/5)
+
 CHANGES IN VERSION 1.54
 -----------------------
 

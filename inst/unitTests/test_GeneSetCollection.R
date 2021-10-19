@@ -215,15 +215,19 @@ test_GSC_mapIdentifiers <- function() {
 test_GSC_GOCollection_ontology <- function() {
     idType <- AnnotationIdentifier("org.Hs.eg.db")
     eids <- as.character(1:2)
+    expect0 <- select(org.Hs.eg.db::org.Hs.eg.db, eids, "GO", "ENTREZID")
+    expect <- unique(expect0[, c("GO", "ONTOLOGY")])
+
     setType <- GOCollection()
     gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
-    checkIdentical(length(gsc), 30L)
+    checkIdentical(length(gsc), nrow(expect))
     tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
-    checkIdentical(as.integer(tbl), c(9L, 9L, 12L))
+    checkIdentical(tbl, table(expect$ONTOLOGY))
 
+    expect <- expect[expect$ONTOLOGY == "BP", , drop = FALSE]
     setType <- GOCollection(ontology="BP")
     gsc <- GeneSetCollection(eids, idType=idType, setType=setType)
-    checkIdentical(length(gsc), 9L)
+    checkIdentical(length(gsc), nrow(expect))
     tbl <- table(unlist(eapply(GOTERM[names(gsc)], Ontology)))
-    checkIdentical(as.integer(tbl), 9L)
+    checkIdentical(tbl, table(expect$ONTOLOGY))
 }

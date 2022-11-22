@@ -4,7 +4,7 @@ author:
 - name: "Martin Morgan"
   affiliation: 
   - Roswell Park Cancer Institute, Buffalo, NY
-package: GSEABase^[Report issues on https://github.com/Bioconductor/GSEABase/issues]
+package: GSEABase 1.59.0^[Report issues on https://github.com/Bioconductor/GSEABase/issues]
 abstract: >
   The [_GSEABase_](http://bioconductor.org/packages/GSEABase) package implements data structures and methods to represent,
   manipulate, and analyze gene sets in the context of gene set
@@ -324,4 +324,4 @@ browseURL(url)
 ```
 
 This concludes a brief tour of gene sets and gene set collections
-available in the [_GSEABase_](http://bioconductor.org/packages/GSEABase) package.
+available in the [_GSEABase_](http://bioconductor.org/packages/GSEABase) package. 

@@ -2,7 +2,13 @@ Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
 Version: 1.59.0
-Author: Martin Morgan, Seth Falcon, Robert Gentleman
+Authors@R: c(
+    person("Martin", "Morgan", role = "aut"),
+    person("Seth", "Falcon", role = "aut"),
+    person("Robert", "Gentleman", rol e= "aut"),
+    person("Paul", "Villafuerte",
+        role = "ctb",
+        comment= comment = "'GSEABase' vignette translation from Sweave to Rmarkdown / HTML")
 Maintainer: Bioconductor Package Maintainer
         <maintainer@bioconductor.org>
 Description: This package provides classes and methods to support Gene

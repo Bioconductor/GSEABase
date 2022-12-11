@@ -4,7 +4,10 @@ author:
 - name: "Martin Morgan"
   affiliation: 
   - Roswell Park Cancer Institute, Buffalo, NY
-package: GSEABase 1.59.0^[Report issues on https://github.com/Bioconductor/GSEABase/issues]
+package: | 
+    GSEABase 1.61.0
+    
+    Report issues on https://github.com/Bioconductor/GSEABase/issues
 abstract: >
   The [_GSEABase_](http://bioconductor.org/packages/GSEABase) package implements data structures and methods to represent,
   manipulate, and analyze gene sets in the context of gene set
@@ -87,7 +90,7 @@ showMethods("GeneSet", inherited=FALSE)
 
 These are described on the `GeneSet` help page.
 
-The identifier type of gene sets created from expression sets is .
+The identifier type of gene sets created from expression sets is AnnotationIdentifier.
 Additional predefined identifiers are available:
 
 ```{r GeneIdentifierTypes}
@@ -106,7 +109,7 @@ identifiers are to be converted to Entrez IDs based on the mapping in
 the [_/hgu95av2.db_](http://bioconductor.org/packages/hgu95av2.db) package.
 The function `mapIdentifiers` can automatically determine many of the common
 maps; it is also possible to provide as a third argument an environment
-containing an arbitrary map. Use the `verbose`argument of `mapIdentifiers` to be informed when the
+containing an arbitrary map. Use the `verbose` argument of `mapIdentifiers` to be informed when the
 map between identifier types is not 1:1.
 
 A gene set can be created with different types of identifier, e.g., to
@@ -158,7 +161,7 @@ The example above uses a local file, but the source for the gene set
 might also be a web address accessible via `http://` the protocol. The file name
 is added to the url of the gene set. The set name and category of the
 Broad collection indicate that the gene set contains gene symbols from
-band 24 of the q arm of chromosome 16. The probe sets in chip
+band 24 of the q arm of chromosome 16. The probe sets in chip `hgu95av2` 
 corresponding to these symbols can be determined by mapping identifiers
 
 ```{r Broad-to-annotation}
@@ -192,10 +195,7 @@ Methods exist to directly subset expression sets using gene sets
 sample.ExpressionSet[bgs,]
 ```
 
-Remember that `sample.ExpressionSet`  contains just probe sets, so the small size
-of the subset is not surprising. Note also that subsetting required mapping of symbol
-identifiers in to s; this map used the annotation information in the
-expression set, and is not necessarily 1:1.
+Remember that `sample.ExpressionSet` contains just 500 probe sets, so the small size of the subset is not surprising. Note also that subsetting required mapping of symbol identifiers in bgs to AnnotationIdentifiers; this map used the annotation information in the expression set, and is not necessarily 1:1.
 
 # _GeneColorSet_
 

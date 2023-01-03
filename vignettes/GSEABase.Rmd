@@ -4,6 +4,8 @@ author:
 - name: "Martin Morgan"
   affiliation: 
   - Roswell Park Cancer Institute, Buffalo, NY
+- name: "Paul Villafuerte"
+  affiliation: "Vignette translation from Sweave to Rmarkdown / HTML"
 package: | 
     GSEABase 1.61.0
     
@@ -25,7 +27,7 @@ vignette: >
 output:
   BiocStyle::html_document:
     number_sections: true
-    toc: yes
+    toc: true
     toc_depth: 4
 ---
 
@@ -46,7 +48,7 @@ A _GeneSet_ stores a set of related gene identifiers. Important components of th
 gene set are a vector of identifiers, general descriptive information
 about the set, and information about how the gene set was constructed.
 To construct a gene set, use `GeneSet` . For example, to create a gene set from
-the identifiers in a subset of the sample _ExpressionSet_ in the [_Biobase_](http://bioconductor.org/packages/Biobase)
+the identifiers in a subset of the sample _ExpressionSet_ in the `r Biocpkg('Biobase')`
 package use
 
 ```{r GeneSet}
@@ -55,7 +57,7 @@ egs <- GeneSet(sample.ExpressionSet[201:250,], setName="Sample")
 egs
 ```
 
-Each gene set may have a name. The gene set contains identifiers ('genes')
+Each gene set may have a name. The gene set contains `r length(geneIds(egs))` identifiers ('genes')
 from the _ExpressionSet_. These are accessible using `geneIds`, e.g.,
 
 ```{r geneIds}
@@ -63,7 +65,7 @@ head(geneIds(egs))
 ```
 
 The gene set records that the identifiers are
-probeset names from the annotation package [_hgu95av2.db_](http://bioconductor.org/packages/hgu95av2.db),
+probeset names from the annotation package `r Biocpkg('hgu95av2.db')`,
 and that the source of the
 gene set was an _ExpressionSet_. Additional details are available:
 
@@ -90,7 +92,7 @@ showMethods("GeneSet", inherited=FALSE)
 
 These are described on the `GeneSet` help page.
 
-The identifier type of gene sets created from expression sets is AnnotationIdentifier.
+The identifier type of gene sets created from expression sets is `r as.character(class(geneIdType(egs)))`.
 Additional predefined identifiers are available:
 
 ```{r GeneIdentifierTypes}
@@ -106,7 +108,7 @@ mapIdentifiers(egs, EntrezIdentifier())
 
 `mapIdentifiers` consults the gene set to determine that annotation (probeset)
 identifiers are to be converted to Entrez IDs based on the mapping in
-the [_/hgu95av2.db_](http://bioconductor.org/packages/hgu95av2.db) package.
+the `r Biocpkg('hgu95av2.db')` package.
 The function `mapIdentifiers` can automatically determine many of the common
 maps; it is also possible to provide as a third argument an environment
 containing an arbitrary map. Use the `verbose` argument of `mapIdentifiers` to be informed when the
@@ -143,8 +145,8 @@ GeneSet(GOCollection(c("GO:0005488", "GO:0019825"),
 ```
 
 This creates a gene set by
-consulting an object in the [_GO.db_](http://bioconductor.org/packages/GO.db) package.
-A gene set created from an expression set, and with collection type `GOCollection`
+consulting an object in the `r Biocpkg('GO.db')` package.
+A gene set created from an expression set, and with collection type _GOCollection_
 consults the appropriate environment in the annotation package associated
 with the expression set.
 
@@ -195,7 +197,7 @@ Methods exist to directly subset expression sets using gene sets
 sample.ExpressionSet[bgs,]
 ```
 
-Remember that `sample.ExpressionSet` contains just 500 probe sets, so the small size of the subset is not surprising. Note also that subsetting required mapping of symbol identifiers in bgs to AnnotationIdentifiers; this map used the annotation information in the expression set, and is not necessarily 1:1.
+Remember that `sample.ExpressionSet` contains just `r nrow(sample.ExpressionSet)` probe sets, so the small size of the subset is not surprising. Note also that subsetting required mapping of symbol identifiers in `bgs` to `AnnotationIdentifier`s; this map used the annotation information in the expression set, and is not necessarily 1:1.
 
 # _GeneColorSet_
 
@@ -302,9 +304,9 @@ gsc[["GO:0005737"]]
 ```
 
 A convenient way to visualize a _GeneSetCollection_ is with the
-[_ReportingTools_](http://bioconductor.org/packages/ReportingTools) package.
+`r Biocpkg('ReportingTools')` package.
 
-```{r ReportingTools}
+```{r ReportingTools, echo=TRUE}
 ## 'interesting' gene sets
 idx <- sapply(gsc, function(x) length(geneIds(x))) > 2
 
@@ -324,4 +326,4 @@ browseURL(url)
 ```
 
 This concludes a brief tour of gene sets and gene set collections
-available in the [_GSEABase_](http://bioconductor.org/packages/GSEABase) package. 
+available in the `r Biocpkg('_GSEABase_')` package.

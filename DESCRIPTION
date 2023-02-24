@@ -1,20 +1,16 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.59.0
+Version: 1.61.0
 Authors@R: c(
     person("Martin", "Morgan", role = "aut"),
     person("Seth", "Falcon", role = "aut"),
-    person("Robert", "Gentleman", role= "aut"),
-    person("Paul", "Villafuerte",
-        role = "ctb",
-        comment= comment = "'GSEABase' vignette translation from Sweave to Rmarkdown / HTML"),
-    person("Bioconductor Package Maintainer",
-        role = "cre",
+    person("Robert", "Gentleman", role = "aut"),
+    person("Paul", "Villafuerte", role = "ctb",
+        comment = "'GSEABase' vignette translation from Sweave to Rmarkdown / HTML"),
+    person("Bioconductor Package Maintainer", role = "cre",
         email = "maintainer@bioconductor.org"
     ))
-Maintainer: Bioconductor Package Maintainer
-        <maintainer@bioconductor.org>
 Description: This package provides classes and methods to support Gene
         Set Enrichment Analysis (GSEA).
 License: Artistic-2.0

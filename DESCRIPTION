@@ -3,21 +3,21 @@ Type: Package
 Title: Gene set enrichment data structures and methods
 Version: 1.61.0
 Authors@R: c(
-    person("Martin", "Morgan", role = "aut"),
-    person("Seth", "Falcon", role = "aut"),
-    person("Robert", "Gentleman", role = "aut"),
-    person("Paul", "Villafuerte", role = "ctb",
-        comment = "'GSEABase' vignette translation from Sweave to Rmarkdown / HTML"),
-    person("Bioconductor Package Maintainer", role = "cre",
-        email = "maintainer@bioconductor.org"
-    ))
+        person("Martin", "Morgan", role = "aut"),
+        person("Seth", "Falcon", role = "aut"),
+        person("Robert", "Gentleman", role = "aut"),
+        person("Paul", "Villafuerte", role = "ctb",
+                comment = "'GSEABase' vignette translation from Sweave to Rmarkdown / HTML"),
+        person("Bioconductor Package Maintainer", role = "cre",
+                email = "maintainer@bioconductor.org"
+        ))
 Description: This package provides classes and methods to support Gene
         Set Enrichment Analysis (GSEA).
 License: Artistic-2.0
 Depends: R (>= 2.6.0), BiocGenerics (>= 0.13.8), Biobase (>= 2.17.8),
         annotate (>= 1.45.3), methods, graph (>= 1.37.2)
 Suggests: hgu95av2.db, GO.db, org.Hs.eg.db, Rgraphviz, ReportingTools,
-    testthat, BiocStyle, knitr
+        testthat, BiocStyle, knitr
 Imports: AnnotationDbi, XML
 LazyLoad: yes
 Collate: utilities.R AAA.R AllClasses.R AllGenerics.R getObjects.R

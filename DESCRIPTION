@@ -1,7 +1,7 @@
 Package: GSEABase
 Type: Package
 Title: Gene set enrichment data structures and methods
-Version: 1.63.0
+Version: 1.64.0
 Authors@R: c(
         person("Martin", "Morgan", role = "aut"),
         person("Seth", "Falcon", role = "aut"),

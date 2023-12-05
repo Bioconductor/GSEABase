@@ -184,14 +184,26 @@ setMethod("setdiff",
 
 ## incidence
 
-.incidence <- function(gidList, gnmList) {
-    uids <- unique(unlist(gidList))
-    isIn <- lapply(gidList,
-                   function(g, u) match(u, g, nomatch=0),
-                   uids)
-    t(matrix(as.integer(unlist(isIn) > 0),
-             ncol=length(gidList),
-             dimnames=list(uids, unlist(gnmList))))
+.incidence <- function(gidList, setNames) {
+    ## vector of genes...
+    gene <- unlist(gidList, use.names = FALSE)
+    geneNames <- unique(gene)
+    ## integer *Ids required for duplicate or unnamed sets
+    geneIds <- match(gene, geneNames)
+
+    ## ...belonging to each set; setNames can contain duplicates and NA
+    setIds <- rep(seq_along(setNames), lengths(gidList))
+
+    ## create an all-0 set x gene matrix
+    incidence <- matrix(
+        0L, nrow = length(setNames), ncol = length(geneNames),
+        dimnames = list(setNames, geneNames)
+    )
+    ## update incidence of genes in each set
+    incidence[cbind(setIds, geneIds)] <- 1L
+
+    ## return
+    incidence
 }
 
 setMethod("incidence",
@@ -200,7 +212,7 @@ setMethod("incidence",
           function(x, ...) {
               args <- c(x, ...)
               .incidence(lapply(args, geneIds),
-                         lapply(args, setName))
+                         vapply(args, setName, character(1)))
           })
 
 ## mapIdentifiers

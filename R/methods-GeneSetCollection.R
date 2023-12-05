@@ -658,7 +658,7 @@ setMethod("incidence",
           function(x, ...) {
               args <- c(x, ...)
               .incidence(lapply(args, geneIds),
-                         lapply(args, setName))
+                         vapply(args, setName, character(1)))
           })
 
 ## toGmt

@@ -170,6 +170,39 @@ test_GS_subset2 <- function() {
 }
 
 test_GS_incidence <- function() {
+    checkIdentical(
+        ## GeneSet() creates an unnamed GeneSet; one 'row' but 0 columns
+        incidence(GeneSet()),
+        matrix(0L, 1, 0, dimnames = list(NA_character_, NULL))
+    )
+    ## 'NA' GeneSet name
+    checkIdentical(
+        incidence(GeneSet(geneIds = letters[1:3])),
+        matrix(1L, 1, 3, dimnames = list(NA, letters[1:3]))
+    )
+
+    ## unnamed gene set are a distinct row in the incidence matrix
+    expected <- matrix(
+        c(1L, 1L, 1L, 1L, 0L, 1L), 2L, 3L,
+        dimnames = list(c("A", NA), letters[1:3])
+    )
+    checkIdentical(
+        incidence(
+            GeneSet(geneIds = letters[1:2], setName = "A"),
+            GeneSet(geneIds = letters[1:3])
+        ),
+        expected
+    )
+
+    ## both sets are unnamed, tallied in separate rows of incidence matrix
+    rownames(expected) <- c(NA, NA)
+    checkIdentical(
+        incidence(
+            GeneSet(geneIds = letters[1:2]), GeneSet(geneIds = letters[1:3])
+        ),
+        expected
+    )
+
     gss <- .broadSets()
     res <- incidence(gss[[1]])
     checkTrue(all(dim(res)==c(1, 86)))

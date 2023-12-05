@@ -170,10 +170,17 @@ test_GSC_subset2 <- function() {
 ## }
 
 test_GSC_incidence <- function() {
+    ## empty set
+    res <- incidence(GeneSetCollection(list()))
+    checkIdentical(res, matrix(0L, 0, 0, dimnames = list(NULL, NULL)))
+
+    ## simple gene set collection
     gss <- .broadSets()
     res <- incidence(gss)
     checkTrue(all(dim(res)==c(2, 215)))
     checkTrue(sum(res)== 215)
+
+    ## duplicate gene sets --> duplicate incidence rows
     res <- incidence(gss, gss)
     checkTrue(all(dim(res)==c(4, 215)))
     checkTrue(sum(res)== 430)

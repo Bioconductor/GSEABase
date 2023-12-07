@@ -214,7 +214,7 @@
       expression set, and using \code{geneIdType<-}).}
     \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set.}
-    \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from
+    \item{$}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set, allowing partial matching.}
   }
 

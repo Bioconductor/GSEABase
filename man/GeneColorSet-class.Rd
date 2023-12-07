@@ -117,7 +117,7 @@
     \item{[[}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set, returning a named character vector of \code{gene,
         geneColor, phenotypeColor}. Exact matches only.}
-    \item{\$}{\code{signature(x = "GeneSet")}: select a single gene from
+    \item{$}{\code{signature(x = "GeneSet")}: select a single gene from
       the gene set, returning a named character vector of \code{gene,
         geneColor, phenotypeColor}. Provides partial matching into the
       list of genes.}

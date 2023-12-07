@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.66
+-----------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o faster implementation of `incidence()` for large gene sets / collections
+    (https://github.com/Bioconductor/GSEABase/issues/9)
+
 CHANGES IN VERSION 1.56
 -----------------------
 

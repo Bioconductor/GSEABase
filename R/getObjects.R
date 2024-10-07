@@ -156,7 +156,7 @@ getGmt <- function(con,
     if (any(sapply(lines, length)<2)) {
         txt <- paste(
             "all records in the GMT file must have >= 2 fields",
-            "\n  first invalid line:  %s\n", collpase="")
+            "\n  first invalid line:  %s\n", collapse="")
         .stopf(txt, lines[sapply(lines, length)<2][[1]])
     }
     dups <- new.env(parent=emptyenv())

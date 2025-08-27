@@ -17,12 +17,12 @@ test_CollectionType_Constructors <- function() {
     ## BroadCollection
     checkTrue("c2" == bcCategory(BroadCollection(category="c2")))
     checkTrue("yyy" == bcSubCategory(BroadCollection(subCategory="yyy")))
-    
+
     ## BroadCollection - Mouse categories
-    checkTrue("MH" == bcCategory(BroadCollection(category="MH")))
-    checkTrue("M1" == bcCategory(BroadCollection(category="M1")))
-    checkTrue("M2" == bcCategory(BroadCollection(category="M2")))
-    checkTrue("M8" == bcCategory(BroadCollection(category="M8")))
+    checkTrue("mh" == bcCategory(BroadCollection(category="mh")))
+    checkTrue("m1" == bcCategory(BroadCollection(category="m1")))
+    checkTrue("m2" == bcCategory(BroadCollection(category="m2")))
+    checkTrue("m8" == bcCategory(BroadCollection(category="m8")))
 }
 
 test_CollectionType_Logic <- function() {

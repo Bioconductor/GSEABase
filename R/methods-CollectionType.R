@@ -71,7 +71,7 @@ setMethod("setdiff",
 BroadCollection <- function(
     category = c(
     "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
-    "M1", "M2", "M3", "M5", "M7", "M8", "MH"
+    "m1", "m2", "m3", "m5", "m7", "m8", "mh"
     ),
     subCategory=NA, ...
 ) {
@@ -101,13 +101,13 @@ setMethod("show",
                          c7="c7 (Immunologic Signatures)",
                          c8="c8 (Cell Type Signatures)",
                          h="h (Hallmark)",
-                         M1="M1 (Mouse Positional)",
-                         M2="M2 (Mouse Curated)",
-                         M3="M3 (Mouse Motif)",
-                         M5="M5 (Mouse GO)",
-                         M7="M7 (Mouse Immunologic Signatures)",
-                         M8="M8 (Mouse Cell Type Signatures)"),
-                         MH="MH (Mouse-Ortholog Hallmark)", "\n",
+                         m1="m1 (Mouse Positional)",
+                         m2="m2 (Mouse Curated)",
+                         m3="m3 (Mouse Motif)",
+                         m5="m5 (Mouse GO)",
+                         m7="m7 (Mouse Immunologic Signatures)",
+                         m8="m8 (Mouse Cell Type Signatures)"),
+                         mh="mh (Mouse-Ortholog Hallmark)", "\n",
                   "  bcSubCategory: ", bcSubCategory(object), "\n", sep="")
           })
 

@@ -41,7 +41,7 @@ OBOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
 BroadCollection(
     category=c(
         "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
-        "MH", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
+        "m1", "m2", "m3", "m5", "m7", "m8", "mh"
     ), subCategory=NA, ...
 )
 }
@@ -50,11 +50,10 @@ BroadCollection(
   \item{category}{(Required) Broad category, one of "c1" (postitional),
     "c2" (curated), "c3" (motif), "c4" (computational), "c5" (GO), "c6"
     (Oncogenic Pathway Activation Modules) "c7" (Immunologic
-    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark), "MH"
-    (Mouse Hallmark), "M1" (Mouse Positional), "M2" (Mouse Curated),
-    "M3" (Mouse Motif), "M4" (Mouse Computational), "M5" (Mouse GO),
-    "M6" (Mouse Oncogenic Pathway Activation Modules), "M7" (Mouse
-    Immunologic Signatures), "M8" (Mouse Cell Type Signatures).}
+    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark), "mh"
+    (Mouse-Ortholog Hallmark), "m1" (Mouse Positional), "m2" (Mouse Curated),
+    "m3" (Mouse Motif), "m5" (Mouse GO), "m7" (Mouse Immunologic Signatures),
+    "m8" (Mouse Cell Type Signatures).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
   \item{ids}{(Optional) Character vector of identifiers (e.g., GO, KEGG,
     or PMID terms).}

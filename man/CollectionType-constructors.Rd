@@ -38,7 +38,12 @@ PfamCollection(ids, ...)
 PrositeCollection(ids, ...)
 GOCollection(ids=character(0), evidenceCode="ANY", ontology="ANY", ..., err=FALSE)
 OBOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
-BroadCollection(category, subCategory=NA, ...)
+BroadCollection(
+    category=c(
+        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
+        "MH", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
+    ), subCategory=NA, ...
+)
 }
 
 \arguments{

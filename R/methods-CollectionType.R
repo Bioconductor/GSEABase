@@ -68,16 +68,14 @@ setMethod("setdiff",
 
 ## BroadCollection
 
-BroadCollection <- function(category="c1", subCategory=NA, ...) {
-    categories <- c(
-        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8",
-        "h", "archived",
-        "MH", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
-    )
-
-    if (length(category)!=1 || !(category %in% categories))
-        stop(sprintf("invalid BroadCollection category: '%s'",
-                     paste(category, collapse="', '")))
+BroadCollection <- function(
+    category = c(
+    "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
+    "MH", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
+    ),
+    subCategory=NA, ...
+) {
+    category <- match.arg(category)
     new("BroadCollection",
         category=mkScalar(category),
         subCategory=mkScalar(as.character(subCategory)))

@@ -70,8 +70,8 @@ setMethod("setdiff",
 
 BroadCollection <- function(
     category = c(
-    "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
-    "m1", "m2", "m3", "m5", "m7", "m8", "mh"
+        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
+        "m1", "m2", "m3", "m5", "m7", "m8", "mh"
     ),
     subCategory=NA, ...
 ) {

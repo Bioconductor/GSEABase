@@ -71,7 +71,8 @@ setMethod("setdiff",
 BroadCollection <- function(category="c1", subCategory=NA, ...) {
     categories <- c(
         "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8",
-        "h", "archived"
+        "h", "archived",
+        "MH", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
     )
 
     if (length(category)!=1 || !(category %in% categories))
@@ -101,7 +102,16 @@ setMethod("show",
                          c6="c6 (Oncogenic Pathway Activation Modules)",
                          c7="c7 (Immunologic Signatures)",
                          c8="c8 (Cell Type Signatures)",
-                         h="h (Hallmark)"), "\n",
+                         h="h (Hallmark)",
+                         MH="MH (Mouse Hallmark)",
+                         M1="M1 (Mouse Positional)",
+                         M2="M2 (Mouse Curated)",
+                         M3="M3 (Mouse Motif)",
+                         M4="M4 (Mouse Computational)",
+                         M5="M5 (Mouse GO)",
+                         M6="M6 (Mouse Oncogenic Pathway Activation Modules)",
+                         M7="M7 (Mouse Immunologic Signatures)",
+                         M8="M8 (Mouse Cell Type Signatures)"), "\n",
                   "  bcSubCategory: ", bcSubCategory(object), "\n", sep="")
           })
 

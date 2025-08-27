@@ -45,7 +45,11 @@ BroadCollection(category, subCategory=NA, ...)
   \item{category}{(Required) Broad category, one of "c1" (postitional),
     "c2" (curated), "c3" (motif), "c4" (computational), "c5" (GO), "c6"
     (Oncogenic Pathway Activation Modules) "c7" (Immunologic
-    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark).}
+    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark), "MH"
+    (Mouse Hallmark), "M1" (Mouse Positional), "M2" (Mouse Curated),
+    "M3" (Mouse Motif), "M4" (Mouse Computational), "M5" (Mouse GO),
+    "M6" (Mouse Oncogenic Pathway Activation Modules), "M7" (Mouse
+    Immunologic Signatures), "M8" (Mouse Cell Type Signatures).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
   \item{ids}{(Optional) Character vector of identifiers (e.g., GO, KEGG,
     or PMID terms).}

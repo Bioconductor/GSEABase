@@ -68,15 +68,14 @@ setMethod("setdiff",
 
 ## BroadCollection
 
-BroadCollection <- function(category="c1", subCategory=NA, ...) {
-    categories <- c(
-        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8",
-        "h", "archived"
-    )
-
-    if (length(category)!=1 || !(category %in% categories))
-        stop(sprintf("invalid BroadCollection category: '%s'",
-                     paste(category, collapse="', '")))
+BroadCollection <- function(
+    category = c(
+        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
+        "m1", "m2", "m3", "m5", "m7", "m8", "mh"
+    ),
+    subCategory=NA, ...
+) {
+    category <- match.arg(category)
     new("BroadCollection",
         category=mkScalar(category),
         subCategory=mkScalar(as.character(subCategory)))
@@ -101,7 +100,14 @@ setMethod("show",
                          c6="c6 (Oncogenic Pathway Activation Modules)",
                          c7="c7 (Immunologic Signatures)",
                          c8="c8 (Cell Type Signatures)",
-                         h="h (Hallmark)"), "\n",
+                         h="h (Hallmark)",
+                         m1="m1 (Mouse Positional)",
+                         m2="m2 (Mouse Curated)",
+                         m3="m3 (Mouse Motif)",
+                         m5="m5 (Mouse GO)",
+                         m7="m7 (Mouse Immunologic Signatures)",
+                         m8="m8 (Mouse Cell Type Signatures)"),
+                         mh="mh (Mouse-Ortholog Hallmark)", "\n",
                   "  bcSubCategory: ", bcSubCategory(object), "\n", sep="")
           })
 

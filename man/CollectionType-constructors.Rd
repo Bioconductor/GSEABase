@@ -38,14 +38,22 @@ PfamCollection(ids, ...)
 PrositeCollection(ids, ...)
 GOCollection(ids=character(0), evidenceCode="ANY", ontology="ANY", ..., err=FALSE)
 OBOCollection(ids, evidenceCode="ANY", ontology="ANY", ...)
-BroadCollection(category, subCategory=NA, ...)
+BroadCollection(
+    category=c(
+        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "h", "archived",
+        "m1", "m2", "m3", "m5", "m7", "m8", "mh"
+    ), subCategory=NA, ...
+)
 }
 
 \arguments{
   \item{category}{(Required) Broad category, one of "c1" (postitional),
     "c2" (curated), "c3" (motif), "c4" (computational), "c5" (GO), "c6"
     (Oncogenic Pathway Activation Modules) "c7" (Immunologic
-    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark).}
+    Signatures), "c8" (Cell Type Signatures), "h" (Hallmark), "mh"
+    (Mouse-Ortholog Hallmark), "m1" (Mouse Positional), "m2" (Mouse Curated),
+    "m3" (Mouse Motif), "m5" (Mouse GO), "m7" (Mouse Immunologic Signatures),
+    "m8" (Mouse Cell Type Signatures).}
   \item{subCategory}{(Optional) Sub-category; no controlled vocabulary.}
   \item{ids}{(Optional) Character vector of identifiers (e.g., GO, KEGG,
     or PMID terms).}
